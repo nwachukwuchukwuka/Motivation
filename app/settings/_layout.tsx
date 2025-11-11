@@ -5,8 +5,13 @@ export default function SettingsLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
 
-      <Stack.Screen name="topics-screen" />
       <Stack.Screen name="reminders-screen" />
+      <Stack.Screen name="topics-screen" />
+      <Stack.Screen name="app-icon" />
+      <Stack.Screen name="watch-screen" />
+      <Stack.Screen name="bundle-screen" />
+      <Stack.Screen name="widgets-screen" />
+
     </Stack>
   );
 }

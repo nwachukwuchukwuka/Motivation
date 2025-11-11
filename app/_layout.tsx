@@ -60,6 +60,14 @@ export default function RootLayout() {
                   animation: "fade_from_bottom",
                 }}
               />
+
+              <Stack.Screen name="explore-topics/topics-follow-screen" />
+              <Stack.Screen
+                name="edit-reminder"
+                options={{
+                  presentation: "modal",
+                }}
+              />
             </Stack>
           </KeyboardAvoidingView>
         </AppProvider>

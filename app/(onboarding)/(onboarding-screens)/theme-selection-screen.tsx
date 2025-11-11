@@ -1,7 +1,7 @@
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
-import Svg, { Circle, Path } from "react-native-svg";
 
 const THEMES = [
   {
@@ -49,29 +49,6 @@ const THEMES = [
   },
 ];
 
-const CheckIcon = () => (
-  <Svg width={16} height={16} viewBox="0 0 24 24">
-    <Path
-      fill="black"
-      d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-    />
-  </Svg>
-);
-const PlayIcon = () => (
-  <Svg width={24} height={24} viewBox="0 0 24 24">
-    <Circle
-      cx="12"
-      cy="12"
-      r="10"
-      stroke="white"
-      strokeOpacity="0.5"
-      strokeWidth="1.5"
-      fill="none"
-    />
-    <Path d="M10 8l6 4-6 4V8z" fill="white" fillOpacity="0.8" />
-  </Svg>
-);
-
 const ThemeSelectionScreen = () => {
   const router = useRouter();
   const [selectedId, setSelectedId] = useState(1);
@@ -87,21 +64,19 @@ const ThemeSelectionScreen = () => {
           Which theme would you like to start with?
         </Text>
         <View className="flex-row flex-wrap justify-center mt-36">
-          {THEMES.map((theme) => (
-            <View key={theme.id} className="p-2 w-1/3">
-              <TouchableOpacity onPress={() => setSelectedId(theme.id)}>
-                <ImageBackground
-                  source={theme.value}
-                  className="h-44 w-full rounded-2xl items-center justify-center relative overflow-hidden"
-                  resizeMode="cover"
-                >
-                  <View className="absolute inset-0 bg-black/10" />
+          {THEMES.map((theme) => {
+            const isSelected = selectedId === theme.id;
 
-                  {selectedId === theme.id ? (
-                    <View className="bg-white/90 rounded-full w-8 h-8 items-center justify-center">
-                      <CheckIcon />
-                    </View>
-                  ) : (
+            return (
+              <View key={theme.id} className="p-2 w-1/3">
+                <TouchableOpacity onPress={() => setSelectedId(theme.id)}>
+                  <ImageBackground
+                    source={theme.value}
+                    className="h-44 w-full rounded-2xl items-center justify-center relative overflow-hidden"
+                    resizeMode="cover"
+                  >
+                    <View className="absolute inset-0 bg-black/10" />
+
                     <Text
                       style={{
                         color: theme.textColor || "white",
@@ -111,16 +86,27 @@ const ThemeSelectionScreen = () => {
                     >
                       Aa
                     </Text>
-                  )}
-                  {theme.isVideo && selectedId !== theme.id && (
-                    <View className="absolute top-2 left-2">
-                      <PlayIcon />
-                    </View>
-                  )}
-                </ImageBackground>
-              </TouchableOpacity>
-            </View>
-          ))}
+
+                    {theme.isVideo && (
+                      <View className="absolute top-2 left-2">
+                        <MaterialCommunityIcons
+                          name="motion-play-outline"
+                          size={24}
+                          color="white"
+                        />
+                      </View>
+                    )}
+
+                    {isSelected && (
+                      <View className="absolute top-2 right-2 bg-white rounded-full w-6 h-6 items-center justify-center">
+                        <Feather name="check" size={18} color="black" />
+                      </View>
+                    )}
+                  </ImageBackground>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         </View>
       </View>
       <TouchableOpacity

@@ -175,7 +175,6 @@ const MainContent = ({
 );
 
 const QuoteScreen = () => {
-  // const isAuthenticated = false;
   const {
     themeSource,
     fontSize,
@@ -185,7 +184,6 @@ const QuoteScreen = () => {
     textShadowStyle,
     setActiveQuote,
     isAuthenticated,
-    setIsAuthenticated,
   } = useAppContext();
   if (!isAuthenticated) return <Redirect href="/welcome-screen" />;
 

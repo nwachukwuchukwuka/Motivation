@@ -1,4 +1,4 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -9,6 +9,7 @@ import Svg, {
   Rect,
   Stop,
   LinearGradient as SvgGradient,
+  Text as SvgText,
 } from "react-native-svg";
 
 const PhoneIllustration = () => (
@@ -53,92 +54,18 @@ const FlameIcon = () => (
         d="M12 2c2.4 1.6 3.8 4.3 3.8 7.2 0 2.4-1.1 4.6-2.9 6.2 -1.4 1.2-3.4 2.6-3.4 4.6h-1c0-2-2-3.4-3.4-4.6C3.3 13.8 2.2 11.6 2.2 9.2c0-2.9 1.4-5.6 3.8-7.2 1.5-.9 3.2-1.2 4-1.2s2.5.3 4 1.2z M12 2c0 0 2-2 3 0s-1 4-1 4s2-2 3 0s-2 5-2 5"
         transform="translate(2, 0)"
       />
+      <SvgText
+        x="12"
+        y="15"
+        textAnchor="middle"
+        fontWeight="bold"
+        fontSize="10"
+        fill="white"
+      >
+        1
+      </SvgText>
     </Svg>
-    <Text className="text-white text-lg font-bold absolute">1</Text>
   </View>
-);
-const TopicsIllustration = () => (
-  <Svg width="80" height="80" viewBox="0 0 100 100">
-    <Rect
-      x="20"
-      y="30"
-      width="40"
-      height="50"
-      rx="10"
-      fill="#4a5162"
-      transform="rotate(-15 40 55)"
-    />
-    <Rect
-      x="40"
-      y="20"
-      width="40"
-      height="50"
-      rx="10"
-      fill="#3a4151"
-      transform="rotate(10 60 45)"
-    />
-  </Svg>
-);
-const RemindersIllustration = () => (
-  <Svg width="80" height="80" viewBox="0 0 24 24">
-    <Path
-      fill="#4a5162"
-      d="M10 21h4c0 1.1-.9 2-2 2s-2-.9-2-2m11-2v1H3v-1l2-2v-6c0-3.1 2-5.8 5-6.7V4c0-1.1.9-2 2-2s2 .9 2 2v.3c3 .9 5 3.6 5 6.7v6l2 2z"
-    />
-  </Svg>
-);
-const AppIconIllustration = () => (
-  <Svg width="80" height="80" viewBox="0 0 100 100">
-    <Rect
-      x="20"
-      y="50"
-      width="30"
-      height="30"
-      rx="8"
-      fill="#F5A1BE"
-      transform="rotate(-20 35 65)"
-    />
-    <Rect x="40" y="40" width="30" height="30" rx="8" fill="#3a4151" />
-    <Rect
-      x="50"
-      y="20"
-      width="30"
-      height="30"
-      rx="8"
-      fill="#C97EFF"
-      transform="rotate(20 65 35)"
-    />
-  </Svg>
-);
-const WidgetsIllustration = () => (
-  <Svg width="80" height="80" viewBox="0 0 100 100">
-    <Rect x="25" y="10" width="50" height="80" rx="10" fill="#3a4151" />
-    <Rect x="35" y="35" width="30" height="20" rx="5" fill="#4a5162" />
-  </Svg>
-);
-const WatchIllustration = () => (
-  <Svg width="80" height="80" viewBox="0 0 100 100">
-    <Rect x="35" y="10" width="30" height="80" rx="8" fill="#1E1E2F" />
-    <Rect x="30" y="20" width="40" height="60" rx="10" fill="#3a4151" />
-    <Rect x="35" y="30" width="30" height="15" rx="4" fill="#1E1E2F" />
-  </Svg>
-);
-const BundleIllustration = () => (
-  <Svg width="80" height="80" viewBox="0 0 100 100">
-    <Path d="M50 80 C 40 60, 60 60, 50 80 Z" fill="#3a4151" />
-    <Path
-      d="M45 60 C 35 55, 40 40, 50 50"
-      stroke="#4a5162"
-      fill="none"
-      strokeWidth="2"
-    />
-    <Path
-      d="M55 60 C 65 55, 60 40, 50 50"
-      stroke="#4a5162"
-      fill="none"
-      strokeWidth="2"
-    />
-  </Svg>
 );
 
 const DAYS = ["Th", "Fr", "Sa", "Su", "Mo", "Tu", "We"];
@@ -149,18 +76,40 @@ const SettingsScreen = () => {
   const customizeItems = [
     {
       name: "Topics you follow",
-      Illustration: TopicsIllustration,
+      icon: "hash",
+      IconLib: Feather,
       onPress: () => router.push("/settings/topics-screen"),
     },
     {
       name: "Reminders",
-      Illustration: RemindersIllustration,
+      icon: "bell",
+      IconLib: Feather,
       onPress: () => router.push("/settings/reminders-screen"),
     },
-    { name: "App icon", Illustration: AppIconIllustration },
-    { name: "Widgets", Illustration: WidgetsIllustration },
-    { name: "Watch", Illustration: WatchIllustration },
-    { name: "Self-Growth bundle", Illustration: BundleIllustration },
+    {
+      name: "App icon",
+      icon: "apps",
+      IconLib: Ionicons,
+      onPress: () => router.push('/settings/app-icon'),
+    },
+    {
+      name: "Widgets",
+      icon: "extension-puzzle-outline",
+      IconLib: Ionicons,
+      onPress: () => router.push('/settings/widgets-screen'),
+    },
+    {
+      name: "Watch",
+      icon: "watch-outline",
+      IconLib: Ionicons,
+      onPress: () => router.push('/settings/watch-screen'),
+    },
+    {
+      name: "Self-Growth bundle",
+      icon: "leaf-outline",
+      IconLib: Ionicons,
+      onPress: () => router.push("/settings/bundle-screen"),
+    },
   ];
 
   const contentItems = [
@@ -252,22 +201,29 @@ const SettingsScreen = () => {
           <Text className="text-white text-xl font-bold mb-2">
             Customize the app
           </Text>
-          <View className="flex-row flex-wrap -m-2">
-            {customizeItems.map((item) => (
-              <View key={item.name} className="w-1/2 p-2">
-                <TouchableOpacity
-                  onPress={item.onPress}
-                  className="bg-[#3a4151] rounded-2xl aspect-square p-4 justify-between"
-                >
-                  <Text className="text-white font-semibold text-base">
-                    {item.name}
-                  </Text>
-                  <View className="items-end">
-                    <item.Illustration />
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ))}
+          <View className="flex-row flex-wrap -mx-2">
+            {customizeItems.map((item) => {
+              const IconComponent = item.IconLib;
+              return (
+                <View key={item.name} className="w-1/2 p-2">
+                  <TouchableOpacity
+                    onPress={item.onPress}
+                    className="bg-[#3a4151] rounded-2xl aspect-square p-4 justify-between"
+                  >
+                    <Text className="text-white font-semibold text-base">
+                      {item.name}
+                    </Text>
+                    <View className="items-end">
+                      <IconComponent
+                        name={item.icon as any}
+                        size={48}
+                        color="#969da8"
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
           </View>
         </View>
 
@@ -278,7 +234,10 @@ const SettingsScreen = () => {
               const IconComponent = item.lib;
               return (
                 <View key={item.name} className="w-1/2 p-2">
-                  <TouchableOpacity className="bg-[#3a4151] rounded-2xl p-4 flex-row justify-between items-start h-24">
+                  <TouchableOpacity
+                    className="bg-[#3a4151] rounded-2xl p-4 flex-row justify-between items-start h-24"
+                    onPress={() => router.push("/")}
+                  >
                     <Text className="text-white font-semibold">
                       {item.name}
                     </Text>

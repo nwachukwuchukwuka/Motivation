@@ -40,7 +40,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const defaultBackgroundImage = {
     uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5hYBeUGdL0vrfC6HWYZWs6h24FmRNSx61SA&s",
   };
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const [themeSource, setThemeSource] = useState<{ uri: string } | number>(
     defaultBackgroundImage

@@ -3,12 +3,12 @@ import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
 import {
-    Keyboard,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Keyboard,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -47,12 +47,12 @@ const TopicsFollowScreen = () => {
 
     return (
       <View
-        className={`flex-row justify-between items-center py-3  ${
+        className={`flex-row justify-between items-center py-3 -mx-3 px-3  ${
           !isLastItem ? "border-b border-b-[#262e3d]" : ""
         }`}
       >
         <View className="flex-row items-center">
-          <Text className="text-white text-lg">{name}</Text>
+          <Text className="text-white text-xl">{name}</Text>
           {isLocked && (
             <Feather
               name="lock"
@@ -144,7 +144,7 @@ const TopicsFollowScreen = () => {
             </View>
           ) : (
             <>
-              <View className="mb-6 bg-[#3a4151] p-3 rounded-lg">
+              <View className="mb-6 bg-[#3a4151] p-3 pt-0 rounded-lg">
                 <TopicRow name="General" isLocked={false} isLastItem={false} />
                 <TopicRow
                   name="Favorites"
@@ -159,10 +159,7 @@ const TopicsFollowScreen = () => {
               </View>
 
               {TOPIC_SECTIONS.map((section) => (
-                <View
-                  key={section.title}
-                  className="mb-6 bg-[#3a4151] p-3 rounded-lg"
-                >
+                <View key={section.title} className="mb-6 ">
                   <View className="flex-row justify-between items-center mb-2">
                     <Text className="text-white text-xl font-bold">
                       {section.title}
@@ -171,14 +168,16 @@ const TopicsFollowScreen = () => {
                       <Text className="text-[#969da8]">Follow all</Text>
                     </TouchableOpacity>
                   </View>
-                  {section.items.map((item, index) => (
-                    <TopicRow
-                      key={item.name}
-                      name={item.name}
-                      isLocked={item.isLocked}
-                      isLastItem={index === section.items.length - 1}
-                    />
-                  ))}
+                  <View className="bg-[#3a4151] p-3 py-0 rounded-lg">
+                    {section.items.map((item, index) => (
+                      <TopicRow
+                        key={item.name}
+                        name={item.name}
+                        isLocked={item.isLocked}
+                        isLastItem={index === section.items.length - 1}
+                      />
+                    ))}
+                  </View>
                 </View>
               ))}
             </>

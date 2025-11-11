@@ -1,15 +1,33 @@
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const CAUSE_OPTIONS = [
-  { name: "Family", Icon: <AntDesign name="home" size={24} color="white" /> },
-  { name: "Friends", Icon: <AntDesign name="home" size={24} color="white" /> },
-  { name: "Work", Icon: <AntDesign name="home" size={24} color="white" /> },
-  { name: "Love", Icon: <AntDesign name="home" size={24} color="white" /> },
-  { name: "Health", Icon: <AntDesign name="home" size={24} color="white" /> },
-  { name: "Other", Icon: <AntDesign name="home" size={24} color="white" /> },
+  {
+    name: "Family",
+    Icon: <AntDesign name="team" size={24} color="white" />,
+  },
+  {
+    name: "Friends",
+    Icon: <Feather name="users" size={24} color="white" />,
+  },
+  {
+    name: "Work",
+    Icon: <Feather name="briefcase" size={24} color="white" />,
+  },
+  {
+    name: "Love",
+    Icon: <AntDesign name="heart" size={24} color="white" />,
+  },
+  {
+    name: "Health",
+    Icon: <MaterialCommunityIcons name="heart-pulse" size={24} color="white" />,
+  },
+  {
+    name: "Other",
+    Icon: <Feather name="help-circle" size={24} color="white" />,
+  },
 ];
 
 const FeelingCauseScreen = () => {
