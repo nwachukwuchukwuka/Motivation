@@ -90,19 +90,19 @@ const SettingsScreen = () => {
       name: "App icon",
       icon: "apps",
       IconLib: Ionicons,
-      onPress: () => router.push('/settings/app-icon'),
+      onPress: () => router.push("/settings/app-icon"),
     },
     {
       name: "Widgets",
       icon: "extension-puzzle-outline",
       IconLib: Ionicons,
-      onPress: () => router.push('/settings/widgets-screen'),
+      onPress: () => router.push("/settings/widgets-screen"),
     },
     {
       name: "Watch",
       icon: "watch-outline",
       IconLib: Ionicons,
-      onPress: () => router.push('/settings/watch-screen'),
+      onPress: () => router.push("/settings/watch-screen"),
     },
     {
       name: "Self-Growth bundle",
@@ -118,6 +118,7 @@ const SettingsScreen = () => {
       name: "Collections",
       icon: "bookmark-outline",
       lib: MaterialCommunityIcons,
+      // onPress: () => router.push("/collections"),
     },
     { name: "My quotes", icon: "edit-3", lib: Feather },
     {

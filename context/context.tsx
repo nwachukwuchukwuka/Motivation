@@ -14,7 +14,39 @@ export type ThemeSource =
     }
   | number;
 
+export type Quote = {
+  id: string;
+  text: string;
+  date: string;
+};
+
+export type Collection = {
+  id: string;
+  name: string;
+  quoteIds: string[];
+};
+
+const ALL_QUOTES: Quote[] = [
+  {
+    id: "1",
+    text: "I live by 3 simple rules: Love needs action. Trust needs proof. Sorry needs change.",
+    date: "Wed, Nov 12, 2025",
+  },
+  {
+    id: "2",
+    text: "The best way to predict the future is to create it.",
+    date: "Tue, Oct 28, 2025",
+  },
+  {
+    id: "3",
+    text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+    date: "Mon, Sep 15, 2025",
+  },
+];
+
 type AppContextType = {
+  allQuotes: Quote[];
+  collections: Collection[];
   themeSource: ThemeSource;
   setThemeSource: (source: ThemeSource) => void;
   fontSize: number;
@@ -32,6 +64,15 @@ type AppContextType = {
   setActiveQuote: (quote: { text: string; author: string }) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (value: boolean) => void;
+
+  addQuoteToCollection: (collectionId: string, quoteId: string) => void;
+  isQuoteInCollection: (collectionId: string, quoteId: string) => boolean;
+  quoteToAdd: Quote | null;
+  setQuoteToAdd: (quote: Quote | null) => void;
+
+  favoriteQuoteIds: string[];
+  toggleFavorite: (quoteId: string) => void;
+  isFavorite: (quoteId: string) => boolean;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -57,6 +98,61 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     text: "Show people,\ndon't tell people.",
     author: "-David Goggins",
   });
+
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [quoteToAdd, setQuoteToAdd] = useState<Quote | null>(null);
+  const [allQuotes, setAllQuotes] = useState<Quote[]>(ALL_QUOTES);
+  const [favoriteQuoteIds, setFavoriteQuoteIds] = useState<string[]>(["1"]);
+
+  const toggleFavorite = (quoteId: string) => {
+    setFavoriteQuoteIds((prevIds) => {
+      if (prevIds.includes(quoteId)) {
+        return prevIds.filter((id) => id !== quoteId);
+      } else {
+        return [...prevIds, quoteId];
+      }
+    });
+  };
+
+  const isFavorite = (quoteId: string): boolean => {
+    return favoriteQuoteIds.includes(quoteId);
+  };
+
+  console.log("isFavorite in contect", isFavorite);
+
+  const addCollection = (name: string) => {
+    const newCollection: Collection = {
+      id: Date.now().toString(),
+      name,
+      quoteIds: [],
+    };
+    setCollections((prev) => [...prev, newCollection]);
+  };
+
+  const addQuoteToCollection = (collectionId: string, quoteId: string) => {
+    setCollections((prev) =>
+      prev.map((collection) => {
+        if (collection.id === collectionId) {
+          if (collection.quoteIds.includes(quoteId)) {
+            return {
+              ...collection,
+              quoteIds: collection.quoteIds.filter((id) => id !== quoteId),
+            };
+          }
+          return { ...collection, quoteIds: [...collection.quoteIds, quoteId] };
+        }
+        return collection;
+      })
+    );
+  };
+
+  const isQuoteInCollection = (
+    collectionId: string,
+    quoteId: string
+  ): boolean => {
+    const collection = collections.find((c) => c.id === collectionId);
+    return collection?.quoteIds.includes(quoteId) ?? false;
+  };
 
   const textShadowStyle = useMemo(() => {
     switch (letterCaseStyle) {
@@ -98,8 +194,20 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     textShadowStyle,
     activeQuote,
     setActiveQuote,
-    isAuthenticated, 
+    isAuthenticated,
     setIsAuthenticated,
+
+    collections,
+    addCollection,
+    addQuoteToCollection,
+    isQuoteInCollection,
+    quoteToAdd,
+    setQuoteToAdd,
+    allQuotes,
+
+    favoriteQuoteIds,
+    toggleFavorite,
+    isFavorite,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

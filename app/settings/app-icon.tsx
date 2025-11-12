@@ -3,16 +3,15 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+    Pressable,
     ScrollView,
     Text,
     TouchableOpacity,
-    View
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// --- Data for all the icon styles ---
 const ICON_STYLES = [
-  // Row 1
   {
     id: "default",
     type: "color",
@@ -38,7 +37,6 @@ const ICON_STYLES = [
     content: "icon-quote-double",
     textColor: "#000000",
   },
-  // Row 2
   {
     id: "purple-gradient",
     type: "gradient",
@@ -64,7 +62,6 @@ const ICON_STYLES = [
       "https://images.unsplash.com/photo-1588621412235-3359b418a29a?q=80&w=400",
     content: "icon-quote-circle-img",
   },
-  // Row 3
   {
     id: "holographic",
     type: "image",
@@ -90,7 +87,6 @@ const ICON_STYLES = [
     value: "#1E1E2F",
     content: "icon-quote-double",
   },
-  // Row 4
   {
     id: "do-not-quit",
     type: "color",
@@ -118,11 +114,8 @@ const ICON_STYLES = [
     content: "Trust the process",
     textColor: "#000000",
   },
-  // You can continue adding all other rows here...
 ];
 
-// --- Reusable Icon Component ---
-// This handles rendering all the different styles based on the data
 const IconDisplay = ({
   styleInfo,
   isSelected,
@@ -230,13 +223,13 @@ const AppIconScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-[#262e3d]">
       {/* Header */}
-      <View className="flex-row items-center px-4 py-2">
+      <View className="flex-row items-center p-4 pl-2">
         <TouchableOpacity
           onPress={() => router.back()}
           className="flex-row items-center"
         >
           <Feather name="chevron-left" size={28} color="white" />
-          <Text className="text-white text-base ml-1">Motivation</Text>
+          <Text className="text-white text-xl ml-1">Motivation</Text>
         </TouchableOpacity>
       </View>
 
@@ -244,15 +237,18 @@ const AppIconScreen = () => {
         <Text className="text-white text-3xl font-bold">App icon</Text>
 
         {/* Icon Grid */}
-        <View className="flex-row flex-wrap mt-4 -mx-2">
+        <View className="flex-row flex-wrap mt-4 justify-between gap-5">
           {ICON_STYLES.map((style) => (
-            <View key={style.id} className="w-1/4 p-2">
-              <TouchableOpacity onPress={() => setSelectedIconId(style.id)}>
+            <View key={style.id} className="w-[70px] mb-5">
+              <Pressable onPress={() => {
+                router.push('/free-trial-details-screen')
+                setSelectedIconId(style.id)
+              }}>
                 <IconDisplay
                   styleInfo={style}
                   isSelected={selectedIconId === style.id}
                 />
-              </TouchableOpacity>
+              </Pressable>
             </View>
           ))}
         </View>

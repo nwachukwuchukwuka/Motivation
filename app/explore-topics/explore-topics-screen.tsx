@@ -23,10 +23,35 @@ import Svg, {
 } from "react-native-svg";
 
 const userItems = [
-  { name: "Favorites", icon: "heart", isLocked: false },
-  { name: "My collections", icon: "bookmark", isLocked: false },
-  { name: "My own quotes", icon: "edit-3", isLocked: false },
-  { name: "Recent quotes", icon: "shuffle", isLocked: true },
+  {
+    name: "Favorites",
+    icon: "heart",
+    isLocked: false,
+    onPress: () => router.push("./favorites-screen"),
+  },
+  {
+    name: "My collections",
+    icon: "bookmark",
+    isLocked: false,
+    // onPress: () => router.push("./collections-screen"),
+    onPress: () =>
+      router.push({
+        pathname: "./collections-screen",
+        params: { display: "collections" },
+      }),
+  },
+  {
+    name: "My own quotes",
+    icon: "edit-3",
+    isLocked: false,
+    onPress: () => router.push("./user-quotes"),
+  },
+  {
+    name: "Recent quotes",
+    icon: "shuffle",
+    isLocked: true,
+    onPress: () => router.push("/free-trial-details-screen"),
+  },
 ];
 
 const mostPopular = [
@@ -146,21 +171,22 @@ const ExploreTopicsScreen = () => {
   const handleItemPress = (item: { name: string; isLocked: boolean }) => {
     if (item.isLocked) {
       router.push("/free-trial-details-screen");
-    } else {
-      if (
-        ["Favorites", "My collections", "My own quotes"].includes(item.name)
-      ) {
-        router.push({
-          pathname: "/explore-topics/user-item-screen",
-          params: { category: item.name },
-        });
-      } else {
-        router.push({
-          pathname: "/explore-topics/topic-details-screen",
-          params: { topicName: item.name },
-        });
-      }
     }
+    // else {
+    //   if (
+    //     ["Favorites", "My collections", "My own quotes"].includes(item.name)
+    //   ) {
+    //     router.push({
+    //       pathname: "/explore-topics/user-item-screen",
+    //       params: { category: item.name },
+    //     });
+    //   } else {
+    //     router.push({
+    //       pathname: "/explore-topics/topic-details-screen",
+    //       params: { topicName: item.name },
+    //     });
+    //   }
+    // }
   };
 
   return (
@@ -212,16 +238,7 @@ const ExploreTopicsScreen = () => {
             <Pressable
               key={item.name}
               className="w-1/2 p-2"
-              onPress={() => {
-                if (item.name === "Recent quotes") {
-                  router.push("/free-trial-details-screen");
-                } else {
-                  router.push({
-                    pathname: "/explore-topics/user-item-screen",
-                    params: { category: item.name },
-                  });
-                }
-              }}
+              onPress={item.onPress}
             >
               <View className="bg-[#3a4151] rounded-2xl p-4 h-24 justify-between">
                 <Text className="text-white font-semibold">{item.name}</Text>
@@ -241,6 +258,32 @@ const ExploreTopicsScreen = () => {
           ))}
         </View>
 
+        {/* <View className="flex-row flex-wrap px-4 mb-6">
+          {userItems.map((item) => (
+            <Pressable
+              key={item.name}
+              className="w-1/2 p-2"
+              onPress={item.onPress} // ✅ Now uses the onPress function from userItems
+            >
+              <View className="bg-[#262e3d] rounded-2xl p-4 h-24 justify-between">
+                <Text className="text-white font-semibold">{item.name}</Text>
+
+                <View className="items-end">
+                  <Feather name={item.icon as any} size={24} color="#969da8" />
+                  {item.isLocked && (
+                    <Feather
+                      name="lock"
+                      size={12}
+                      color="#969da8"
+                      className="absolute -bottom-1 -left-1"
+                    />
+                  )}
+                </View>
+              </View>
+            </Pressable>
+          ))}
+        </View> */}
+
         <View className="px-4 mb-6">
           <Text className="text-white text-xl font-bold mb-3">
             Most popular
@@ -253,7 +296,6 @@ const ExploreTopicsScreen = () => {
                 className="bg-[#3a4151] rounded-2xl p-4 flex-row items-center justify-between mb-3"
                 // onPress={() => router.push("/free-trial-details-screen")}
                 onPress={() => handleItemPress(item)}
-
               >
                 <View className="flex-row items-center">
                   <IconComponent
@@ -280,7 +322,6 @@ const ExploreTopicsScreen = () => {
                 key={item.name}
                 className="bg-[#3a4151] rounded-2xl p-4 flex-row items-center justify-between mb-3"
                 onPress={() => handleItemPress(item)}
-
               >
                 <View className="flex-row items-center">
                   <IconComponent
@@ -307,7 +348,6 @@ const ExploreTopicsScreen = () => {
                 key={item.name}
                 className="bg-[#3a4151] rounded-2xl p-4 flex-row items-center justify-between mb-3"
                 onPress={() => handleItemPress(item)}
-
               >
                 <View className="flex-row items-center">
                   <IconComponent

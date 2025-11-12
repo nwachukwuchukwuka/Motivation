@@ -26,7 +26,7 @@ const BoxIllustration = () => (
   </Svg>
 );
 
-const UserQuotesEmpty = () => {
+const UserQuotes = () => {
   return (
     <View className="flex-1 justify-center items-center p-6">
       <BoxIllustration />
@@ -39,4 +39,4 @@ const UserQuotesEmpty = () => {
     </View>
   );
 };
-export default UserQuotesEmpty;
+export default UserQuotes;

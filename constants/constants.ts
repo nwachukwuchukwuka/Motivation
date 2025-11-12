@@ -216,3 +216,5 @@ export const QUOTES = [
     author: "-Friedrich Nietzsche",
   },
 ];
+
+

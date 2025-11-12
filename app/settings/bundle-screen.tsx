@@ -5,7 +5,6 @@ import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// Data for the list of apps in the bundle
 const BUNDLE_APPS = [
   {
     name: "Motivation",
@@ -58,7 +57,6 @@ const BundleScreen = () => {
   return (
     <View className="flex-1 bg-[#262e3d]">
       <SafeAreaView className="flex-1">
-        {/* Header */}
         <View className="flex-row items-center px-4 py-2">
           <TouchableOpacity
             onPress={() => router.back()}
@@ -70,7 +68,6 @@ const BundleScreen = () => {
         </View>
 
         <ScrollView contentContainerStyle={{ paddingBottom: 150 }}>
-          {/* Top Hero Section */}
           <View className="items-center px-6 mt-4">
             <Text className="text-white text-3xl font-bold text-center">
               Your Self-Growth Essentials bundle
@@ -180,7 +177,6 @@ const BundleScreen = () => {
           </View>
         </ScrollView>
 
-        {/* Fixed Footer */}
         <View className="absolute bottom-0 left-0 right-0 p-4 bg-[#262e3d] border-t border-t-gray-700">
           <View className="flex-row justify-center space-x-6 mb-4">
             <TouchableOpacity>

@@ -21,13 +21,11 @@ const SOUND_OPTIONS = [
 
 const SoundScreen = () => {
   const router = useRouter();
-  // In a real app, you'd get the current sound via params and pass the new one back.
-  // For this UI example, we'll manage state locally.
+
   const [selectedSound, setSelectedSound] = useState("System default");
 
   return (
     <SafeAreaView className="flex-1 bg-[#262e3d]">
-      {/* Header */}
       <View className="flex-row items-center p-4 pl-2">
         <TouchableOpacity
           onPress={() => router.back()}

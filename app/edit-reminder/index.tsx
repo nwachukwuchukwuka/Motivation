@@ -142,7 +142,6 @@ const EditReminderScreen = () => {
           </View>
           <View className="border-b border-[#3e485c] -mx-4 px-4" />
 
-          {/* Repeat Card */}
           <View className=" mt-6">
             <Text className="text-white text-xl mb-4">Repeat</Text>
             <View className="flex-row items-center justify-between ">
@@ -171,7 +170,6 @@ const EditReminderScreen = () => {
 
           <View className="border-b border-[#3e485c]  -mx-4 px-4 pt-4" />
 
-          {/* Sound Card */}
           <View className=" mt-4">
             <TouchableOpacity
               onPress={() => router.push("/edit-reminder/sound")}

@@ -8,10 +8,34 @@ export default function ExploreTopicsLayout() {
       }}
     >
       <Stack.Screen name="explore-topics-screen" />
-      <Stack.Screen name="user-item-screen" />
+      {/* {show && <Stack.Screen name="user-item-screen" />} */}
       <Stack.Screen name="topics-follow-screen" />
       <Stack.Screen name="topic-details-screen" />
+      <Stack.Screen name="show-all-in-feed" />
 
+      {/* <Stack.Screen
+        name="collections-screen"
+        options={{ presentation: "modal" }}
+      /> */}
+
+      <Stack.Screen
+        name="collections-screen"
+        options={({ route }) => {
+          const params = route.params as { presentation?: string };
+          if (params.presentation === "modal") {
+            return {
+              presentation: "modal",
+            };
+          }
+          return {
+            presentation: "card",
+          };
+        }}
+      />
+
+      {/* <Stack.Screen name="new-collections" options={{ presentation: "card" }} /> */}
+
+      {/* <Stack.Screen name="new-collections" /> */}
     </Stack>
   );
 }
