@@ -25,9 +25,8 @@ const ONBOARDING_ROUTES = [
   "bundle-offer-screen",
   "theme-selection-screen",
   "welcome-message-screen",
-  'personalization-intro-screen',
-  'inspiring-quotes-screen',
-
+  "personalization-intro-screen",
+  "inspiring-quotes-screen",
 ];
 
 export default function OnboardingLayout() {
@@ -54,23 +53,16 @@ export default function OnboardingLayout() {
   const shouldShowSkip = !noSkipScreens.includes(currentRoute);
 
   const handleSkip = () => {
-    // Find the index of the current screen in our defined flow
     const currentIndex = ONBOARDING_ROUTES.indexOf(currentRoute);
 
-    // Check if the current screen exists in our flow and is not the last one
     if (currentIndex !== -1 && currentIndex < ONBOARDING_ROUTES.length - 1) {
       const nextScreen = ONBOARDING_ROUTES[currentIndex + 1];
 
-      // 2. CONSTRUCT THE DYNAMIC ROUTE
-      // The path should be relative to the app directory, not the layout file.
       const nextRoute = `/${nextScreen}` as Href;
       console.log("nextRoute", nextRoute);
 
-      // 3. PUSH the route, now correctly typed
       router.push(nextRoute);
     } else {
-      // If there's no next screen, the onboarding is complete.
-      // router.replace('/(tabs)');
       console.log("cannot skip");
     }
   };
