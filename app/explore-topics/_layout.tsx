@@ -8,15 +8,9 @@ export default function ExploreTopicsLayout() {
       }}
     >
       <Stack.Screen name="explore-topics-screen" />
-      {/* {show && <Stack.Screen name="user-item-screen" />} */}
       <Stack.Screen name="topics-follow-screen" />
       <Stack.Screen name="topic-details-screen" />
       <Stack.Screen name="show-all-in-feed" />
-
-      {/* <Stack.Screen
-        name="collections-screen"
-        options={{ presentation: "modal" }}
-      /> */}
 
       <Stack.Screen
         name="collections-screen"
@@ -33,9 +27,7 @@ export default function ExploreTopicsLayout() {
         }}
       />
 
-      {/* <Stack.Screen name="new-collections" options={{ presentation: "card" }} /> */}
-
-      {/* <Stack.Screen name="new-collections" /> */}
+      <Stack.Screen name="add-quote" />
     </Stack>
   );
 }

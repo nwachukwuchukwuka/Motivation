@@ -1,3 +1,11 @@
+import {
+  Feather,
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { Href, router } from "expo-router";
+
 export const TOPIC_SECTIONS = [
   {
     title: "Most popular",
@@ -52,6 +60,61 @@ export const TOPIC_SECTIONS = [
       { name: "Discipline", isLocked: true },
       { name: "Focus", isLocked: true },
     ],
+  },
+];
+export const SETTINGS_DATA = [
+  {
+    title: "MAKE IT YOURS",
+    items: [
+      {
+        name: "Content Preference",
+        route: "/settings/content-preferences-screen" as Href,
+      },
+      {
+        name: "Gender identity",
+        route: "/settings/gender-identity-screen" as Href,
+      },
+      {
+        name: "Muted content",
+        route: "/settings/muted-content-screen" as Href,
+      },
+      { name: "Language" },
+      { name: "Name", route: "/settings/name-screen" as Href },
+      { name: "Sound", route: "/settings/sound-screen" as Href },
+      { name: "Voice", route: "/settings/voice-screen" as Href },
+      {
+        name: "Add Siri Shortcuts",
+        route: "/settings/siri-shortcuts-screen" as Href,
+      },
+    ],
+  },
+  {
+    title: "ACCOUNT",
+    items: [{ name: "Sign in", route: "/settings/sign-in-screen" as Href }],
+  },
+  {
+    title: "SUPPORT US",
+    items: [
+      { name: "Share Motivation" },
+      {
+        name: "More by Monkey Taps",
+        route: "/settings/monkey-taps-screen" as Href,
+      },
+      { name: "Leave us a review" },
+      { name: "Give feedback" },
+    ],
+  },
+  {
+    title: "HELP",
+    items: [{ name: "Help" }],
+  },
+  {
+    title: "FOLLOW US",
+    items: [{ name: "Success" }, { name: "Discipline" }, { name: "Focus" }],
+  },
+  {
+    title: "OTHER",
+    items: [{ name: "Success" }, { name: "Discipline" }, { name: "Focus" }],
   },
 ];
 
@@ -193,28 +256,179 @@ export const COLORS = [
   "#FF0000",
 ];
 
-
 export const QUOTES = [
   {
     id: "1",
     text: "Show people, don't tell people.",
     author: "-David Goggins",
+    date: "Thu, Dec 25, 2025",
   },
   {
     id: "2",
     text: "The only way to do great work is to love what you do.",
     author: "-Steve Jobs",
+    date: "Thu, Dec 25, 2025",
   },
   {
     id: "3",
     text: "The journey of a thousand miles begins with a single step.",
     author: "-Lao Tzu",
+    date: "Thu, Dec 25, 2025",
   },
   {
     id: "4",
     text: "That which does not kill us makes us stronger.",
     author: "-Friedrich Nietzsche",
+    date: "Thu, Dec 25, 2025",
+  },
+  {
+    id: "5",
+    text: "That which does not kill us makes us stronger.",
+    author: "-Friedrich Nietzsche",
+    date: "Thu, Dec 25, 2025",
   },
 ];
 
+export const userItems = [
+  {
+    name: "Favorites",
+    icon: "heart",
+    isLocked: false,
+    // onPress: () => router.push("./favorites-screen"),
+    onPress: () => router.push("/explore-topics/favorites-screen"),
+  },
+  {
+    name: "My collections",
+    icon: "bookmark",
+    isLocked: false,
+    onPress: () =>
+      router.push({
+        // pathname: "./collections-screen",
+        pathname: "/explore-topics/collections-screen",
+        params: { display: "collections" },
+      }),
+  },
+  {
+    name: "My own quotes",
+    icon: "edit-3",
+    isLocked: false,
+    // onPress: () => router.push("./user-quotes"),
+    onPress: () => router.push("/explore-topics/user-quotes"),
+  },
+  {
+    name: "Recent quotes",
+    icon: "shuffle",
+    isLocked: true,
+    onPress: () => router.push("/free-trial-details-screen"),
+  },
+];
 
+export const mostPopular = [
+  {
+    name: "Mental toughness",
+    icon: "brain",
+    lib: MaterialCommunityIcons,
+    isLocked: true,
+  },
+  { name: "Feeling blessed", icon: "sunny", lib: Ionicons, isLocked: true },
+  { name: "Self-worth", icon: "sparkles", lib: Ionicons, isLocked: true },
+  { name: "Bible verses", icon: "bible", lib: FontAwesome5, isLocked: true },
+];
+
+export const forYou = [
+  { name: "Listening", icon: "ear", lib: Ionicons, isLocked: true },
+  { name: "Family", icon: "home", lib: Feather, isLocked: true },
+  { name: "Fake people", icon: "people", lib: Ionicons, isLocked: true },
+  {
+    name: "Honesty",
+    icon: "shield-check",
+    lib: MaterialCommunityIcons,
+    isLocked: true,
+  },
+  {
+    name: "Setting boundaries",
+    icon: "fence",
+    lib: MaterialCommunityIcons,
+    isLocked: true,
+  },
+];
+
+export const freeToday = [
+  { name: "Finding purpose", icon: "compass", lib: Feather, isLocked: false },
+  {
+    name: "Mental health",
+    icon: "head-side-virus",
+    lib: FontAwesome5,
+    isLocked: false,
+  },
+  { name: "Life balance", icon: "git-compare", lib: Feather, isLocked: false },
+  { name: "Start your day", icon: "sunrise", lib: Feather, isLocked: false },
+  { name: "Resilience", icon: "shield", lib: Feather, isLocked: false },
+  { name: "Business", icon: "trending-up", lib: Feather, isLocked: false },
+];
+
+export const personalGrowth = [
+  { name: "Growth", icon: "leaf", lib: Ionicons, isLocked: true },
+  {
+    name: "Self-love",
+    icon: "hand-heart",
+    lib: MaterialCommunityIcons,
+    isLocked: true,
+  },
+  { name: "New beginnings", icon: "sun", lib: Feather, isLocked: true },
+  { name: "Love yourself", icon: "heart", lib: Feather, isLocked: true },
+  { name: "Gratitude", icon: "pray", lib: FontAwesome5, isLocked: true },
+  {
+    name: "Moving on",
+    icon: "arrow-right-circle",
+    lib: Feather,
+    isLocked: true,
+  },
+];
+
+type ImageTheme = {
+  id: number;
+  type: "image";
+  value: { uri: string };
+  video?: string; // Video is optional on image themes
+  isVideo: boolean;
+  textColor?: string;
+};
+
+type ColorTheme = {
+  id: number;
+  type: "color";
+  value: string; // The hex color code
+  textColor: string;
+};
+
+// 2. DEFINE the main Theme type as a union of the two
+export type Theme = ImageTheme | ColorTheme;
+
+export const THEMES: Theme[] = [
+  { id: 1, type: "color", value: "#000000", textColor: "#FFFFFF" },
+
+  {
+    id: 2,
+    type: "image",
+    value: {
+      uri: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=800",
+    },
+    isVideo: true,
+  },
+  { id: 3, type: "color", value: "#4A4A4A", textColor: "#FFFFFF" },
+
+  { id: 4, type: "color", value: "#F2D7E7", textColor: "#000000" },
+
+  {
+    id: 5,
+    type: "image",
+    value: {
+      uri: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=800",
+    },
+    textColor: "black",
+    isVideo: false,
+  },
+
+  { id: 6, type: "color", value: "#1E1E2F", textColor: "#FFFFFF" },
+];

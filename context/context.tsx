@@ -1,4 +1,5 @@
 import { LetterCaseStyle } from "@/components/TextControls";
+import { QUOTES } from "@/constants/constants";
 import React, {
   createContext,
   ReactNode,
@@ -26,23 +27,12 @@ export type Collection = {
   quoteIds: string[];
 };
 
-const ALL_QUOTES: Quote[] = [
-  {
-    id: "1",
-    text: "I live by 3 simple rules: Love needs action. Trust needs proof. Sorry needs change.",
-    date: "Wed, Nov 12, 2025",
-  },
-  {
-    id: "2",
-    text: "The best way to predict the future is to create it.",
-    date: "Tue, Oct 28, 2025",
-  },
-  {
-    id: "3",
-    text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-    date: "Mon, Sep 15, 2025",
-  },
-];
+export type UserQuote = {
+  id: string;
+  text: string;
+  author?: string;
+  date: string;
+};
 
 type AppContextType = {
   allQuotes: Quote[];
@@ -73,13 +63,23 @@ type AppContextType = {
   favoriteQuoteIds: string[];
   toggleFavorite: (quoteId: string) => void;
   isFavorite: (quoteId: string) => boolean;
+  isQuoteInAnyCollection: (quoteId: string) => boolean;
+  feedQuotes: Quote[];
+  setFeedQuotes: (quotes: Quote[]) => void;
+
+  userQuotes: UserQuote[];
+  addUserQuote: (quote: { text: string; author?: string }) => void;
+
+  mutedWords: string[];
+  addMutedWord: (word: string) => void;
+  removeMutedWord: (word: string) => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const defaultBackgroundImage = {
-    uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5hYBeUGdL0vrfC6HWYZWs6h24FmRNSx61SA&s",
+    uri: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=800",
   };
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
@@ -101,8 +101,44 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const [collections, setCollections] = useState<Collection[]>([]);
   const [quoteToAdd, setQuoteToAdd] = useState<Quote | null>(null);
-  const [allQuotes, setAllQuotes] = useState<Quote[]>(ALL_QUOTES);
-  const [favoriteQuoteIds, setFavoriteQuoteIds] = useState<string[]>(["1"]);
+  // const [allQuotes, setAllQuotes] = useState<Quote[]>(QUOTES);
+  const [favoriteQuoteIds, setFavoriteQuoteIds] = useState<string[]>([]);
+  const [feedQuotes, setFeedQuotes] = useState<Quote[]>([]);
+  const [userQuotes, setUserQuotes] = useState<UserQuote[]>([]);
+
+  const [mutedWords, setMutedWords] = useState<string[]>([]);
+
+  const addMutedWord = (word: string) => {
+      // Add word if it doesn't already exist (case-insensitive)
+      if (!mutedWords.find(w => w.toLowerCase() === word.toLowerCase())) {
+          setMutedWords(prev => [word, ...prev]);
+      }
+  };
+
+  const removeMutedWord = (wordToRemove: string) => {
+      setMutedWords(prev => prev.filter(word => word !== wordToRemove));
+  };
+
+  const allQuotes = useMemo(() => {
+    // The `allQuotes` list is now a combination of the user's quotes and the default quotes.
+    // User quotes are placed first.
+    return [...userQuotes, ...QUOTES];
+  }, [userQuotes]);
+
+  const addUserQuote = (quote: { text: string; author?: string }) => {
+    const newQuote: UserQuote = {
+      id: `user_${Date.now()}`,
+      text: quote.text,
+      author: quote.author || "Chuks",
+      date: new Date().toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+    };
+    setUserQuotes((prev) => [newQuote, ...prev]);
+  };
 
   const toggleFavorite = (quoteId: string) => {
     setFavoriteQuoteIds((prevIds) => {
@@ -117,8 +153,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const isFavorite = (quoteId: string): boolean => {
     return favoriteQuoteIds.includes(quoteId);
   };
-
-  console.log("isFavorite in contect", isFavorite);
 
   const addCollection = (name: string) => {
     const newCollection: Collection = {
@@ -178,6 +212,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [letterCaseStyle]);
 
+  const isQuoteInAnyCollection = (quoteId: string): boolean => {
+    return collections.some((collection) =>
+      collection.quoteIds.includes(quoteId)
+    );
+  };
+
   const value = {
     themeSource,
     setThemeSource,
@@ -208,6 +248,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     favoriteQuoteIds,
     toggleFavorite,
     isFavorite,
+    isQuoteInAnyCollection,
+    feedQuotes,
+    setFeedQuotes,
+    userQuotes,
+    addUserQuote,
+    mutedWords,
+    addMutedWord,
+    removeMutedWord,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

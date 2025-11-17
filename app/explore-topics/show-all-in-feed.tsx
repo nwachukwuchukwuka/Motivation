@@ -1,42 +1,25 @@
-import { Feather } from "@expo/vector-icons";
+import { useAppContext } from "@/context/context";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
-    Dimensions,
-    FlatList,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
-    Pressable,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  FlatList,
+  ImageBackground,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import {
-    useAnimatedStyle,
-    useSharedValue,
-    withDelay,
-    withSpring,
-    withTiming,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
+  withTiming,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-const QUOTES = [
-  {
-    id: "1",
-    text: "Sometimes when things are falling apart, they may actually be falling into place.",
-    author: "-Jessica Redland",
-  },
-  {
-    id: "2",
-    text: "The only way to do great work is to love what you do.",
-    author: "-Steve Jobs",
-  },
-  {
-    id: "3",
-    text: "The journey of a thousand miles begins with a single step.",
-    author: "-Lao Tzu",
-  },
-];
 
 type Quote = {
   id: string;
@@ -48,11 +31,23 @@ const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 type QuoteCardProps = {
   item: Quote;
-  onLike: () => void;
-  isLiked: boolean;
+  onToggleFavorite: () => void;
+  isFavorite: boolean;
+  textStyles: {
+    fontSize: number;
+    fontFamily: string;
+    color: string;
+    textAlign: "center" | "left" | "right";
+    textShadowStyle: object;
+  };
 };
 
-const QuoteCard = ({ item, onLike, isLiked }: QuoteCardProps) => {
+const QuoteCard = ({
+  item,
+  onToggleFavorite,
+  isFavorite,
+  textStyles,
+}: QuoteCardProps) => {
   const router = useRouter();
   return (
     <View
@@ -61,24 +56,44 @@ const QuoteCard = ({ item, onLike, isLiked }: QuoteCardProps) => {
     >
       <View>
         <View className="items-center">
-          <Text className="text-white text-4xl font-semibold text-center leading-relaxed">
+          {/* <Text className="text-white text-4xl font-semibold text-center leading-relaxed"> */}
+          <Text
+            className="text-center leading-relaxed"
+            style={[
+              {
+                fontFamily: textStyles.fontFamily,
+                fontSize: textStyles.fontSize,
+                color: textStyles.color,
+                textAlign: textStyles.textAlign,
+              },
+              textStyles.textShadowStyle,
+            ]}
+          >
             {item.text}
           </Text>
           {item.author ? (
-            <Text className="text-white text-lg mt-4">{item.author}</Text>
+            <Text
+              className="text-lg mt-4"
+              style={[
+                { color: textStyles.color, fontFamily: textStyles.fontFamily },
+                textStyles.textShadowStyle,
+              ]}
+            >
+              {item.author}
+            </Text>
           ) : null}
         </View>
         <View className="flex-row justify-center items-center gap-8 mt-12">
           <Pressable onPress={() => router.push("/share-quote-modal")}>
             <Feather name="share" size={28} color="white" />
           </Pressable>
-          <TouchableOpacity onPress={onLike}>
-            <Feather
-              name="heart"
-              size={28}
-              color={isLiked ? "white" : "white"}
-              fill={isLiked ? "white" : "transparent"}
-            />
+
+          <TouchableOpacity onPress={onToggleFavorite}>
+            {isFavorite ? (
+              <AntDesign name="heart" size={32} color="white" />
+            ) : (
+              <Feather name="heart" size={32} color="white" />
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -88,11 +103,24 @@ const QuoteCard = ({ item, onLike, isLiked }: QuoteCardProps) => {
 
 const ShowAllInFeed = () => {
   const router = useRouter();
+  // const { feedQuotes, themeSource, isFavorite, toggleFavorite } =
+  //   useAppContext();
+
+  const {
+    feedQuotes,
+    themeSource,
+    isFavorite,
+    toggleFavorite,
+    fontSize,
+    fontFamily,
+    textColor,
+    textAlign,
+    textShadowStyle,
+  } = useAppContext();
   const { topicName } = useLocalSearchParams<{ topicName: string }>();
   const [isFollowing, setIsFollowing] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
-  const [likedQuotes, setLikedQuotes] = useState<string[]>([]);
   const scale = useSharedValue(0);
   const opacity = useSharedValue(0);
 
@@ -109,12 +137,8 @@ const ShowAllInFeed = () => {
   };
 
   const handleLikePress = (quoteId: string) => {
-    const isAlreadyLiked = likedQuotes.includes(quoteId);
-
-    if (isAlreadyLiked) {
-      setLikedQuotes((prev) => prev.filter((id) => id !== quoteId));
-    } else {
-      setLikedQuotes((prev) => [...prev, quoteId]);
+    toggleFavorite(quoteId);
+    if (!isFavorite(quoteId)) {
       triggerLikeAnimation();
     }
   };
@@ -128,19 +152,25 @@ const ShowAllInFeed = () => {
       setCurrentIndex(newIndex);
     }
   };
+  const isImageBackground = typeof themeSource === "object" && themeSource.uri;
 
-  const insets = useSafeAreaInsets();
-
-  return (
-    <View className="flex-1 bg-black">
+  const MainContent = () => (
+    <View className="flex-1">
       <FlatList
         ref={flatListRef}
-        data={QUOTES}
+        data={feedQuotes}
         renderItem={({ item }) => (
           <QuoteCard
             item={item}
-            onLike={() => handleLikePress(item.id)}
-            isLiked={likedQuotes.includes(item.id)}
+            onToggleFavorite={() => handleLikePress(item.id)}
+            isFavorite={isFavorite(item.id)}
+            textStyles={{
+              fontSize,
+              fontFamily,
+              color: textColor,
+              textAlign,
+              textShadowStyle,
+            }}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -151,23 +181,14 @@ const ShowAllInFeed = () => {
         decelerationRate="fast"
       />
 
-      {/* <Animated.View
-        style={animatedStyle}
-        className="absolute inset-0 justify-center items-center"
-      >
-        <Feather name="heart" size={150} color="white" fill="white" />
-      </Animated.View> */}
-
-      <View
-        // style={{ paddingTop: insets.top }}
-        className="absolute top-0 left-0 right-0 p-4"
-      >
+      <View className="absolute top-0 left-0 right-0 p-4">
         <View className="flex-row justify-between items-center h-14">
           <TouchableOpacity onPress={() => router.back()}>
             <Feather name="chevron-left" size={28} color="white" />
           </TouchableOpacity>
           <Text className="text-white text-lg font-bold">
-            {topicName || "Topic"}
+            {/* {topicName || "Topic"} */}
+            {topicName || "Favorites"}
           </Text>
           <TouchableOpacity
             onPress={() => setIsFollowing(!isFollowing)}
@@ -189,6 +210,23 @@ const ShowAllInFeed = () => {
           </TouchableOpacity>
         </View>
       </View>
+    </View>
+  );
+  return isImageBackground ? (
+    <ImageBackground source={themeSource} resizeMode="cover" className="flex-1">
+      <View className="flex-1 bg-black/20">
+        <MainContent />
+      </View>
+    </ImageBackground>
+  ) : (
+    <View
+      className="flex-1"
+      style={{
+        backgroundColor:
+          typeof themeSource === "object" ? themeSource.color : "black",
+      }}
+    >
+      <MainContent />
     </View>
   );
 };

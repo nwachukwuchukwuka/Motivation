@@ -1,5 +1,5 @@
 import { useAppContext } from "@/context/context";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import {
@@ -43,7 +43,7 @@ const BookIllustration = () => (
 
 const CollectionsScreen = () => {
   const router = useRouter();
-   const { collections, quoteToAdd, addQuoteToCollection, isQuoteInCollection } =
+  const { collections, quoteToAdd, addQuoteToCollection, isQuoteInCollection } =
     useAppContext();
   const { display } = useLocalSearchParams();
   const currentDisplayMode = display || "collections";
@@ -103,48 +103,6 @@ const CollectionsScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* <FlatList
-        data={collections}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16 }}
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() => {
-              if (display === "collections") {
-                router.push(`/explore-topics/${item.id}`);
-              } else if (display === "favorites") {
-                setIsBookmarked(!isBookmarked);
-              }
-            }}
-            className="bg-[#3a4151] rounded-2xl p-4 mb-3 flex-row justify-between items-center"
-          >
-            <View>
-              <Text className="text-white text-lg font-semibold">
-                {item.name}
-              </Text>
-              {display === "collections" && (
-                <Text className="text-gray-400 mt-1">
-                  {item.quoteIds.length} quote
-                  {item.quoteIds.length !== 1 ? "s" : ""}
-                </Text>
-              )}
-            </View>
-
-            {display === "collections" ? (
-              <Feather name="chevron-right" size={24} color="#969da8" />
-            ) : (
-              display === "favorites" && (
-                <Feather
-                  name="bookmark"
-                  size={20}
-                  color={isBookmarked ? "black" : "white"}
-                />
-              )
-            )}
-          </Pressable>
-        )}
-      /> */}
-
       <FlatList
         data={collections}
         keyExtractor={(item) => item.id}
@@ -179,13 +137,10 @@ const CollectionsScreen = () => {
 
               {currentDisplayMode === "collections" ? (
                 <Feather name="chevron-right" size={24} color="#969da8" />
+              ) : isBookmarked ? (
+                <FontAwesome name="bookmark" size={24} color="black" />
               ) : (
-                <Feather
-                  name="bookmark"
-                  size={24}
-                  color={isBookmarked ? "white" : "#969da8"}
-                  fill={isBookmarked ? "white" : "transparent"}
-                />
+                <FontAwesome name="bookmark-o" size={24} color="black" />
               )}
             </Pressable>
           );

@@ -1,3 +1,4 @@
+// import StreakToast from "@/components/StreakToast";
 // import ThemeChangedToast from "@/components/ThemeChangedToast";
 // import { QUOTES } from "@/constants/constants";
 // import { useAppContext } from "@/context/context";
@@ -34,10 +35,18 @@
 //     textAlign: "center" | "left" | "right";
 //     textShadowStyle: object;
 //   };
+//   isFavorite: boolean;
+//   onToggleFavorite: () => void;
 // };
 
-// const QuoteCard = ({ item, textStyles }: QuoteCardProps) => {
+// const QuoteCard = ({
+//   item,
+//   textStyles,
+//   isFavorite,
+//   onToggleFavorite,
+// }: QuoteCardProps) => {
 //   const router = useRouter();
+
 //   return (
 //     <View
 //       style={{ height: SCREEN_HEIGHT }}
@@ -74,8 +83,13 @@
 //           <Pressable onPress={() => router.push("/share-quote-modal")}>
 //             <Feather name="share" size={32} color="white" />
 //           </Pressable>
-//           <TouchableOpacity>
-//             <Feather name="heart" size={32} color="white" />
+
+//           <TouchableOpacity onPress={onToggleFavorite}>
+//             {isFavorite ? (
+//               <AntDesign name="heart" size={32} color="white" />
+//             ) : (
+//               <Feather name="heart" size={32} color="white" />
+//             )}
 //           </TouchableOpacity>
 //         </View>
 //       </View>
@@ -93,13 +107,21 @@
 //   router,
 //   textStyles,
 //   showThemeToast,
+//   isFavorite,
+//   toggleFavorite,
+//   showStreakToast,
 // }: any) => (
 //   <View className="flex-1">
 //     <FlatList
 //       ref={flatListRef}
 //       data={QUOTES}
 //       renderItem={({ item }) => (
-//         <QuoteCard item={item} textStyles={textStyles} />
+//         <QuoteCard
+//           item={item}
+//           textStyles={textStyles}
+//           isFavorite={isFavorite(item.id)}
+//           onToggleFavorite={() => toggleFavorite(item.id)}
+//         />
 //       )}
 //       keyExtractor={(item) => item.id}
 //       pagingEnabled
@@ -128,7 +150,7 @@
 //         </Pressable>
 
 //         <TouchableOpacity
-//           className="bg-black/40 p-2.5 rounded-lg"
+//           className="bg-[#374051] p-2.5 px-3 rounded-xl"
 //           onPress={() => router.push("/free-trial-details-screen")}
 //         >
 //           <AntDesign name="crown" size={24} color="white" />
@@ -136,14 +158,13 @@
 //       </View>
 //     </View>
 
-//     {/* Bottom Section */}
 //     <View
 //       style={{ paddingBottom: insets.bottom }}
 //       className="absolute bottom-0 left-0 right-0 p-4"
 //     >
 //       <View className="flex-row justify-between items-center">
 //         <TouchableOpacity
-//           className="flex-row items-center bg-black/50 rounded-2xl px-4 py-5"
+//           className="flex-row items-center bg-[#374051] rounded-2xl px-4 py-4"
 //           onPress={() => router.push("/explore-topics/explore-topics-screen")}
 //         >
 //           <Feather name="grid" size={20} color="white" />
@@ -155,13 +176,13 @@
 
 //         <View className="flex-row items-center gap-6 mr-4">
 //           <Pressable
-//             className="items-center bg-black/50 rounded-2xl px-4 py-5"
+//             className="items-center bg-[#374051] rounded-2xl px-4 py-4"
 //             onPress={() => router.push("/themes/themes-screen")}
 //           >
 //             <Feather name="sliders" size={18} color="white" />
 //           </Pressable>
 //           <Pressable
-//             className="items-center bg-black/50 rounded-2xl px-4 py-5"
+//             className="items-center bg-[#374051] rounded-2xl px-4 py-4"
 //             onPress={() => router.push("/settings")}
 //           >
 //             <Feather name="user" size={18} color="white" />
@@ -171,6 +192,7 @@
 //     </View>
 
 //     <ThemeChangedToast visible={showThemeToast} />
+//     <StreakToast visible={showStreakToast} streakCount={1} />
 //   </View>
 // );
 
@@ -184,6 +206,8 @@
 //     textShadowStyle,
 //     setActiveQuote,
 //     isAuthenticated,
+//     isFavorite,
+//     toggleFavorite,
 //   } = useAppContext();
 //   if (!isAuthenticated) return <Redirect href="/welcome-screen" />;
 
@@ -194,17 +218,7 @@
 
 //   const [currentIndex, setCurrentIndex] = useState(0);
 //   const flatListRef = useRef<FlatList>(null);
-
-//   // const handleMomentumScrollEnd = (
-//   //   event: NativeSyntheticEvent<NativeScrollEvent>
-//   // ) => {
-//   //   const offsetY = event.nativeEvent.contentOffset.y;
-//   //   const newIndex = Math.round(offsetY / SCREEN_HEIGHT);
-//   //   if (newIndex !== currentIndex) {
-//   //     setCurrentIndex(newIndex);
-//   //     setActiveQuote(QUOTES[newIndex]);
-//   //   }
-//   // };
+//   const [showStreakToast, setShowStreakToast] = useState(false);
 
 //   const handleMomentumScrollEnd = (
 //     event: NativeSyntheticEvent<NativeScrollEvent>
@@ -213,7 +227,6 @@
 //     const newIndex = Math.round(offsetY / SCREEN_HEIGHT);
 //     if (newIndex !== currentIndex) {
 //       setCurrentIndex(newIndex);
-//       // Ensure QUOTES[newIndex] exists before setting
 //       if (QUOTES[newIndex]) {
 //         setActiveQuote(QUOTES[newIndex]);
 //       }
@@ -223,23 +236,24 @@
 //   const insets = useSafeAreaInsets();
 
 //   const isImageBackground = typeof themeSource === "object" && themeSource.uri;
-
-//   console.log("themeSource", themeSource);
 //   const [showThemeToast, setShowThemeToast] = useState(false);
-
 //   const isInitialMount = useRef(true);
 
 //   useEffect(() => {
 //     if (isInitialMount.current) {
 //       isInitialMount.current = false;
-//     } else {
-//       setShowThemeToast(true);
-
-//       const timer = setTimeout(() => {
-//         setShowThemeToast(false);
+//       setShowStreakToast(true);
+//       const streakTimer = setTimeout(() => {
+//         setShowStreakToast(false);
 //       }, 4000);
 
-//       return () => clearTimeout(timer);
+//       return () => clearTimeout(streakTimer);
+//     } else {
+//       setShowThemeToast(true);
+//       const themeTimer = setTimeout(() => {
+//         setShowThemeToast(false);
+//       }, 4000);
+//       return () => clearTimeout(themeTimer);
 //     }
 //   }, [themeSource]);
 
@@ -259,98 +273,10 @@
 //       textShadowStyle,
 //     },
 //     showThemeToast,
+//     isFavorite,
+//     toggleFavorite,
+//     showStreakToast,
 //   };
-
-//   // const MainContent = () => (
-//   //   <View className="flex-1">
-//   //     <FlatList
-//   //       ref={flatListRef}
-//   //       data={QUOTES}
-//   //       renderItem={({ item }) => (
-//   //         <QuoteCard
-//   //           item={item}
-//   //           textStyles={{
-//   //             fontSize,
-//   //             fontFamily,
-//   //             color: textColor,
-//   //             textAlign,
-//   //             textShadowStyle,
-//   //           }}
-//   //         />
-//   //       )}
-//   //       keyExtractor={(item) => item.id}
-//   //       pagingEnabled
-//   //       showsVerticalScrollIndicator={false}
-//   //       onMomentumScrollEnd={handleMomentumScrollEnd}
-//   //       decelerationRate="fast"
-//   //     />
-
-//   //     {/* Top Section */}
-//   // <View
-//   //   style={{ paddingTop: insets.top }}
-//   //   className="absolute top-0 left-0 right-0 p-4"
-//   // >
-//   //   <View className="flex-row justify-between items-center">
-//   //     <View className="mr-10" />
-//   //     <Pressable className="flex-row items-center">
-//   //       <Feather name="heart" size={16} color="white" />
-//   //       <Text className="text-white font-semibold mx-2 text-sm">
-//   //         {likes}/{maxLikes}
-//   //       </Text>
-//   //       <View className="w-32 h-1.5 bg-white/30 rounded-full">
-//   //         <View
-//   //           style={{ width: `${progress}%` }}
-//   //           className="h-1.5 bg-white rounded-full"
-//   //         />
-//   //       </View>
-//   //     </Pressable>
-
-//   //     <TouchableOpacity
-//   //       className="bg-black/40 p-2.5 rounded-lg"
-//   //       onPress={() => router.push("/free-trial-details-screen")}
-//   //     >
-//   //       <AntDesign name="crown" size={24} color="white" />
-//   //     </TouchableOpacity>
-//   //   </View>
-//   // </View>
-
-//   //     {/* Bottom Section */}
-//   // <View
-//   //   style={{ paddingBottom: insets.bottom }}
-//   //   className="absolute bottom-0 left-0 right-0 p-4"
-//   // >
-//   //   <View className="flex-row justify-between items-center">
-//   //     <TouchableOpacity
-//   //       className="flex-row items-center bg-black/50 rounded-2xl px-4 py-5"
-//   //       onPress={() => router.push("/explore-topics/explore-topics-screen")}
-//   //     >
-//   //       <Feather name="grid" size={20} color="white" />
-//   //       <Text className="text-white font-semibold ml-2">General</Text>
-//   //       <View className="absolute -top-3.5 -right-1 bg-[#ff8a8a] rounded-full px-2 py-1">
-//   //         <Text className="text-white text-md">NEW</Text>
-//   //       </View>
-//   //     </TouchableOpacity>
-
-//   //     <View className="flex-row items-center gap-6 mr-4">
-//   //       <Pressable
-//   //         className="items-center bg-black/50 rounded-2xl px-4 py-5"
-//   //         onPress={() => router.push("/themes/themes-screen")}
-//   //       >
-//   //         <Feather name="sliders" size={18} color="white" />
-//   //       </Pressable>
-//   //       <Pressable
-//   //         className="items-center bg-black/50 rounded-2xl px-4 py-5"
-//   //         onPress={() => router.push("/settings")}
-//   //       >
-//   //         <Feather name="user" size={18} color="white" />
-//   //       </Pressable>
-//   //     </View>
-//   //   </View>
-//   // </View>
-
-//   //     <ThemeChangedToast visible={showThemeToast} />
-//   //   </View>
-//   // );
 
 //   return isImageBackground ? (
 //     <ImageBackground source={themeSource} resizeMode="cover" className="flex-1">
@@ -373,6 +299,7 @@
 
 // export default QuoteScreen;
 
+import StreakToast from "@/components/StreakToast";
 import ThemeChangedToast from "@/components/ThemeChangedToast";
 import { QUOTES } from "@/constants/constants";
 import { useAppContext } from "@/context/context";
@@ -459,12 +386,11 @@ const QuoteCard = ({
           </Pressable>
 
           <TouchableOpacity onPress={onToggleFavorite}>
-            <Feather
-              name="heart"
-              size={32}
-              // color="white"
-              color={isFavorite ? "white" : "black"}
-            />
+            {isFavorite ? (
+              <AntDesign name="heart" size={32} color="white" />
+            ) : (
+              <Feather name="heart" size={32} color="white" />
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -484,91 +410,116 @@ const MainContent = ({
   showThemeToast,
   isFavorite,
   toggleFavorite,
-}: any) => (
-  <View className="flex-1">
-    <FlatList
-      ref={flatListRef}
-      data={QUOTES}
-      renderItem={({ item }) => (
-        <QuoteCard
-          item={item}
-          textStyles={textStyles}
-          isFavorite={isFavorite(item.id)}
-          onToggleFavorite={() => toggleFavorite(item.id)}
-        />
+  showStreakToast,
+}: any) => {
+  const [showLargeHeart, setShowLargeHeart] = useState(false);
+
+  const handleLikePress = (quoteId: string) => {
+    if (!isFavorite(quoteId)) {
+      setShowLargeHeart(true);
+
+      setTimeout(() => {
+        setShowLargeHeart(false);
+      }, 800);
+    }
+    toggleFavorite(quoteId);
+  };
+
+  console.log(likes)
+  return (
+    <View className="flex-1">
+      <FlatList
+        ref={flatListRef}
+        data={QUOTES}
+        renderItem={({ item }) => (
+          <QuoteCard
+            item={item}
+            textStyles={textStyles}
+            isFavorite={isFavorite(item.id)}
+            onToggleFavorite={() => handleLikePress(item.id)}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+        pagingEnabled
+        showsVerticalScrollIndicator={false}
+        onMomentumScrollEnd={handleMomentumScrollEnd}
+        decelerationRate="fast"
+      />
+
+      {showLargeHeart && (
+        <View className="absolute inset-0 justify-center items-center pointer-events-none">
+          <AntDesign name="heart" size={150} color="#FFC0CB" />
+        </View>
       )}
-      keyExtractor={(item) => item.id}
-      pagingEnabled
-      showsVerticalScrollIndicator={false}
-      onMomentumScrollEnd={handleMomentumScrollEnd}
-      decelerationRate="fast"
-    />
 
-    <View
-      style={{ paddingTop: insets.top }}
-      className="absolute top-0 left-0 right-0 p-4"
-    >
-      <View className="flex-row justify-between items-center">
-        <View className="mr-10" />
-        <Pressable className="flex-row items-center">
-          <Feather name="heart" size={16} color="white" />
-          <Text className="text-white font-semibold mx-2 text-sm">
-            {likes}/{maxLikes}
-          </Text>
-          <View className="w-32 h-1.5 bg-white/30 rounded-full">
-            <View
-              style={{ width: `${progress}%` }}
-              className="h-1.5 bg-white rounded-full"
-            />
-          </View>
-        </Pressable>
+      <View
+        style={{ paddingTop: insets.top }}
+        className="absolute top-0 left-0 right-0 p-4"
+      >
+        <View className="flex-row justify-between items-center">
+          <View className="mr-10" />
+          {likes < 5 && (
+            <Pressable className="flex-row items-center">
+              <Feather name="heart" size={16} color="white" />
+              <Text className="text-white font-semibold mx-2 text-sm">
+                {likes}/{maxLikes}
+              </Text>
+              <View className="w-32 h-1.5 bg-white/30 rounded-full">
+                <View
+                  style={{ width: `${progress}%` }}
+                  className="h-1.5 bg-white rounded-full"
+                />
+              </View>
+            </Pressable>
+          )}
 
-        <TouchableOpacity
-          className="bg-black/40 p-2.5 rounded-lg"
-          onPress={() => router.push("/free-trial-details-screen")}
-        >
-          <AntDesign name="crown" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
-    </View>
-
-    {/* Bottom Section */}
-    <View
-      style={{ paddingBottom: insets.bottom }}
-      className="absolute bottom-0 left-0 right-0 p-4"
-    >
-      <View className="flex-row justify-between items-center">
-        <TouchableOpacity
-          className="flex-row items-center bg-black/50 rounded-2xl px-4 py-5"
-          onPress={() => router.push("/explore-topics/explore-topics-screen")}
-        >
-          <Feather name="grid" size={20} color="white" />
-          <Text className="text-white font-semibold ml-2">General</Text>
-          <View className="absolute -top-3.5 -right-1 bg-[#ff8a8a] rounded-full px-2 py-1">
-            <Text className="text-white text-md">NEW</Text>
-          </View>
-        </TouchableOpacity>
-
-        <View className="flex-row items-center gap-6 mr-4">
-          <Pressable
-            className="items-center bg-black/50 rounded-2xl px-4 py-5"
-            onPress={() => router.push("/themes/themes-screen")}
+          <TouchableOpacity
+            className="bg-[#374051] p-2.5 px-3 rounded-xl"
+            onPress={() => router.push("/free-trial-details-screen")}
           >
-            <Feather name="sliders" size={18} color="white" />
-          </Pressable>
-          <Pressable
-            className="items-center bg-black/50 rounded-2xl px-4 py-5"
-            onPress={() => router.push("/settings")}
-          >
-            <Feather name="user" size={18} color="white" />
-          </Pressable>
+            <AntDesign name="crown" size={24} color="white" />
+          </TouchableOpacity>
         </View>
       </View>
-    </View>
 
-    <ThemeChangedToast visible={showThemeToast} />
-  </View>
-);
+      <View
+        style={{ paddingBottom: insets.bottom }}
+        className="absolute bottom-0 left-0 right-0 p-4"
+      >
+        <View className="flex-row justify-between items-center">
+          <TouchableOpacity
+            className="flex-row items-center bg-[#374051] rounded-2xl px-4 py-4"
+            onPress={() => router.push("/explore-topics/explore-topics-screen")}
+          >
+            <Feather name="grid" size={20} color="white" />
+            <Text className="text-white font-semibold ml-2">General</Text>
+            <View className="absolute -top-3.5 -right-1 bg-[#ff8a8a] rounded-full px-2 py-1">
+              <Text className="text-white text-md">NEW</Text>
+            </View>
+          </TouchableOpacity>
+
+          <View className="flex-row items-center gap-6 mr-4">
+            <Pressable
+              className="items-center bg-[#374051] rounded-2xl px-4 py-4"
+              onPress={() => router.push("/themes/themes-screen")}
+            >
+              <Feather name="sliders" size={18} color="white" />
+            </Pressable>
+            <Pressable
+              className="items-center bg-[#374051] rounded-2xl px-4 py-4"
+              onPress={() => router.push("/settings")}
+            >
+              <Feather name="user" size={18} color="white" />
+            </Pressable>
+          </View>
+        </View>
+      </View>
+
+      <ThemeChangedToast visible={showThemeToast} />
+      <StreakToast visible={showStreakToast} streakCount={1} />
+    </View>
+  );
+};
 
 const QuoteScreen = () => {
   const {
@@ -582,16 +533,18 @@ const QuoteScreen = () => {
     isAuthenticated,
     isFavorite,
     toggleFavorite,
+    favoriteQuoteIds,
   } = useAppContext();
   if (!isAuthenticated) return <Redirect href="/welcome-screen" />;
 
   const router = useRouter();
-  const likes = 0;
   const maxLikes = 5;
-  const progress = (likes / maxLikes) * 100;
+  const likes = favoriteQuoteIds.length;
+  const progress = Math.min((likes / maxLikes) * 100, 100);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
+  const [showStreakToast, setShowStreakToast] = useState(false);
 
   const handleMomentumScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>
@@ -600,7 +553,6 @@ const QuoteScreen = () => {
     const newIndex = Math.round(offsetY / SCREEN_HEIGHT);
     if (newIndex !== currentIndex) {
       setCurrentIndex(newIndex);
-      // Ensure QUOTES[newIndex] exists before setting
       if (QUOTES[newIndex]) {
         setActiveQuote(QUOTES[newIndex]);
       }
@@ -610,22 +562,24 @@ const QuoteScreen = () => {
   const insets = useSafeAreaInsets();
 
   const isImageBackground = typeof themeSource === "object" && themeSource.uri;
-
   const [showThemeToast, setShowThemeToast] = useState(false);
-
   const isInitialMount = useRef(true);
 
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
-    } else {
-      setShowThemeToast(true);
-
-      const timer = setTimeout(() => {
-        setShowThemeToast(false);
+      setShowStreakToast(true);
+      const streakTimer = setTimeout(() => {
+        setShowStreakToast(false);
       }, 4000);
 
-      return () => clearTimeout(timer);
+      return () => clearTimeout(streakTimer);
+    } else {
+      setShowThemeToast(true);
+      const themeTimer = setTimeout(() => {
+        setShowThemeToast(false);
+      }, 4000);
+      return () => clearTimeout(themeTimer);
     }
   }, [themeSource]);
 
@@ -647,6 +601,7 @@ const QuoteScreen = () => {
     showThemeToast,
     isFavorite,
     toggleFavorite,
+    showStreakToast,
   };
 
   return isImageBackground ? (

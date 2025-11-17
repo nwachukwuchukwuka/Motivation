@@ -11,7 +11,7 @@ const NewCollectionScreen = () => {
   const [name, setName] = useState("");
 
   const handleSave = () => {
-    if (!name.trim()) return; // Prevent saving empty names
+    if (!name.trim()) return;
     addCollection(name.trim());
     router.back();
   };

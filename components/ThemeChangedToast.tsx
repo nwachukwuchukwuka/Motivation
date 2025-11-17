@@ -2,18 +2,18 @@ import { Feather } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withSpring,
-    withTiming,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, {
-    Circle,
-    Defs,
-    Rect,
-    Stop,
-    LinearGradient as SvgGradient,
+  Circle,
+  Defs,
+  Rect,
+  Stop,
+  LinearGradient as SvgGradient,
 } from "react-native-svg";
 
 const FacebookStoriesIcon = () => (
@@ -88,9 +88,7 @@ const ThemeChangedToast = ({ visible }: Props) => {
   return (
     <Animated.View
       style={animatedStyle}
-      //   className="absolute left-4 right-4 bg-[#3a4151] rounded-2xl p-4 shadow-lg"
-      className="absolute top-20 left-4 right-4 bg-[#3a4151] rounded-2xl p-4 shadow-lg"
-      //   style={[animatedStyle, { top: insets.top + 10 }]}
+      className="absolute top-20 left-4 right-4 bg-[#3a4151] rounded-3xl p-4 shadow-lg"
     >
       <Text className="text-white text-base font-semibold mb-4">
         Theme changed! Want to share this quote?

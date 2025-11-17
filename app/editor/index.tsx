@@ -97,14 +97,8 @@ const QuoteEditorScreen = () => {
   }, [themeSource]);
 
   const handleDone = () => {
-    // if (activeTab === "Text") {
-    //   setActiveTab("Background");
-    //   return;
-    // }
-    // if (isCustomImage) {
     setThemeSource(background);
     router.back();
-    // }
   };
 
   const renderBottomControls = () => {
@@ -160,6 +154,7 @@ const QuoteEditorScreen = () => {
       <Text
         style={[
           {
+            // fontFamily: "momo-signature",
             fontFamily: fontFamily,
             fontSize: fontSize,
             color: textColor,
@@ -169,8 +164,6 @@ const QuoteEditorScreen = () => {
         ]}
         className=" leading-relaxed"
       >
-        {/* TOMORROW IS NOT PROMISED, AND THE PAST CANNOT BE CHANGED. THEREFORE,
-        LIVE EACH DAY TO THE FULLEST AND KNOW THAT EVERY NEW DAY IS A BLESSING. */}
         {quoteText}
       </Text>
       {quoteAuthor && (

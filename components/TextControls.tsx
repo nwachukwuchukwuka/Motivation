@@ -2,23 +2,55 @@ import { COLORS } from "@/constants/constants";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-    Pressable,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-    runOnJS,
-    useAnimatedStyle,
-    useSharedValue,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
 } from "react-native-reanimated";
 
+// const FONTS = [
+//   { displayName: "momo-signature", fontFamily: "momo-signature" },
+//   { displayName: "BebasNeue-Regular", fontFamily: "BebasNeue-Regular" },
+// ];
 const FONTS = [
-  { displayName: "Gordita-Black", fontFamily: "Kalam-Bold" },
-  { displayName: "Mainsail", fontFamily: "serif" },
-  { displayName: "System", fontFamily: "sans-serif" },
+  { displayName: "momo-signature", fontFamily: "momo-signature" },
+  { displayName: "BebasNeue-Regular", fontFamily: "BebasNeue-Regular" },
+  {
+    displayName: "Caveat-VariableFont_wght",
+    fontFamily: "Caveat-VariableFont_wght",
+  },
+  {
+    displayName: "DancingScript-VariableFont_wght",
+    fontFamily: "DancingScript-VariableFont_wght",
+  },
+  { displayName: "IBMPlexMono-Bold", fontFamily: "IBMPlexMono-Bold" },
+  { displayName: "IndieFlower-Regular", fontFamily: "IndieFlower-Regular" },
+  { displayName: "LibreBaskerville-Bold", fontFamily: "LibreBaskerville-Bold" },
+  { displayName: "Lobster-Regular", fontFamily: "Lobster-Regular" },
+  { displayName: "MomoSignature-Regular", fontFamily: "MomoSignature-Regular" },
+  {
+    displayName: "ShadowsIntoLight-Regular",
+    fontFamily: "ShadowsIntoLight-Regular",
+  },
+  {
+    displayName: "Sixtyfour-Regular-VariableFont_BLED,SCAN",
+    fontFamily: "Sixtyfour-Regular-VariableFont_BLED,SCAN",
+  },
+  {
+    displayName: "SourceCodePro-Italic-VariableFont_wght",
+    fontFamily: "SourceCodePro-Italic-VariableFont_wght",
+  },
+  {
+    displayName: "SourceCodePro-VariableFont_wght",
+    fontFamily: "SourceCodePro-VariableFont_wght",
+  },
 ];
 
 export type LetterCaseStyle = "filled" | "thin" | "thick";
@@ -211,13 +243,7 @@ const TextControls = ({
             color="white"
           />
         </TouchableOpacity>
-        {/* <TouchableOpacity>
-          <MaterialCommunityIcons
-            name="format-letter-case"
-            size={28}
-            color="white"
-          />
-        </TouchableOpacity> */}
+
         <TouchableOpacity onPress={handleLetterCaseToggle}>
           <LetterCaseIcon />
         </TouchableOpacity>
@@ -230,7 +256,8 @@ const TextControls = ({
         <GestureDetector gesture={panGesture}>
           <Animated.View
             style={animatedKnobStyle}
-            className="w-6 h-6 -ml-2.5 bg-gray-400 rounded-full border-2 border-white"
+            // className="w-6 h-6 -ml-2.5 bg-gray-400 rounded-full border-2 border-white"
+            className="w-6 h-6 bg-gray-400 rounded-full border-2 border-white"
           />
         </GestureDetector>
       </View>
