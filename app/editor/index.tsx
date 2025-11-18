@@ -1,6 +1,6 @@
 import TextControls from "@/components/TextControls";
 import { COLORS } from "@/constants/constants";
-import { useAppContext } from "@/context/context";
+import { ThemeSource, useAppContext } from "@/context/context";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -36,7 +36,7 @@ const QuoteEditorScreen = () => {
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
 
   type BackgroundSource = { uri?: string; color?: string };
-  const [background, setBackground] = useState<BackgroundSource>(themeSource);
+  const [background, setBackground] = useState<ThemeSource>(themeSource);
 
   const [activeTab, setActiveTab] = useState("Background");
   const [isCustomImage, setIsCustomImage] = useState(false);
@@ -154,7 +154,6 @@ const QuoteEditorScreen = () => {
       <Text
         style={[
           {
-            // fontFamily: "momo-signature",
             fontFamily: fontFamily,
             fontSize: fontSize,
             color: textColor,
@@ -182,9 +181,11 @@ const QuoteEditorScreen = () => {
     </View>
   );
 
+  const isImageBackground = typeof themeSource === "object" && themeSource.uri;
+
   return (
     <View className="flex-1">
-      {background.uri ? (
+      {isImageBackground ? (
         <ImageBackground
           source={background}
           resizeMode="cover"
@@ -193,7 +194,14 @@ const QuoteEditorScreen = () => {
           <MainContent />
         </ImageBackground>
       ) : (
-        <View style={{ backgroundColor: background.color }} className="flex-1">
+        <View
+          // style={{ backgroundColor: background.color }}
+          style={{
+            backgroundColor:
+              typeof themeSource === "object" ? themeSource.color : "black",
+          }}
+          className="flex-1"
+        >
           <MainContent />
         </View>
       )}

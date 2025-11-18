@@ -1,4 +1,8 @@
-import { ALL_THEMES, THEME_MIXES_HALF } from "@/constants/constants";
+import {
+  ALL_THEMES,
+  THEME_MIXES_HALF,
+  ThemeTypes,
+} from "@/constants/constants";
 import { useAppContext } from "@/context/context";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -31,7 +35,7 @@ const ThemesScreen = () => {
       );
 
     if (isCustomPhoto) {
-      const myPhotoTheme = {
+      const myPhotoTheme: ThemeTypes = {
         id: "my-photo-theme",
         image: themeSource.uri,
         isFree: true,
@@ -256,9 +260,7 @@ const ThemesScreen = () => {
                               })
                             }
                           >
-                            <Text className="text-black  text-sm ">
-                              Edit
-                            </Text>
+                            <Text className="text-black  text-sm ">Edit</Text>
                           </Pressable>
                         )}
                       </View>

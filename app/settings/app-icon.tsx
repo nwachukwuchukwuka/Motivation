@@ -1,120 +1,16 @@
+import { ICON_STYLES } from "@/constants/constants";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    Pressable,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const ICON_STYLES = [
-  {
-    id: "default",
-    type: "color",
-    value: "#3a4151",
-    content: "icon-quote-double",
-  },
-  {
-    id: "dark-solid",
-    type: "color",
-    value: "#1E1E2F",
-    content: "icon-quote-double",
-  },
-  {
-    id: "dark-outline",
-    type: "color",
-    value: "#1E1E2F",
-    content: "icon-quote-circle",
-  },
-  {
-    id: "white-solid",
-    type: "color",
-    value: "#FFFFFF",
-    content: "icon-quote-double",
-    textColor: "#000000",
-  },
-  {
-    id: "purple-gradient",
-    type: "gradient",
-    value: ["#C97EFF", "#F5A1BE"],
-    content: "icon-quote-single-low",
-  },
-  {
-    id: "white-solid-black",
-    type: "color",
-    value: "#FFFFFF",
-    content: "icon-quote-double-black",
-  },
-  {
-    id: "galaxy",
-    type: "image",
-    value:
-      "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=400",
-  },
-  {
-    id: "marble-outline",
-    type: "image",
-    value:
-      "https://images.unsplash.com/photo-1588621412235-3359b418a29a?q=80&w=400",
-    content: "icon-quote-circle-img",
-  },
-  {
-    id: "holographic",
-    type: "image",
-    value:
-      "https://images.unsplash.com/photo-1599232857413-a44283804828?q=80&w=400",
-    content: "icon-quote-single-black",
-  },
-  {
-    id: "white-black-2",
-    type: "color",
-    value: "#FFFFFF",
-    content: "icon-quote-double-black",
-  },
-  {
-    id: "black-circle",
-    type: "color",
-    value: "#1E1E2F",
-    content: "icon-quote-circle-smiley",
-  },
-  {
-    id: "black-solid",
-    type: "color",
-    value: "#1E1E2F",
-    content: "icon-quote-double",
-  },
-  {
-    id: "do-not-quit",
-    type: "color",
-    value: "#1E1E2F",
-    content: "Do not quit",
-  },
-  {
-    id: "chase-dreams",
-    type: "color",
-    value: "#FFFFFF",
-    content: "Chase your dreams",
-    textColor: "#000000",
-  },
-  {
-    id: "be-you",
-    type: "image",
-    value:
-      "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?q=80&w=400",
-    content: "Be you.\nDo you.\nFor you.",
-  },
-  {
-    id: "trust-process",
-    type: "color",
-    value: "#FFFFFF",
-    content: "Trust the process",
-    textColor: "#000000",
-  },
-];
 
 const IconDisplay = ({
   styleInfo,
@@ -222,7 +118,6 @@ const AppIconScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#262e3d]">
-      {/* Header */}
       <View className="flex-row items-center p-4 pl-2">
         <TouchableOpacity
           onPress={() => router.back()}
@@ -236,14 +131,15 @@ const AppIconScreen = () => {
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         <Text className="text-white text-3xl font-bold">App icon</Text>
 
-        {/* Icon Grid */}
         <View className="flex-row flex-wrap mt-4 justify-between gap-5">
           {ICON_STYLES.map((style) => (
             <View key={style.id} className="w-[70px] mb-5">
-              <Pressable onPress={() => {
-                router.push('/free-trial-details-screen')
-                setSelectedIconId(style.id)
-              }}>
+              <Pressable
+                onPress={() => {
+                  router.push("/free-trial-details-screen");
+                  setSelectedIconId(style.id);
+                }}
+              >
                 <IconDisplay
                   styleInfo={style}
                   isSelected={selectedIconId === style.id}

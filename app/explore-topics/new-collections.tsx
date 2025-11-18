@@ -25,12 +25,12 @@ const NewCollectionScreen = () => {
             className="flex-row items-center"
           >
             <Feather name="chevron-left" size={28} color="white" />
-            <Text className="text-white text-base ml-1">Back</Text>
+            <Text className="text-white text-xl ml-1">Back</Text>
           </TouchableOpacity>
         </View>
         <View className="p-4">
           <Text className="text-white text-3xl font-bold">New collection</Text>
-          <Text className="text-gray-400 text-base mt-2 mb-6">
+          <Text className="text-white text-lg mt-2 mb-6">
             Enter a name for your new collection. You can rename it later.
           </Text>
           <TextInput
@@ -38,7 +38,7 @@ const NewCollectionScreen = () => {
             onChangeText={setName}
             placeholder="My new collection"
             placeholderTextColor="#969da8"
-            className="bg-[#3a4151] rounded-lg p-4 text-white text-lg"
+            className="bg-[#3a4151] rounded-lg p-4 pt-3 text-white text-lg"
           />
         </View>
       </View>

@@ -37,6 +37,7 @@ export type UserQuote = {
 type AppContextType = {
   allQuotes: Quote[];
   collections: Collection[];
+  addCollection: (name: string) => void;
   themeSource: ThemeSource;
   setThemeSource: (source: ThemeSource) => void;
   fontSize: number;
@@ -83,7 +84,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  const [themeSource, setThemeSource] = useState<{ uri: string } | number>(
+  const [themeSource, setThemeSource] = useState<ThemeSource>(
     defaultBackgroundImage
   );
   const [fontSize, setFontSize] = useState(28);
@@ -101,7 +102,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const [collections, setCollections] = useState<Collection[]>([]);
   const [quoteToAdd, setQuoteToAdd] = useState<Quote | null>(null);
-  // const [allQuotes, setAllQuotes] = useState<Quote[]>(QUOTES);
   const [favoriteQuoteIds, setFavoriteQuoteIds] = useState<string[]>([]);
   const [feedQuotes, setFeedQuotes] = useState<Quote[]>([]);
   const [userQuotes, setUserQuotes] = useState<UserQuote[]>([]);
@@ -109,19 +109,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [mutedWords, setMutedWords] = useState<string[]>([]);
 
   const addMutedWord = (word: string) => {
-      // Add word if it doesn't already exist (case-insensitive)
-      if (!mutedWords.find(w => w.toLowerCase() === word.toLowerCase())) {
-          setMutedWords(prev => [word, ...prev]);
-      }
+    if (!mutedWords.find((w) => w.toLowerCase() === word.toLowerCase())) {
+      setMutedWords((prev) => [word, ...prev]);
+    }
   };
 
   const removeMutedWord = (wordToRemove: string) => {
-      setMutedWords(prev => prev.filter(word => word !== wordToRemove));
+    setMutedWords((prev) => prev.filter((word) => word !== wordToRemove));
   };
 
   const allQuotes = useMemo(() => {
-    // The `allQuotes` list is now a combination of the user's quotes and the default quotes.
-    // User quotes are placed first.
     return [...userQuotes, ...QUOTES];
   }, [userQuotes]);
 

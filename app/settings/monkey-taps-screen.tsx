@@ -66,26 +66,24 @@ const MonkeyTapsScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#262e3d]">
-      {/* Header */}
       <View className="flex-row items-center p-4">
         <TouchableOpacity
           onPress={() => router.back()}
           className="flex-row items-center"
         >
           <Feather name="chevron-left" size={28} color="white" />
-          <Text className="text-white text-base ml-1">Back</Text>
+          <Text className="text-white text-xl ml-1">Settings</Text>
         </TouchableOpacity>
       </View>
 
       <Text className="text-white text-3xl font-bold px-4">Monkey Taps</Text>
 
       <ScrollView contentContainerStyle={{ padding: 16 }}>
-        {/* More Motivation Section */}
         <View className="mb-8">
-          <Text className="text-gray-400 text-sm font-bold tracking-widest mb-3">
+          <Text className="text-white text-md font-bold tracking-widest mb-3 mt-4">
             MORE MOTIVATION
           </Text>
-          <View className="bg-[#3a4151] rounded-2xl">
+          <View className="bg-[#374051] rounded-2xl">
             {MORE_MOTIVATION.map((item, index) => (
               <TouchableOpacity
                 key={item.name}
@@ -98,19 +96,18 @@ const MonkeyTapsScreen = () => {
                 <View className="w-8 h-8 items-center justify-center mr-4">
                   <item.Icon />
                 </View>
-                <Text className="text-white text-lg flex-1">{item.name}</Text>
-                <Feather name="chevron-right" size={20} color="#969da8" />
+                <Text className="text-white text-xl flex-1">{item.name}</Text>
+         
               </TouchableOpacity>
             ))}
           </View>
         </View>
 
-        {/* You May Like Section */}
         <View>
-          <Text className="text-gray-400 text-sm font-bold tracking-widest mb-3">
+          <Text className="text-white text-md font-bold tracking-widest mb-3 mt-4">
             IF YOU LIKE THIS APP, YOU MAY LIKE
           </Text>
-          <View className="bg-[#3a4151] rounded-2xl">
+          <View className="bg-[#374051] rounded-2xl">
             {YOU_MAY_LIKE.map((app, index) => {
               const IconComponent = app.IconLib;
               return (
@@ -141,8 +138,7 @@ const MonkeyTapsScreen = () => {
                       />
                     ) : null}
                   </View>
-                  <Text className="text-white text-lg flex-1">{app.name}</Text>
-                  <Feather name="chevron-right" size={20} color="#969da8" />
+                  <Text className="text-white text-xl flex-1">{app.name}</Text>
                 </TouchableOpacity>
               );
             })}

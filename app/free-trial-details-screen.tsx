@@ -11,7 +11,7 @@ const FreeTrialDetailsScreen = () => {
   return (
     <View className="flex-1  px-5 pt-24 bg-[#262e3d]">
       <TouchableOpacity
-        onPress={() => router.replace('/widget-install-screen')}
+        onPress={() => router.back()}
         className="absolute top-3 left-6 z-10"
       >
         <Feather name="x" size={28} color="gray" />
@@ -80,9 +80,9 @@ const FreeTrialDetailsScreen = () => {
             width: "100%",
             borderRadius: 9999,
             overflow: "hidden",
-            marginTop: 10, 
+            marginTop: 10,
           }}
-          onPress={() => router.push("/widget-install-screen")}
+          // onPress={() => router.push("/widget-install-screen")}
           activeOpacity={0.8}
         >
           <LinearGradient

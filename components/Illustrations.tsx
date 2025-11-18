@@ -71,10 +71,10 @@ export const BookIllustration = () => (
 );
 
 export const BoxIllustration = () => (
-  <Svg width="150" height="150" viewBox="0 0 100 100">
+  <Svg width="250" height="250" viewBox="0 0 100 100">
     <Path d="M20 60 L 80 60 L 80 90 L 20 90 Z" fill="#3a4151" />
     <Path d="M15 60 L 40 45 L 90 45 L 85 60 Z" fill="#4a4152" />
-    <SvgText
+    {/* <SvgText
       x="45"
       y="40"
       fill="white"
@@ -83,13 +83,13 @@ export const BoxIllustration = () => (
       transform="rotate(-15 45 40)"
     >
       ”
-    </SvgText>
-    <SvgText x="60" y="30" fill="white" fontSize="20" fontWeight="bold">
+    </SvgText> */}
+    {/* <SvgText x="60" y="30" fill="white" fontSize="20" fontWeight="bold">
       ”
     </SvgText>
     <SvgText x="35" y="50" fill="white" fontSize="14" fontWeight="bold">
       ”
-    </SvgText>
+    </SvgText> */}
   </Svg>
 );
 
@@ -122,7 +122,6 @@ export const PhoneIllustration = () => (
   </Svg>
 );
 
-
 export const PremiumBgIllustration = () => (
   <View className="absolute bottom-0 left-0 right-0 h-64">
     <Svg
@@ -143,5 +142,3 @@ export const PremiumBgIllustration = () => (
     </Svg>
   </View>
 );
-
-

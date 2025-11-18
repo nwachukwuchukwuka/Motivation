@@ -2,16 +2,15 @@ import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-    Dimensions,
-    Pressable,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Rect, Text as SvgText } from "react-native-svg";
-
 
 const { width: screenWidth } = Dimensions.get("window");
 const horizontalMargin = 30;
@@ -22,7 +21,6 @@ const PhoneMockup = () => (
     height="480"
     viewBox={`0 0 ${screenWidth} 480`}
   >
-    {/* Phone Body */}
     <Rect
       x="0"
       y="0"
@@ -43,7 +41,6 @@ const PhoneMockup = () => (
       fill="none"
     />
 
-    {/* Earpiece/Notch */}
     <Rect
       x={screenWidth / 2 - 60}
       y="20"
@@ -54,7 +51,6 @@ const PhoneMockup = () => (
       fillOpacity="0.5"
     />
 
-    {/* Dashed Widget Area (Full Width) */}
     <Rect
       x="20"
       y="90"
@@ -69,7 +65,6 @@ const PhoneMockup = () => (
       fillOpacity="0.3"
     />
 
-    {/* Text inside the widget */}
     <SvgText
       x={screenWidth / 2}
       y="145"
@@ -91,11 +86,10 @@ const PhoneMockup = () => (
       you think.
     </SvgText>
 
-    {/* Small boxes below */}
     {Array.from({ length: 8 }).map((_, i) => (
       <Rect
         key={i}
-        x={40 + (i % 4) * ((screenWidth - 100) / 4)} 
+        x={40 + (i % 4) * ((screenWidth - 100) / 4)}
         y={250 + Math.floor(i / 4) * 55}
         width={(screenWidth - 180) / 4}
         height="45"
@@ -106,8 +100,6 @@ const PhoneMockup = () => (
     ))}
   </Svg>
 );
-
-
 
 const WidgetsScreen = () => {
   const router = useRouter();

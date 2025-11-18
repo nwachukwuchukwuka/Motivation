@@ -54,68 +54,6 @@ const RemindersScreen = () => {
               </View>
             </View>
           </Pressable>
-
-          {/* <View className="bg-[#3a4151] rounded-2xl p-4">
-            <View className="flex-row justify-between items-start">
-              <View>
-                <Text className="text-white text-lg font-bold">
-                  Streak reminder
-                </Text>
-                <Text className="text-[#969da8]">1x Every day</Text>
-              </View>
-              <View className="items-end">
-                <Text className="text-[#969da8] text-sm">10:27AM</Text>
-                <Switch
-                  value={streakEnabled}
-                  onValueChange={setStreakEnabled}
-                  trackColor={{ false: "#767577", true: "#81b0ff" }}
-                  thumbColor={streakEnabled ? "#f4f3f4" : "#f4f3f4"}
-                  ios_backgroundColor="#3e3e3e"
-                  className="mt-2 scale-110"
-                />
-              </View>
-            </View>
-          </View>
-
-          <View className="bg-[#3a4151] rounded-2xl p-4 opacity-50">
-            <View className="flex-row justify-between items-start">
-              <View>
-                <Text className="text-white text-lg font-bold">General</Text>
-                <Text className="text-[#969da8]">3x Every weekday</Text>
-              </View>
-              <View className="items-end">
-                <Text className="text-[#969da8] text-sm">9:00AM-5:00PM</Text>
-                <Switch
-                  value={false}
-                  disabled={true}
-                  trackColor={{ false: "#767577", true: "#81b0ff" }}
-                  ios_backgroundColor="#3e3e3e"
-                  className="mt-2 scale-110"
-                />
-              </View>
-            </View>
-          </View>
-
-          <View className="bg-[#3a4151] rounded-2xl p-4 opacity-50">
-            <View className="flex-row justify-between items-start">
-              <View>
-                <Text className="text-white text-lg font-bold">
-                  Gratitude and Positive thinking
-                </Text>
-                <Text className="text-[#969da8]">1x Every day</Text>
-              </View>
-              <View className="items-end">
-                <Text className="text-[#969da8] text-sm">9:00PM</Text>
-                <Switch
-                  value={false}
-                  disabled={true}
-                  trackColor={{ false: "#767577", true: "#81b0ff" }}
-                  ios_backgroundColor="#3e3e3e"
-                  className="mt-2 scale-110"
-                />
-              </View>
-            </View>
-          </View> */}
         </View>
       </ScrollView>
 

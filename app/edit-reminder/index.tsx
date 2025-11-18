@@ -65,7 +65,6 @@ const EditReminderScreen = () => {
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         <Text className="text-white text-3xl font-bold">Edit reminder</Text>
 
-        {/* Main Settings Card */}
         <View className="bg-[#374051] rounded-2xl p-4 mt-6">
           <TouchableOpacity
             className="flex-row justify-between items-center py-3 pt-0"

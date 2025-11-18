@@ -28,7 +28,7 @@ const AddQuoteScreen = () => {
             className="flex-row items-center"
           >
             <Feather name="chevron-left" size={28} color="white" />
-            <Text className="text-white text-base ml-1">Back</Text>
+            <Text className="text-white text-xl ml-1">Back</Text>
           </TouchableOpacity>
         </View>
         <View className="p-4">
@@ -55,7 +55,7 @@ const AddQuoteScreen = () => {
           </View>
         </View>
       </View>
-      <View className="p-4">
+      <View className="p-4 absolute bottom-10 left-0 right-0 p-4">
         <TouchableOpacity
           onPress={handleSave}
           disabled={isSaveDisabled}

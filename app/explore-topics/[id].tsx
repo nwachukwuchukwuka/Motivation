@@ -1,21 +1,21 @@
 import { BookIllustration } from "@/components/Illustrations";
 import { Quote, useAppContext } from "@/context/context";
 import {
-    AntDesign,
-    Entypo,
-    Feather,
-    FontAwesome,
-    MaterialCommunityIcons,
+  AntDesign,
+  Entypo,
+  Feather,
+  FontAwesome,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
 import {
-    Keyboard,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Keyboard,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -83,22 +83,6 @@ const CollectionDetailsScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-[#262e3d]">
       <View className="p-4">
-        {/* <View className="flex-row justify-between items-center ">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="flex-row items-center"
-          >
-            <Feather name="chevron-left" size={28} color="white" />
-            <Text className="text-white text-base ml-1">Back</Text>
-          </TouchableOpacity>
-          <Text className="text-white text-lg font-bold">
-            {collection.name}
-          </Text>
-          <View className="">
-
-          </View>
-        </View> */}
-
         <View className="flex-row justify-between items-center py-2">
           <TouchableOpacity onPress={() => router.back()}>
             <Feather name="chevron-left" size={28} color="white" />

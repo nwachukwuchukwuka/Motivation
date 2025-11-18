@@ -13,13 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
 
 type Quote = {
   id: string;
@@ -56,7 +49,6 @@ const QuoteCard = ({
     >
       <View>
         <View className="items-center">
-          {/* <Text className="text-white text-4xl font-semibold text-center leading-relaxed"> */}
           <Text
             className="text-center leading-relaxed"
             style={[
@@ -103,8 +95,6 @@ const QuoteCard = ({
 
 const ShowAllInFeed = () => {
   const router = useRouter();
-  // const { feedQuotes, themeSource, isFavorite, toggleFavorite } =
-  //   useAppContext();
 
   const {
     feedQuotes,
@@ -121,27 +111,8 @@ const ShowAllInFeed = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
-  const scale = useSharedValue(0);
-  const opacity = useSharedValue(0);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
-  }));
-
-  const triggerLikeAnimation = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 120 });
-    opacity.value = withTiming(0.8, { duration: 100 });
-    scale.value = withDelay(500, withSpring(0));
-    opacity.value = withDelay(500, withTiming(0, { duration: 200 }));
-  };
-
-  const handleLikePress = (quoteId: string) => {
-    toggleFavorite(quoteId);
-    if (!isFavorite(quoteId)) {
-      triggerLikeAnimation();
-    }
-  };
+  const [showLargeHeart, setShowLargeHeart] = useState(false);
 
   const handleMomentumScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>
@@ -154,68 +125,95 @@ const ShowAllInFeed = () => {
   };
   const isImageBackground = typeof themeSource === "object" && themeSource.uri;
 
-  const MainContent = () => (
-    <View className="flex-1">
-      <FlatList
-        ref={flatListRef}
-        data={feedQuotes}
-        renderItem={({ item }) => (
-          <QuoteCard
-            item={item}
-            onToggleFavorite={() => handleLikePress(item.id)}
-            isFavorite={isFavorite(item.id)}
-            textStyles={{
-              fontSize,
-              fontFamily,
-              color: textColor,
-              textAlign,
-              textShadowStyle,
-            }}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-        snapToInterval={SCREEN_HEIGHT}
-        snapToAlignment={"start"}
-        showsVerticalScrollIndicator={false}
-        onMomentumScrollEnd={handleMomentumScrollEnd}
-        decelerationRate="fast"
-      />
+  type MainContentProps = {
+    showLargeHeart: boolean;
+    setShowLargeHeart: React.Dispatch<React.SetStateAction<boolean>>;
+  };
 
-      <View className="absolute top-0 left-0 right-0 p-4">
-        <View className="flex-row justify-between items-center h-14">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Feather name="chevron-left" size={28} color="white" />
-          </TouchableOpacity>
-          <Text className="text-white text-lg font-bold">
-            {/* {topicName || "Topic"} */}
-            {topicName || "Favorites"}
-          </Text>
-          <TouchableOpacity
-            onPress={() => setIsFollowing(!isFollowing)}
-            className={`rounded-full border px-5 py-1.5 flex-row items-center ${
-              isFollowing ? "border-white" : "border-gray-500"
-            }`}
-          >
-            {isFollowing && (
-              <Feather
-                name="check"
-                size={16}
-                color="white"
-                style={{ marginRight: 4 }}
-              />
-            )}
-            <Text className="text-white font-semibold">
-              {isFollowing ? "Following" : "Follow"}
+  const MainContent = ({
+    showLargeHeart,
+    setShowLargeHeart,
+  }: MainContentProps) => {
+    const handleLikePress = (quoteId: string) => {
+      if (!isFavorite(quoteId)) {
+        setShowLargeHeart(true);
+
+        setTimeout(() => {
+          setShowLargeHeart(false);
+        }, 800);
+      }
+      toggleFavorite(quoteId);
+    };
+    return (
+      <View className="flex-1">
+        <FlatList
+          ref={flatListRef}
+          data={feedQuotes}
+          renderItem={({ item }) => (
+            <QuoteCard
+              item={item}
+              onToggleFavorite={() => handleLikePress(item.id)}
+              isFavorite={isFavorite(item.id)}
+              textStyles={{
+                fontSize,
+                fontFamily,
+                color: textColor,
+                textAlign,
+                textShadowStyle,
+              }}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          snapToInterval={SCREEN_HEIGHT}
+          snapToAlignment={"start"}
+          showsVerticalScrollIndicator={false}
+          onMomentumScrollEnd={handleMomentumScrollEnd}
+          decelerationRate="fast"
+        />
+        {showLargeHeart && (
+          <View className="absolute inset-0 justify-center items-center pointer-events-none">
+            <AntDesign name="heart" size={150} color="white" />
+          </View>
+        )}
+
+        <View className="absolute top-0 left-0 right-0 p-4">
+          <View className="flex-row justify-between items-center h-14">
+            <TouchableOpacity onPress={() => router.back()}>
+              <Feather name="chevron-left" size={28} color="white" />
+            </TouchableOpacity>
+            <Text className="text-white text-lg font-bold">
+              {topicName || "Favorites"}
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setIsFollowing(!isFollowing)}
+              className={`rounded-full border px-5 py-1.5 flex-row items-center ${
+                isFollowing ? "border-white" : "border-gray-500"
+              }`}
+            >
+              {isFollowing && (
+                <Feather
+                  name="check"
+                  size={16}
+                  color="white"
+                  style={{ marginRight: 4 }}
+                />
+              )}
+              <Text className="text-white font-semibold">
+                {isFollowing ? "Following" : "Follow"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  };
   return isImageBackground ? (
     <ImageBackground source={themeSource} resizeMode="cover" className="flex-1">
       <View className="flex-1 bg-black/20">
-        <MainContent />
+        <MainContent
+          showLargeHeart={showLargeHeart}
+          setShowLargeHeart={setShowLargeHeart}
+        />
       </View>
     </ImageBackground>
   ) : (
@@ -226,7 +224,10 @@ const ShowAllInFeed = () => {
           typeof themeSource === "object" ? themeSource.color : "black",
       }}
     >
-      <MainContent />
+      <MainContent
+        showLargeHeart={showLargeHeart}
+        setShowLargeHeart={setShowLargeHeart}
+      />
     </View>
   );
 };

@@ -1,12 +1,11 @@
 import { PhoneIllustration } from "@/components/Illustrations";
 import StreakSection from "@/components/StreakSection";
 import UserItemsGrid from "@/components/UserItemsGrid";
-import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 const SettingsScreen = () => {
   const router = useRouter();
@@ -50,30 +49,15 @@ const SettingsScreen = () => {
     },
   ];
 
-  const contentItems = [
-    { name: "Favorites", icon: "heart-outline", lib: MaterialCommunityIcons },
-    {
-      name: "Collections",
-      icon: "bookmark-outline",
-      lib: MaterialCommunityIcons,
-      // onPress: () => router.push("/collections"),
-    },
-    { name: "My quotes", icon: "edit-3", lib: Feather },
-    {
-      name: "History",
-      icon: "shuffle-variant",
-      lib: MaterialCommunityIcons,
-      isLocked: true,
-    },
-  ];
-
   return (
     <SafeAreaView className="flex-1 bg-[#262e3d]">
       <View className="flex-row justify-between items-center px-4 py-4">
         <TouchableOpacity onPress={() => router.back()}>
           <Feather name="x" size={28} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push("/settings/profile-settings")}>
+        <TouchableOpacity
+          onPress={() => router.push("/settings/profile-settings")}
+        >
           <Text className="text-white text-xl">Settings</Text>
         </TouchableOpacity>
       </View>

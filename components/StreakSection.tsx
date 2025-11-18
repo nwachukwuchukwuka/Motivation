@@ -60,9 +60,7 @@ const StreakSection = () => {
             </View>
           </View>
           <View className="flex-row justify-between mt-2">
-            {/* Map over the correctly ordered array */}
             {DAYS_OF_WEEK.map((day, index) => {
-              // 3. The `isActive` check is now dynamic
               const isActive = index === currentDayIndex;
               return (
                 <View key={index} className="items-center">

@@ -15,10 +15,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-// const FONTS = [
-//   { displayName: "momo-signature", fontFamily: "momo-signature" },
-//   { displayName: "BebasNeue-Regular", fontFamily: "BebasNeue-Regular" },
-// ];
+
 const FONTS = [
   { displayName: "momo-signature", fontFamily: "momo-signature" },
   { displayName: "BebasNeue-Regular", fontFamily: "BebasNeue-Regular" },
@@ -256,7 +253,6 @@ const TextControls = ({
         <GestureDetector gesture={panGesture}>
           <Animated.View
             style={animatedKnobStyle}
-            // className="w-6 h-6 -ml-2.5 bg-gray-400 rounded-full border-2 border-white"
             className="w-6 h-6 bg-gray-400 rounded-full border-2 border-white"
           />
         </GestureDetector>

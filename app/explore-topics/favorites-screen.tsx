@@ -1,20 +1,20 @@
 import { ShelfIllustration } from "@/components/Illustrations";
 import { Quote, useAppContext } from "@/context/context";
 import {
-    AntDesign,
-    Feather,
-    FontAwesome,
-    MaterialCommunityIcons,
+  AntDesign,
+  Feather,
+  FontAwesome,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
 import {
-    Keyboard,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Keyboard,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -88,7 +88,6 @@ const FavoritesScreen = () => {
     );
   }
 
-  console.log('filteredFavorites', filteredFavorites)
 
   return (
     <SafeAreaView className="flex-1 bg-[#262e3d]">

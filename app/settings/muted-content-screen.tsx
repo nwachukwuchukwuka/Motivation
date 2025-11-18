@@ -1,4 +1,4 @@
-import { useAppContext } from "@/context/context"; // We'll need to add muted content to our context
+import { useAppContext } from "@/context/context";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Circle, Path } from "react-native-svg";
 
 const MutedIllustration = () => (
-  <Svg width="120" height="120" viewBox="0 0 100 100">
+  <Svg width="250" height="250" viewBox="0 0 100 100">
     <Circle cx="50" cy="50" r="40" fill="#3a4151" />
     <Path d="M20 80 L 80 20" stroke="#262e3d" strokeWidth="12" />
     <Path
@@ -29,7 +29,6 @@ const MutedIllustration = () => (
 
 const MutedContentScreen = () => {
   const router = useRouter();
-  // Assuming you've added `mutedWords` and `removeMutedWord` to your context
   const { mutedWords = [], removeMutedWord = () => {} } = useAppContext();
 
   if (mutedWords.length === 0) {
@@ -42,26 +41,28 @@ const MutedContentScreen = () => {
               className="flex-row items-center"
             >
               <Feather name="chevron-left" size={28} color="white" />
-              <Text className="text-white text-base ml-1">Back</Text>
+              <Text className="text-white text-xl ml-1">settings</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push("/settings/add-muted-content-screen")}
             >
-              <Text className="text-white text-base">Add</Text>
+              <Text className="text-white text-xl">Add</Text>
             </TouchableOpacity>
           </View>
-          <View className="flex-1 items-center justify-center pt-16">
+          <View className="flex-1 items-center justify-center pt-[200px]">
             <MutedIllustration />
-            <Text className="text-white text-2xl font-bold text-center mt-8">
+          </View>
+          <View className="mt-[200px] px-10">
+            <Text className="text-white text-3xl font-bold text-center ">
               You haven't muted anything yet
             </Text>
-            <Text className="text-gray-400 text-base text-center mt-2 max-w-xs">
+            <Text className="text-gray-100 text-xl text-center mt-4">
               When you mute content, you won't see it in your feed,
               notifications, or widgets
             </Text>
           </View>
         </View>
-        <View className="p-4 border-t border-t-gray-700">
+        <View className="p-4">
           <TouchableOpacity
             onPress={() => router.push("/settings/add-muted-content-screen")}
             className="bg-white rounded-full w-full py-4 items-center justify-center"
@@ -83,7 +84,7 @@ const MutedContentScreen = () => {
           className="flex-row items-center"
         >
           <Feather name="chevron-left" size={28} color="white" />
-          <Text className="text-white text-base ml-1">Back</Text>
+          <Text className="text-white text-xl ml-1">settings</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => router.push("/settings/add-muted-content-screen")}

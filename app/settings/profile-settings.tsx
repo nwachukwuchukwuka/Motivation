@@ -1,16 +1,38 @@
-import { SETTINGS_DATA, TOPIC_SECTIONS } from "@/constants/constants";
-import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
+import { SETTINGS_DATA } from "@/constants/constants";
+import {
+  AntDesign,
+  Feather,
+  Ionicons,
+  SimpleLineIcons,
+} from "@expo/vector-icons";
+import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import React from "react";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProfileSettings = () => {
-  const ALL_TOPICS = TOPIC_SECTIONS.flatMap((section) => section.items);
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
-  const [followedTopics, setFollowedTopics] = useState(["General"]);
+
+  const appVersion = "6.9.0";
+  const fullUserId = "DF249E4E-C593-498C-B02A-1234567890AB";
+  const displayUserId = `${fullUserId.substring(0, 22)}...`;
+
+  const handleCopyToClipboard = async () => {
+    try {
+      await Clipboard.setStringAsync(fullUserId);
+      Alert.alert("Copied", "User ID has been copied to your clipboard.");
+    } catch (error) {
+      Alert.alert("Error", "Could not copy User ID.");
+    }
+  };
 
   const TopicRow = ({
     name,
@@ -19,7 +41,7 @@ const ProfileSettings = () => {
   }: {
     name: string;
     isLastItem?: boolean;
-    onPress?: () => void; 
+    onPress?: () => void;
   }) => {
     return (
       <Pressable
@@ -34,8 +56,9 @@ const ProfileSettings = () => {
           <Text className="text-white text-xl">{name}</Text>
         </View>
 
-        {/* <SimpleLineIcons name="arrow-right" size={14} color="#969da8" /> */}
-        {onPress && <SimpleLineIcons name="arrow-right" size={14} color="#969da8" />}
+        {onPress && (
+          <SimpleLineIcons name="arrow-right" size={14} color="#969da8" />
+        )}
       </Pressable>
     );
   };
@@ -59,7 +82,7 @@ const ProfileSettings = () => {
           <>
             <Text className="text-white text-lg mt-8">PREMIUM</Text>
             <Pressable
-              className="bg-[#3a4151] rounded-2xl p-4 my-4 flex-row items-center justify-between"
+              className="bg-[#374051] rounded-2xl p-4 my-4 flex-row items-center justify-between"
               onPress={() => router.push("./subscription-screen")}
             >
               <View className="flex-row items-center gap-4">
@@ -79,20 +102,40 @@ const ProfileSettings = () => {
                     {section.title}
                   </Text>
                 </View>
-                <View className="bg-[#3a4151] p-3 py-0 rounded-lg">
+                <View className="bg-[#374051] p-3 py-0 rounded-lg">
                   {section.items.map((item, index) => (
                     <TopicRow
                       key={item.name}
                       name={item.name}
                       isLastItem={index === section.items.length - 1}
-                      onPress={item.route ? () => router.push(item.route) : undefined}
-
+                      onPress={
+                        item.route ? () => router.push(item.route) : undefined
+                      }
                     />
                   ))}
                 </View>
               </View>
             ))}
           </>
+        </View>
+        <View className="mx-5 mb-20">
+          <View className="border border-white rounded-2xl flex-row">
+            <View className="flex-1 p-4 justify-center">
+              <Text className="text-gray-300 text-base">
+                Motivation app - version {appVersion}
+              </Text>
+              <Text className="text-gray-300 text-sm mt-1">
+                User ID: {displayUserId}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              onPress={handleCopyToClipboard}
+              className="border-l border-l-white px-4 items-center justify-center"
+            >
+              <Ionicons name="copy-outline" size={28} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

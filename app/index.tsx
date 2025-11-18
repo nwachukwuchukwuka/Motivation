@@ -152,7 +152,7 @@ const MainContent = ({
 
       {showLargeHeart && (
         <View className="absolute inset-0 justify-center items-center pointer-events-none">
-          <AntDesign name="heart" size={150} color="#FFC0CB" />
+          <AntDesign name="heart" size={150} color="white" />
         </View>
       )}
 

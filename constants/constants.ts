@@ -110,13 +110,14 @@ export const SETTINGS_DATA = [
   },
   {
     title: "FOLLOW US",
-    items: [{ name: "Success" }, { name: "Discipline" }, { name: "Focus" }],
+    items: [{ name: "Instagtram" }, { name: "Tiktok" }, { name: "Facebook" }, { name: "Pinterest" }, { name: "X(formerly Twitter)" }],
   },
   {
     title: "OTHER",
-    items: [{ name: "Success" }, { name: "Discipline" }, { name: "Focus" }],
+    items: [{ name: "Privacy Policy" }, { name: "Terms and Conditions" }]
   },
 ];
+
 
 export const THEME_MIXES = [
   {
@@ -181,7 +182,16 @@ export const THEME_MIXES = [
   },
 ];
 
-export const ALL_THEMES = [
+export type ThemeTypes = {
+  id: number | string;
+  isFree: boolean;
+  image?: string;
+  video?: string;
+  isNew?: boolean;
+  category?: string;
+};
+
+export const ALL_THEMES: ThemeTypes[] = [
   {
     id: 1,
     video:
@@ -294,7 +304,6 @@ export const userItems = [
     name: "Favorites",
     icon: "heart",
     isLocked: false,
-    // onPress: () => router.push("./favorites-screen"),
     onPress: () => router.push("/explore-topics/favorites-screen"),
   },
   {
@@ -303,7 +312,6 @@ export const userItems = [
     isLocked: false,
     onPress: () =>
       router.push({
-        // pathname: "./collections-screen",
         pathname: "/explore-topics/collections-screen",
         params: { display: "collections" },
       }),
@@ -312,7 +320,6 @@ export const userItems = [
     name: "My own quotes",
     icon: "edit-3",
     isLocked: false,
-    // onPress: () => router.push("./user-quotes"),
     onPress: () => router.push("/explore-topics/user-quotes"),
   },
   {
@@ -390,7 +397,7 @@ type ImageTheme = {
   id: number;
   type: "image";
   value: { uri: string };
-  video?: string; // Video is optional on image themes
+  video?: string;
   isVideo: boolean;
   textColor?: string;
 };
@@ -398,11 +405,10 @@ type ImageTheme = {
 type ColorTheme = {
   id: number;
   type: "color";
-  value: string; // The hex color code
+  value: string;
   textColor: string;
 };
 
-// 2. DEFINE the main Theme type as a union of the two
 export type Theme = ImageTheme | ColorTheme;
 
 export const THEMES: Theme[] = [
@@ -431,4 +437,167 @@ export const THEMES: Theme[] = [
   },
 
   { id: 6, type: "color", value: "#1E1E2F", textColor: "#FFFFFF" },
+];
+
+export const BUNDLE_APPS = [
+  {
+    name: "Motivation",
+    description: "Reminders to think positive",
+    icon: "”",
+    bgColor: "#4A4A4A",
+    status: "Installed",
+  },
+  {
+    name: "I am",
+    description: "Affirmations to empower daily",
+    icon: "I am",
+    bgColor: "#FFFFFF",
+    textColor: "#000000",
+    isTextIcon: true,
+  },
+  {
+    name: "Loving Kindness",
+    description: "Daily meditation mantras",
+    icon: "lotus-outline",
+    IconLib: Ionicons,
+    bgColor: "#F2D7E7",
+  },
+  {
+    name: "Moodlight",
+    description: "Mood tracker & self-help",
+    icon: "moon-outline",
+    IconLib: Ionicons,
+    bgColor: "#424874",
+  },
+  {
+    name: "Vocabulary",
+    description: "Improve vocabulary every day",
+    icon: "text",
+    IconLib: Feather,
+    bgColor: "#DCD6F7",
+  },
+  {
+    name: "Facts",
+    description: "Learn new interesting trivia",
+    icon: "bulb-outline",
+    IconLib: Ionicons,
+    bgColor: "#F4D160",
+  },
+];
+
+export const ICON_STYLES = [
+  {
+    id: "default",
+    type: "color",
+    value: "#3a4151",
+    content: "icon-quote-double",
+  },
+  {
+    id: "dark-solid",
+    type: "color",
+    value: "#1E1E2F",
+    content: "icon-quote-double",
+  },
+  {
+    id: "dark-outline",
+    type: "color",
+    value: "#1E1E2F",
+    content: "icon-quote-circle",
+  },
+  {
+    id: "white-solid",
+    type: "color",
+    value: "#FFFFFF",
+    content: "icon-quote-double",
+    textColor: "#000000",
+  },
+  {
+    id: "purple-gradient",
+    type: "gradient",
+    value: ["#C97EFF", "#F5A1BE"],
+    content: "icon-quote-single-low",
+  },
+  {
+    id: "white-solid-black",
+    type: "color",
+    value: "#FFFFFF",
+    content: "icon-quote-double-black",
+  },
+  {
+    id: "galaxy",
+    type: "image",
+    value:
+      "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=400",
+  },
+  {
+    id: "marble-outline",
+    type: "image",
+    value:
+      "https://images.unsplash.com/photo-1588621412235-3359b418a29a?q=80&w=400",
+    content: "icon-quote-circle-img",
+  },
+  {
+    id: "holographic",
+    type: "image",
+    value:
+      "https://images.unsplash.com/photo-1599232857413-a44283804828?q=80&w=400",
+    content: "icon-quote-single-black",
+  },
+  {
+    id: "white-black-2",
+    type: "color",
+    value: "#FFFFFF",
+    content: "icon-quote-double-black",
+  },
+  {
+    id: "black-circle",
+    type: "color",
+    value: "#1E1E2F",
+    content: "icon-quote-circle-smiley",
+  },
+  {
+    id: "black-solid",
+    type: "color",
+    value: "#1E1E2F",
+    content: "icon-quote-double",
+  },
+  {
+    id: "do-not-quit",
+    type: "color",
+    value: "#1E1E2F",
+    content: "Do not quit",
+  },
+  {
+    id: "chase-dreams",
+    type: "color",
+    value: "#FFFFFF",
+    content: "Chase your dreams",
+    textColor: "#000000",
+  },
+  {
+    id: "be-you",
+    type: "image",
+    value:
+      "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?q=80&w=400",
+    content: "Be you.\nDo you.\nFor you.",
+  },
+  {
+    id: "trust-process",
+    type: "color",
+    value: "#FFFFFF",
+    content: "Trust the process",
+    textColor: "#000000",
+  },
+];
+
+
+// ... (your existing forYou, freeToday, mostPopular, etc. arrays)
+
+// NEW: Create a combined array of all searchable topics
+export const ALL_EXPLORE_TOPICS = [
+  ...mostPopular,
+  ...forYou,
+  ...freeToday,
+  ...personalGrowth,
+  // Add any other topic arrays you want to be searchable
 ];

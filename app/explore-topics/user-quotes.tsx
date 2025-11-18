@@ -77,13 +77,13 @@ const UserQuotesScreen = () => {
           Your own quotes
         </Text>
 
-        <View className="flex-1 justify-center items-center p-6 -mt-16">
+        <View className="flex-1 justify-center items-center p-6 -mt-24">
           <BoxIllustration />
-          <Text className="text-white text-2xl font-bold text-center mt-8">
+          <Text className="text-white text-3xl font-bold text-center mt-20">
             You don't have any quotes yet
           </Text>
         </View>
-        <View className="p-4 border-t border-t-gray-700">
+        <View className=" absolute bottom-10 left-0 right-0 p-4">
           <TouchableOpacity
             onPress={() => router.push("/explore-topics/add-quote")}
             className="bg-white rounded-full w-full py-4 items-center justify-center"
@@ -212,7 +212,7 @@ const UserQuotesScreen = () => {
         </View>
       </ScrollView>
 
-      <View className="absolute bottom-0 left-0 right-0 p-4 bg-[#262e3d] border-t border-t-gray-700">
+      <View className="absolute bottom-10 left-0 right-0 p-4">
         <TouchableOpacity
           onPress={() => router.push("/explore-topics/add-quote")}
           className="bg-white rounded-full w-full py-4 items-center justify-center"
