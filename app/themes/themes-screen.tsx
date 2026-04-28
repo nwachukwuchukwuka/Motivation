@@ -6,6 +6,7 @@ import {
 import { useAppContext } from "@/context/context";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -17,6 +18,14 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuProvider,
+  MenuTrigger,
+} from "react-native-popup-menu";
 
 const FILTERS = ["All", "Free", "New", "Seasonal", "Most popular", "Recent"];
 
@@ -103,176 +112,263 @@ const ThemesScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="flex-row justify-between items-center px-4 py-4">
-        <TouchableOpacity onPress={() => router.back()}>
-          <Feather name="x" size={28} color="white" />
-        </TouchableOpacity>
-        <Text className="text-white text-2xl font-bold">Themes</Text>
-        <TouchableOpacity>
-          <Text className="text-white text-xl">Unlock all</Text>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 12 }}
-        >
+    <MenuProvider>
+      <SafeAreaView className="flex-1 bg-[#050505]">
+        {/* Premium Header */}
+        <View className="flex-row justify-between items-center px-6 py-6">
           <TouchableOpacity
-            onPress={() => router.push("/editor")}
-            className="flex-row items-center bg-[#3a4151] rounded-full px-4 py-4 mr-2"
+            onPress={() => router.back()}
+            className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-[#222222]"
           >
-            <Feather name="plus" size={16} color="white" />
-            <Text className="text-white ml-1 font-semibold">Create</Text>
+            <Feather name="x" size={24} color="white" />
           </TouchableOpacity>
-          {FILTERS.map((filter) => (
-            <Pressable
-              key={filter}
-              onPress={() => setActiveFilter(filter)}
-              className={`rounded-3xl px-4 py-4 mx-1 ${
-                activeFilter === filter ? "bg-white" : "bg-[#3a4151]"
-              }`}
-            >
-              <Text
-                className={` ${
-                  activeFilter === filter ? "text-black" : "text-white"
-                }`}
-              >
-                {filter}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
 
-        <View className="px-4 mt-4">
-          <View className="flex-row justify-between items-center mb-2">
-            <Text className="text-white text-xl font-bold">Theme mixes</Text>
-            <TouchableOpacity
-              onPress={() => router.push("/themes/theme-mixes-screen")}
-            >
-              <Text className="text-[#969da8] text-lg">See all</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingRight: 16 }}
+          <Text className="text-white text-lg font-bold tracking-tight">Themes</Text>
+
+          <TouchableOpacity
+            onPress={() => router.push("/free-trial-details-screen")}
+            className="bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20"
           >
-            {THEME_MIXES_HALF.map((mix, index) => (
-              <Pressable
-                key={index}
-                className="mr-3"
-                onPress={() => router.push("/free-trial-details-screen")}
-              >
-                <ImageBackground
-                  source={{ uri: mix.image }}
-                  className="w-48 h-32 rounded-2xl items-center justify-center overflow-hidden"
-                  resizeMode="cover"
-                >
-                  <View className="absolute inset-0 bg-black/30 rounded-2xl" />
-                  <Text className="text-white text-lg font-semibold">
-                    {mix.name}
-                  </Text>
-                </ImageBackground>
-              </Pressable>
-            ))}
-            <Pressable
-              onPress={() => router.push("/themes/theme-mixes-screen")}
-              className="w-40 h-32 rounded-2xl items-center justify-center bg-[#3a4151]"
-            >
-              <Text className="text-white text-2xl ">+21</Text>
-            </Pressable>
-          </ScrollView>
+            <Text className="text-emerald-400 text-xs font-bold">Unlock all</Text>
+          </TouchableOpacity>
         </View>
 
-        <View className="px-4 mt-6">
-          <Text className="text-white text-xl font-bold mb-2">For you</Text>
-          <View className="flex-row flex-wrap justify-between">
-            {filteredThemes.map((theme) => {
-              const isSelected = selectedThemeId === theme.id;
-              const sourceUri = theme.image || theme.video;
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Modern Action Bar */}
+          <View className="flex-row px-6 py-4 gap-3">
+            <TouchableOpacity
+              onPress={() => router.push("/editor")}
+              className="flex-1 flex-row items-center justify-center bg-[#111111] border border-[#222222] rounded-2xl py-4"
+            >
+              <Feather name="plus" size={18} color="#10b981" />
+              <Text className="text-white ml-2 font-bold">Create</Text>
+            </TouchableOpacity>
 
-              return (
-                <View key={theme.id} className="w-1/3 p-1.5">
-                  <Pressable onPress={() => handleThemePress(theme)}>
-                    <View
-                      className={`h-48 w-full rounded-2xl relative overflow-hidden ${
-                        isSelected ? "border border-gray-400" : ""
-                      }`}
+            <Menu style={{ flex: 1 }}>
+              <MenuTrigger
+                customStyles={{
+                  triggerOuterWrapper: { flex: 1 },
+                  triggerWrapper: { flex: 1 },
+                }}
+              >
+                <View className="flex-1 flex-row items-center justify-center bg-[#111111] border border-[#222222] rounded-2xl py-4">
+                  <Feather name="sliders" size={18} color="#10b981" />
+                  <Text className="text-white ml-2 font-bold">Filters</Text>
+                  {activeFilter !== "All" && (
+                    <View className="ml-2 w-2 h-2 bg-emerald-500 rounded-full" />
+                  )}
+                </View>
+              </MenuTrigger>
+
+              <MenuOptions
+                customStyles={{
+                  optionsContainer: {
+                    backgroundColor: "#111111",
+                    borderRadius: 24,
+                    padding: 8,
+                    width: 220,
+                    marginTop: 50,
+                    borderWidth: 1,
+                    borderColor: "#222222",
+                    shadowColor: "#000",
+                    shadowOpacity: 0.5,
+                    shadowRadius: 20,
+                    elevation: 10,
+                  },
+                }}
+              >
+                {FILTERS.map((filter) => {
+                  const isActive = activeFilter === filter;
+                  return (
+                    <MenuOption
+                      key={filter}
+                      onSelect={() => setActiveFilter(filter)}
+                      customStyles={{
+                        optionWrapper: {
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          paddingHorizontal: 16,
+                          paddingVertical: 14,
+                          borderRadius: 16,
+                          backgroundColor: isActive ? "rgba(16, 185, 129, 0.1)" : "transparent",
+                          marginVertical: 2,
+                        },
+                      }}
                     >
-                      {sourceUri ? (
-                        <Image
-                          source={{ uri: sourceUri }}
-                          contentFit="cover"
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                          }}
+                      <Text className={`font-bold ${isActive ? "text-emerald-500" : "text-zinc-400"}`}>
+                        {filter}
+                      </Text>
+                      {isActive && <Feather name="check" size={16} color="#10b981" />}
+                    </MenuOption>
+                  );
+                })}
+              </MenuOptions>
+            </Menu>
+          </View>
+
+          {/* Immersive Theme Mixes */}
+          <View className="mt-8">
+            <View className="px-6 flex-row justify-between items-center mb-6">
+              <Text className="text-white text-xl font-bold tracking-tight">Theme mixes</Text>
+              <TouchableOpacity
+                onPress={() => router.push("/themes/theme-mixes-screen")}
+              >
+                <Text className="text-zinc-500 text-sm font-bold">See all</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingLeft: 24, paddingRight: 24 }}
+            >
+              {THEME_MIXES_HALF.map((mix, index) => (
+                <Pressable
+                  key={index}
+                  className="mr-4"
+                  onPress={() => router.push("/free-trial-details-screen")}
+                >
+                  <View className="w-56 h-36 rounded-[32px] overflow-hidden border border-[#222222]">
+                    <ImageBackground
+                      source={{ uri: mix.image }}
+                      className="flex-1 items-center justify-center"
+                      resizeMode="cover"
+                    >
+                      <View className="absolute inset-0 bg-black/40" />
+                      <Text className="text-white text-base font-bold text-center px-4">
+                        {mix.name}
+                      </Text>
+                    </ImageBackground>
+                  </View>
+                </Pressable>
+              ))}
+
+              <Pressable
+                onPress={() => router.push("/themes/theme-mixes-screen")}
+                className="w-40 h-36 rounded-[32px] items-center justify-center bg-[#111111] border border-[#222222]"
+              >
+                <View className="items-center">
+                  <Text className="text-white text-3xl font-bold">+21</Text>
+                  <Text className="text-zinc-500 text-xs font-bold mt-1">More</Text>
+                </View>
+              </Pressable>
+            </ScrollView>
+          </View>
+
+          {/* Dynamic Editorial Theme Grid */}
+          <View className="px-6 mt-12 pb-32">
+            <Text className="text-white text-xl font-bold mb-8 tracking-tight">For you</Text>
+            <View className="flex-row flex-wrap justify-between">
+              {filteredThemes.map((theme, index) => {
+                const isSelected = selectedThemeId === theme.id;
+                const sourceUri = theme.image || theme.video;
+
+                // Dynamic layout: First item is full width, others are 2 per row
+                const isFullWidth = index === 0;
+                const cardWidth = isFullWidth ? "w-full" : "w-[48%]";
+                const aspectClass = isFullWidth ? "aspect-[16/10]" : "aspect-[9/14]";
+
+                return (
+                  <View key={theme.id} className={`${cardWidth} mb-6`}>
+                    <Pressable onPress={() => handleThemePress(theme)}>
+                      <View
+                        className={`${aspectClass} w-full rounded-[36px] relative overflow-hidden border-2 ${isSelected ? "border-emerald-500" : "border-[#111111]"
+                          }`}
+                      >
+                        {sourceUri ? (
+                          <Image
+                            source={{ uri: sourceUri }}
+                            contentFit="cover"
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                            }}
+                          />
+                        ) : (
+                          <View className="flex-1 bg-zinc-900" />
+                        )}
+
+                        {/* Premium Overlays */}
+                        <LinearGradient
+                          colors={["rgba(0,0,0,0.4)", "transparent", "rgba(0,0,0,0.4)"]}
+                          className="absolute inset-0"
                         />
-                      ) : (
-                        <View className="flex-1 bg-gray-700" />
-                      )}
 
-                      {theme.id === "my-photo-theme" && (
-                        <View className="absolute top-2 left-2 bg-black/50 p-1.5 rounded-full">
-                          <Feather name="user" size={12} color="white" />
+                        {/* Theme Badges */}
+                        <View className="absolute top-4 left-4 flex-row gap-2">
+                          {theme.id === "my-photo-theme" && (
+                            <View className="bg-black/60 w-10 h-10 rounded-full items-center justify-center backdrop-blur-md border border-white/10">
+                              <Feather name="user" size={16} color="white" />
+                            </View>
+                          )}
+                          {theme.video && (
+                            <View className="bg-black/60 w-10 h-10 rounded-full items-center justify-center backdrop-blur-md border border-white/10">
+                              <MaterialCommunityIcons
+                                name="motion-play-outline"
+                                size={22}
+                                color="white"
+                              />
+                            </View>
+                          )}
                         </View>
-                      )}
 
-                      {theme.isFree &&
-                        !isSelected &&
-                        theme.id !== "my-photo-theme" && (
-                          <View className="absolute top-2 right-2 bg-white rounded-full px-2 py-0.5">
-                            <Text className=" text-xs">Free</Text>
+                        {theme.isFree && !isSelected && theme.id !== "my-photo-theme" && (
+                          <View className="absolute top-4 right-4 bg-emerald-500 rounded-full px-3 py-1 shadow-lg">
+                            <Text className="text-white text-[9px] font-bold tracking-widest">FREE</Text>
                           </View>
                         )}
 
-                      {theme.video && (
-                        <View className="absolute top-2 left-2">
-                          <MaterialCommunityIcons
-                            name="motion-play-outline"
-                            size={24}
-                            color="white"
-                          />
-                        </View>
-                      )}
-
-                      <View className="absolute inset-0 bg-black/10 items-center justify-center">
-                        <Text className="text-white text-2xl font-bold">
-                          Aa
-                        </Text>
-
-                        {isSelected && (
-                          <Pressable
-                            className="absolute bottom-2 right-2 bg-white/90 rounded-full px-3 py-1"
-                            onPress={() =>
-                              router.push({
-                                pathname: "/editor",
-                                params: {
-                                  quoteText: activeQuote.text,
-                                  quoteAuthor: activeQuote.author,
-                                },
-                              })
-                            }
+                        {/* Preview Center */}
+                        <View className="absolute inset-0 items-center justify-center">
+                          <Text
+                            style={{ textShadowColor: 'rgba(0,0,0,0.5)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 10 }}
+                            className={`text-white font-bold opacity-90 ${isFullWidth ? "text-5xl" : "text-3xl"}`}
                           >
-                            <Text className="text-black  text-sm ">Edit</Text>
-                          </Pressable>
+                            Aa
+                          </Text>
+                        </View>
+
+                        {/* Quick Edit for Selected */}
+                        {isSelected && (
+                          <View className="absolute inset-0 bg-emerald-500/10 items-center justify-center">
+                            <Pressable
+                              className="bg-white rounded-full px-8 py-3 shadow-2xl"
+                              onPress={() =>
+                                router.push({
+                                  pathname: "/editor",
+                                  params: {
+                                    quoteText: activeQuote.text,
+                                    quoteAuthor: activeQuote.author,
+                                  },
+                                })
+                              }
+                            >
+                              <Text className="text-black text-sm font-bold">Customize</Text>
+                            </Pressable>
+                          </View>
+                        )}
+
+                        {/* Selection Indicator for Staggered View */}
+                        {isSelected && !isFullWidth && (
+                          <View className="absolute bottom-4 left-4 bg-emerald-500 w-8 h-8 rounded-full items-center justify-center">
+                            <Feather name="check" size={16} color="white" />
+                          </View>
                         )}
                       </View>
-                    </View>
-                  </Pressable>
-                </View>
-              );
-            })}
+                    </Pressable>
+                  </View>
+                );
+              })}
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </MenuProvider>
+
   );
 };
 

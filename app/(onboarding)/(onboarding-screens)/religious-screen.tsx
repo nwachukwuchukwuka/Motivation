@@ -1,11 +1,18 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Feather } from "@expo/vector-icons";
 
-const RELIGIOUS_OPTIONS = ["Yes", "No", "Spiritual but not religious"];
+const RELIGIOUS_OPTIONS = [
+  { label: "Yes", icon: "moon" },
+  { label: "No", icon: "sun" },
+  { label: "Spiritual but not religious", icon: "wind" },
+];
 
 const ReligiousScreen = () => {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleSelect = (option: string) => {
@@ -21,45 +28,66 @@ const ReligiousScreen = () => {
   };
 
   return (
-    <View className="flex-1 px-5 pt-24 bg-[#262e3d]">
-      <View>
-        <Text className="text-white text-3xl font-semibold text-center mb-6 ">
-          Are you religious?
-        </Text>
+    <View className="flex-1 bg-[#050505]" style={{ paddingTop: insets.top + 40 }}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-8"
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
+        <View className="mb-12">
+          <Text className="text-[#E2E8F0] text-4xl font-bold tracking-tighter leading-tight">
+            Are you religious?
+          </Text>
+          <View className="w-12 h-1 bg-emerald-500 mt-6" />
+        </View>
 
-        <View className="mb-8">
-          {RELIGIOUS_OPTIONS.map((option) => {
-            const isSelected = selectedOption === option;
+        <View className="flex-row flex-wrap justify-between">
+          {RELIGIOUS_OPTIONS.map((item) => {
+            const isSelected = selectedOption === item.label;
 
             return (
               <TouchableOpacity
-                key={option}
-                className={`flex-row justify-between items-center rounded-full px-6 py-4 my-2 border ${
+                key={item.label}
+                activeOpacity={0.8}
+                onPress={() => handleSelect(item.label)}
+                className={`w-[48%] h-[120px] p-4 rounded-[28px] border-2 transition-all justify-between mb-4 ${
                   isSelected
-                    ? "bg-[#333b4f] border-gray-300"
-                    : "bg-transparent border-[#3a4151]"
+                    ? "bg-[#111111] border-emerald-500"
+                    : "bg-[#111111] border-white/5"
                 }`}
-                onPress={() => handleSelect(option)}
               >
+                <View className="flex-row justify-between items-start">
+                  <View className={`w-8 h-8 rounded-lg items-center justify-center border ${
+                    isSelected ? "bg-emerald-500/10 border-emerald-500/20" : "bg-white/5 border-white/10"
+                  }`}>
+                    <Feather 
+                      name={item.icon as any} 
+                      size={16} 
+                      color={isSelected ? "#10b981" : "#52525b"} 
+                    />
+                  </View>
+                  
+                  {isSelected ? (
+                    <View className="w-5 h-5 rounded-full bg-emerald-500 items-center justify-center">
+                      <Feather name="check" size={12} color="black" />
+                    </View>
+                  ) : (
+                    <View className="w-5 h-5 rounded-full border-2 border-white/10" />
+                  )}
+                </View>
+
                 <Text
-                  className={`text-lg ${
-                    isSelected ? "text-white font-semibold" : "text-[#969da8]"
+                  className={`text-[14px] tracking-tight leading-tight ${
+                    isSelected ? "text-white" : "text-[#94A3B8]"
                   }`}
                 >
-                  {option}
+                  {item.label}
                 </Text>
-                <View
-                  className={`w-6 h-6 rounded-full ${
-                    isSelected
-                      ? "border-[3px] border-gray-300"
-                      : "border-[2px] border-[#969da8]"
-                  }`}
-                />
               </TouchableOpacity>
             );
           })}
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

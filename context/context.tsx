@@ -10,9 +10,9 @@ import React, {
 
 export type ThemeSource =
   | {
-      uri?: string;
-      color?: string;
-    }
+    uri?: string;
+    color?: string;
+  }
   | number;
 
 export type Quote = {

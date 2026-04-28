@@ -186,9 +186,8 @@ const ShowAllInFeed = () => {
             </Text>
             <TouchableOpacity
               onPress={() => setIsFollowing(!isFollowing)}
-              className={`rounded-full border px-5 py-1.5 flex-row items-center ${
-                isFollowing ? "border-white" : "border-gray-500"
-              }`}
+              className={`rounded-full border px-5 py-1.5 flex-row items-center ${isFollowing ? "border-white" : "border-gray-500"
+                }`}
             >
               {isFollowing && (
                 <Feather

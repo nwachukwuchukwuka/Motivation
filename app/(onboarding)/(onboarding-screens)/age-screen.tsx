@@ -1,6 +1,8 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Feather } from "@expo/vector-icons";
 
 const AGE_OPTIONS = [
   "13 to 17",
@@ -14,6 +16,7 @@ const AGE_OPTIONS = [
 const AgeScreen = () => {
   const [selectedAge, setSelectedAge] = useState<string | null>(null);
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const handleSelect = (option: string) => {
     setSelectedAge(option);
@@ -24,45 +27,66 @@ const AgeScreen = () => {
   };
 
   return (
-    <View className="flex-1 px-5 pt-24 bg-[#262e3d]">
-      <View>
-        <Text className="text-white text-3xl font-semibold text-center mb-6">
-          How old are you?
-        </Text>
+    <View className="flex-1 bg-[#050505]" style={{ paddingTop: insets.top + 40 }}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-8"
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
+        <View className="mb-12">
+          <Text className="text-[#E2E8F0] text-4xl font-bold tracking-tighter leading-tight">
+            How old are you?
+          </Text>
+          <View className="w-12 h-1 bg-emerald-500 mt-6" />
+        </View>
 
-        <View className="mb-8">
+        <View className="flex-row flex-wrap justify-between">
           {AGE_OPTIONS.map((option) => {
             const isSelected = selectedAge === option;
 
             return (
               <TouchableOpacity
                 key={option}
-                className={`flex-row justify-between items-center rounded-full px-6 py-4 my-2 border ${
-                  isSelected
-                    ? "bg-[#333b4f] border-gray-300"
-                    : "bg-transparent border-[#3a4151]"
-                }`}
+                activeOpacity={0.8}
                 onPress={() => handleSelect(option)}
+                className={`w-[48%] aspect-square p-6 rounded-[32px] border-2 transition-all justify-between mb-4 ${
+                  isSelected
+                    ? "bg-[#111111] border-emerald-500"
+                    : "bg-[#111111] border-white/5"
+                }`}
               >
+                <View className="flex-row justify-between items-start">
+                  <View className={`w-10 h-10 rounded-xl items-center justify-center border ${
+                    isSelected ? "bg-emerald-500/10 border-emerald-500/20" : "bg-white/5 border-white/10"
+                  }`}>
+                    <Feather 
+                      name="calendar" 
+                      size={20} 
+                      color={isSelected ? "#10b981" : "#52525b"} 
+                    />
+                  </View>
+                  
+                  {isSelected ? (
+                    <View className="w-6 h-6 rounded-full bg-emerald-500 items-center justify-center">
+                      <Feather name="check" size={14} color="black" />
+                    </View>
+                  ) : (
+                    <View className="w-6 h-6 rounded-full border-2 border-white/10" />
+                  )}
+                </View>
+
                 <Text
-                  className={`text-lg ${
-                    isSelected ? "text-white font-semibold" : "text-[#969da8]"
+                  className={`text-xl font-bold tracking-tight ${
+                    isSelected ? "text-white" : "text-[#94A3B8]"
                   }`}
                 >
                   {option}
                 </Text>
-                <View
-                  className={`w-6 h-6 rounded-full ${
-                    isSelected
-                      ? "border-[3px] border-gray-300"
-                      : "border-[2px] border-[#969da8]"
-                  }`}
-                />
               </TouchableOpacity>
             );
           })}
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

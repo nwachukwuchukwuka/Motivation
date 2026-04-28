@@ -1,128 +1,140 @@
 import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Switch, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Switch, Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const FreeTrialDetailsScreen = () => {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [isReminderEnabled, setIsReminderEnabled] = useState(false);
 
+  const PHASES = [
+    {
+      id: "01",
+      title: "Immediate Access",
+      label: "Today",
+      desc: "Unlock the full potential of your mindset. Every theme, font, and premium quote becomes yours instantly.",
+      icon: "unlock",
+    },
+    {
+      id: "02",
+      title: "Momentum Building",
+      label: "Day 2",
+      desc: "We'll send a notification 24 hours before your trial expires so you stay in total control.",
+      icon: "bell",
+    },
+    {
+      id: "03",
+      title: "Full Curation",
+      label: "After Day 3",
+      desc: "Your subscription begins. Cancel anytime in your device settings before the trial ends.",
+      icon: "zap",
+    },
+  ];
+
   return (
-    <View className="flex-1  px-5 pt-24 bg-[#262e3d]">
-      <TouchableOpacity
-        onPress={() => router.back()}
-        className="absolute top-3 left-6 z-10"
+    <View className="flex-1 bg-[#050505]">
+      {/* Top Right Close Button */}
+      <View className="flex-row justify-end px-6 pt-4">
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="w-12 h-12 bg-[#111111] rounded-full items-center justify-center border border-white/5"
+        >
+          <Feather name="x" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-6"
+        contentContainerStyle={{ paddingBottom: 40 }}
       >
-        <Feather name="x" size={28} color="gray" />
-      </TouchableOpacity>
-
-      <View>
-        <Text className="text-white text-3xl font-semibold text-center">
-          How your free trial works
-        </Text>
-        <Text className="text-[#dee1e5] text-lg text-center mt-2">
-          You won’t be charged anything today
-        </Text>
-
-        <View className="bg-[#3a4151] rounded-2xl p-6 mt-8 flex-row">
-          <View className="items-center mr-4 gap-9">
-            <View className="w-10 h-10 bg-black/20 rounded-full items-center justify-center">
-              <Feather name="lock" size={20} color="#C97EFF" />
-            </View>
-            <LinearGradient
-              colors={["#C97EFF", "#F5A1BE"]}
-              className="w-1 h-16 my-2"
-            />
-            <View className="w-10 h-10 bg-black/20 rounded-full items-center justify-center">
-              <Feather name="bell" size={20} color="#F5A1BE" />
-            </View>
-            <LinearGradient
-              colors={["#F5A1BE", "#F5A1BE"]}
-              className="w-1 h-16 my-2"
-            />
-            <View className="w-10 h-10 bg-black/20 rounded-full items-center justify-center">
-              <Feather name="star" size={20} color="#F5A1BE" />
-            </View>
-          </View>
-          <View className="flex-1 pt-1">
-            <Text className="text-white font-bold text-lg">Today</Text>
-            <Text className="text-[#969da8] mb-12">
-              Get full access and see your mindset start to change
-            </Text>
-            <Text className="text-white font-bold text-lg">Day 2</Text>
-            <Text className="text-[#969da8] mb-12">
-              Get a reminder that your trial ends in 24 hours
-            </Text>
-            <Text className="text-white font-bold text-lg">After day 3</Text>
-            <Text className="text-[#969da8]">
-              Your free trial ends and you'll be charged, cancel anytime before
-            </Text>
-          </View>
+        <View className="mt-8 mb-12">
+          <Text className="text-white text-4xl font-semibold tracking-tighter leading-[1.1]">
+            Trial Journey
+          </Text>
+          <Text className="text-emerald-500 text-lg font-bold tracking-tight mt-2">
+            No commitment required today
+          </Text>
         </View>
 
-        <View className="flex-row justify-between items-center bg-[#3a4151] rounded-full px-6 py-3 mt-16">
-          <Text className="text-white text-base">
-            Reminder before trial ends
-          </Text>
+        {/* Phase Pods */}
+        {PHASES.map((phase) => (
+          <View
+            key={phase.id}
+            className="bg-[#111111] rounded-[32px] p-6 mb-4 border border-white/5"
+          >
+            <View className="flex-row justify-between items-center mb-4">
+              <View className="flex-row items-center">
+                <View className="w-10 h-10 bg-emerald-500/10 rounded-xl items-center justify-center border border-emerald-500/20 mr-3">
+                  <Feather name={phase.icon as any} size={20} color="#10b981" />
+                </View>
+                <Text className="text-emerald-500 font-bold text-xs tracking-widest uppercase">
+                  Phase {phase.id}
+                </Text>
+              </View>
+              <Text className="text-zinc-500 font-bold text-xs tracking-tight">{phase.label}</Text>
+            </View>
+            <Text className="text-white text-xl font-bold tracking-tight mb-2">
+              {phase.title}
+            </Text>
+            <Text className="text-zinc-500 text-sm font-medium leading-relaxed">
+              {phase.desc}
+            </Text>
+          </View>
+        ))}
+
+        {/* Reminder Pod */}
+        <View className="flex-row justify-between items-center bg-[#111111] rounded-2xl px-6 py-4 mt-6 border border-white/5">
+          <View className="flex-row items-center">
+            <Feather name="bell" size={18} color="#10b981" />
+            <Text className="text-white text-sm font-bold ml-3 tracking-tight">
+              Trial end reminder
+            </Text>
+          </View>
           <Switch
-            trackColor={{ false: "#767577", true: "#C97EFF" }}
-            thumbColor={isReminderEnabled ? "#f4f3f4" : "#f4f3f4"}
+            trackColor={{ false: "#18181b", true: "#10b981" }}
+            thumbColor="#ffffff"
             onValueChange={() => setIsReminderEnabled((prev) => !prev)}
             value={isReminderEnabled}
           />
         </View>
-      </View>
 
-      <View>
-        <TouchableOpacity
-          style={{
-            width: "100%",
-            borderRadius: 9999,
-            overflow: "hidden",
-            marginTop: 10,
-          }}
-          // onPress={() => router.push("/widget-install-screen")}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={["#C97EFF", "#F5A1BE"]}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={{
-              paddingVertical: 16,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+        {/* Action Zone */}
+        <View className="mt-12">
+          <TouchableOpacity
+            className="bg-emerald-500 w-full py-5 rounded-[24px] items-center justify-center"
+            activeOpacity={0.9}
           >
-            <Text
-              style={{
-                color: "#000",
-                fontSize: 18,
-                fontWeight: "bold",
-              }}
-            >
-              Start 3-day free trial
+            <Text className="text-black text-lg font-bold tracking-tight">
+              Start 3-Day Free Trial
             </Text>
-          </LinearGradient>
-        </TouchableOpacity>
+          </TouchableOpacity>
 
-        <Text className="text-center text-[#969da8] mt-3 text-lg">
-          Unlimited free access for 3 days, then ₦29,900.00 per year
-          (₦2,491.66/month)
-        </Text>
-        <View className="flex-row justify-center gap-6 mt-4">
-          <TouchableOpacity>
-            <Text className="text-[#969da8] text-sm">Restore</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text className="text-[#969da8] text-sm">Terms & Conditions</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text className="text-[#969da8] text-sm">Privacy Policy</Text>
-          </TouchableOpacity>
+          <View className="mt-6 px-4">
+            <Text className="text-center text-zinc-500 text-sm font-medium leading-relaxed">
+              Unlimited access for 3 days, then <Text className="text-white">₦29,900.00/year</Text>
+            </Text>
+            <Text className="text-center text-zinc-600 text-xs mt-1 font-bold">
+              Just ₦2,491.66 per month
+            </Text>
+          </View>
+
+          {/* Footer Links */}
+          <View className="flex-row justify-center gap-8 mt-10">
+            <TouchableOpacity>
+              <Text className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Restore</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Terms</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Privacy</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

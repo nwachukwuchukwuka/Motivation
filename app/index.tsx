@@ -16,10 +16,9 @@ import {
   ImageBackground,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Pressable,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -29,7 +28,7 @@ type Quote = {
   author: string;
 };
 
-const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 type QuoteCardProps = {
   item: Quote;
@@ -54,49 +53,58 @@ const QuoteCard = ({
 
   return (
     <View
-      style={{ height: SCREEN_HEIGHT }}
-      className="w-full justify-center items-center p-6"
+      style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
+      className="justify-start pt-48 px-10"
     >
-      <View>
-        <View className="items-center mb-52 mt-52">
+      <View className="mb-12">
+        <Text
+          style={[
+            {
+              fontFamily: textStyles.fontFamily,
+              fontSize: textStyles.fontSize,
+              color: textStyles.color,
+              textAlign: textStyles.textAlign,
+            },
+            textStyles.textShadowStyle,
+          ]}
+          className="leading-tight tracking-tight"
+        >
+          {item.text}
+        </Text>
+        <View className="flex-row items-center mt-6">
+          <View className="w-8 h-[2px] bg-emerald-500 mr-4" />
           <Text
-            className="text-center"
-            style={[
-              {
-                fontFamily: textStyles.fontFamily,
-                fontSize: textStyles.fontSize,
-                color: textStyles.color,
-                textAlign: textStyles.textAlign,
-              },
-              textStyles.textShadowStyle,
-            ]}
-          >
-            {item.text}
-          </Text>
-          <Text
-            className="text-white text-lg mt-2"
+            className="text-white/60 text-lg font-medium italic"
             style={{
-              textShadowColor: "rgba(0, 0, 0, 0.75)",
+              textShadowColor: "rgba(0, 0, 0, 0.5)",
               textShadowOffset: { width: 0, height: 1 },
-              textShadowRadius: 8,
+              textShadowRadius: 4,
             }}
           >
             {item.author}
           </Text>
         </View>
-        <View className="flex-row justify-center items-center gap-8 mt-16">
-          <Pressable onPress={() => router.push("/share-quote-modal")}>
-            <Feather name="share" size={32} color="white" />
-          </Pressable>
+      </View>
 
-          <TouchableOpacity onPress={onToggleFavorite}>
-            {isFavorite ? (
-              <AntDesign name="heart" size={32} color="white" />
-            ) : (
-              <Feather name="heart" size={32} color="white" />
-            )}
-          </TouchableOpacity>
-        </View>
+      {/* Floating Action Sidebar */}
+      <View className="absolute right-6 top-1/2 -translate-y-1/2 space-y-8">
+        <TouchableOpacity
+          onPress={onToggleFavorite}
+          className="w-16 h-16 bg-black/30 backdrop-blur-md rounded-full items-center justify-center border border-white/10"
+        >
+          {isFavorite ? (
+            <AntDesign name="heart" size={28} color="#10b981" />
+          ) : (
+            <Feather name="heart" size={28} color="white" />
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push("/share-quote-modal")}
+          className="w-16 h-16 bg-black/30 backdrop-blur-md rounded-full items-center justify-center border border-white/10 mt-6"
+        >
+          <Feather name="share-2" size={28} color="white" />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -122,19 +130,19 @@ const MainContent = ({
   const handleLikePress = (quoteId: string) => {
     if (!isFavorite(quoteId)) {
       setShowLargeHeart(true);
-
-      setTimeout(() => {
-        setShowLargeHeart(false);
-      }, 800);
+      setTimeout(() => setShowLargeHeart(false), 800);
     }
     toggleFavorite(quoteId);
   };
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 ">
       <FlatList
         ref={flatListRef}
         data={QUOTES}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <QuoteCard
             item={item}
@@ -144,80 +152,76 @@ const MainContent = ({
           />
         )}
         keyExtractor={(item) => item.id}
-        pagingEnabled
-        showsVerticalScrollIndicator={false}
         onMomentumScrollEnd={handleMomentumScrollEnd}
         decelerationRate="fast"
       />
 
       {showLargeHeart && (
         <View className="absolute inset-0 justify-center items-center pointer-events-none">
-          <AntDesign name="heart" size={150} color="white" />
+          <AntDesign name="heart" size={120} color="#10b981" style={{ opacity: 0.6 }} />
         </View>
       )}
 
+      {/* Floating HUD Top */}
       <View
-        style={{ paddingTop: insets.top }}
-        className="absolute top-0 left-0 right-0 p-4"
+        style={{ top: insets.top + 10 }}
+        className="absolute left-6 right-6 flex-row justify-between items-center"
       >
-        <View className="flex-row justify-between items-center">
-          <View className="mr-10" />
-          {likes < 5 && (
-            <Pressable
-              className="flex-row items-center"
-              onPress={handleProgressBarPress}
-            >
-              <Feather name="heart" size={16} color="white" />
-              <Text className="text-white font-semibold mx-2 text-sm">
-                {likes}/{maxLikes}
-              </Text>
-              <View className="w-32 h-1.5 bg-white/30 rounded-full">
+        {likes < 5 ? (
+          <TouchableOpacity
+            className="flex-row items-center bg-[#111111]/80 backdrop-blur-md px-5 py-3 rounded-2xl border border-emerald-500/20"
+            onPress={handleProgressBarPress}
+          >
+            <View className="mr-3">
+              <Text className="text-white font-semibold text-[15px] tracking-widest  mb-1">Curation</Text>
+              <View className="w-20 h-1 bg-zinc-800 rounded-full overflow-hidden">
                 <View
                   style={{ width: `${progress}%` }}
-                  className="h-1.5 bg-white rounded-full"
+                  className="h-full bg-emerald-500 rounded-full"
                 />
               </View>
-            </Pressable>
-          )}
-
-          <TouchableOpacity
-            className="bg-[#374051] p-2.5 px-3 rounded-xl"
-            onPress={() => router.push("/free-trial-details-screen")}
-          >
-            <AntDesign name="crown" size={24} color="white" />
+            </View>
+            <Text className="text-emerald-500 font-bold text-xs ml-1">{likes}/{maxLikes}</Text>
           </TouchableOpacity>
-        </View>
+        ) : <View />}
+
+        <TouchableOpacity
+          className="w-14 h-14 bg-[#111111]/80 backdrop-blur-md rounded-2xl border border-emerald-500/20 items-center justify-center"
+          onPress={() => router.push("/free-trial-details-screen")}
+        >
+          <AntDesign name="crown" size={24} color="#10b981" />
+        </TouchableOpacity>
       </View>
 
+      {/* Floating Island Navigation */}
       <View
-        style={{ paddingBottom: insets.bottom }}
-        className="absolute bottom-0 left-0 right-0 p-4"
+        style={{ bottom: insets.bottom + 20 }}
+        className="absolute left-6 right-6"
       >
-        <View className="flex-row justify-between items-center">
+        <View
+          className="flex-row items-center justify-between bg-[#111111]/90 backdrop-blur-xl px-2 py-2 rounded-[32px] border border-white/5"
+        >
           <TouchableOpacity
-            className="flex-row items-center bg-[#374051] rounded-2xl px-4 py-4"
+            className="flex-row items-center bg-emerald-500 rounded-[24px] px-8 py-4"
             onPress={() => router.push("/explore-topics/explore-topics-screen")}
           >
-            <Feather name="grid" size={20} color="white" />
-            <Text className="text-white font-semibold ml-2">General</Text>
-            <View className="absolute -top-3.5 -right-1 bg-[#ff8a8a] rounded-full px-2 py-1">
-              <Text className="text-white text-md">NEW</Text>
-            </View>
+            <Feather name="grid" size={20} color="black" />
+            <Text className="text-black font-bold ml-3 tracking-tight">Explore</Text>
           </TouchableOpacity>
 
-          <View className="flex-row items-center gap-6 mr-4">
-            <Pressable
-              className="items-center bg-[#374051] rounded-2xl px-4 py-4"
+          <View className="flex-row items-center gap-2 pr-2">
+            <TouchableOpacity
+              className="w-14 h-14 bg-white/5 rounded-[24px] items-center justify-center"
               onPress={() => router.push("/themes/themes-screen")}
             >
-              <Feather name="sliders" size={18} color="white" />
-            </Pressable>
-            <Pressable
-              className="items-center bg-[#374051] rounded-2xl px-4 py-4"
+              <Feather name="sliders" size={20} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="w-14 h-14 bg-white/5 rounded-[24px] items-center justify-center"
               onPress={() => router.push("/settings")}
             >
-              <Feather name="user" size={18} color="white" />
-            </Pressable>
+              <Feather name="user" size={20} color="white" />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -242,6 +246,7 @@ const QuoteScreen = () => {
     toggleFavorite,
     favoriteQuoteIds,
   } = useAppContext();
+
   if (!isAuthenticated) return <Redirect href="/welcome-screen" />;
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -261,8 +266,8 @@ const QuoteScreen = () => {
   const handleMomentumScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / SCREEN_HEIGHT);
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(offsetX / SCREEN_WIDTH);
     if (newIndex !== currentIndex) {
       setCurrentIndex(newIndex);
       if (QUOTES[newIndex]) {
@@ -272,7 +277,6 @@ const QuoteScreen = () => {
   };
 
   const insets = useSafeAreaInsets();
-
   const isImageBackground = typeof themeSource === "object" && themeSource.uri;
   const [showThemeToast, setShowThemeToast] = useState(false);
   const isInitialMount = useRef(true);
@@ -281,16 +285,11 @@ const QuoteScreen = () => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
       setShowStreakToast(true);
-      const streakTimer = setTimeout(() => {
-        setShowStreakToast(false);
-      }, 4000);
-
+      const streakTimer = setTimeout(() => setShowStreakToast(false), 4000);
       return () => clearTimeout(streakTimer);
     } else {
       setShowThemeToast(true);
-      const themeTimer = setTimeout(() => {
-        setShowThemeToast(false);
-      }, 4000);
+      const themeTimer = setTimeout(() => setShowThemeToast(false), 4000);
       return () => clearTimeout(themeTimer);
     }
   }, [themeSource]);
@@ -317,29 +316,25 @@ const QuoteScreen = () => {
     handleProgressBarPress,
   };
 
-  return isImageBackground ? (
+  return (
     <BottomSheetModalProvider>
-      <ImageBackground
-        source={themeSource}
-        resizeMode="cover"
-        className="flex-1"
-      >
-        <View className="flex-1 bg-black/20">
-          <MainContent {...contentProps} />
-          <ResonateQuotesModal ref={bottomSheetModalRef} />
-        </View>
-      </ImageBackground>
-    </BottomSheetModalProvider>
-  ) : (
-    <BottomSheetModalProvider>
-      <View
-        className="flex-1"
-        style={{
-          backgroundColor:
-            typeof themeSource === "object" ? themeSource.color : "black",
-        }}
-      >
-        <MainContent {...contentProps} />
+      <View className="flex-1 bg-[#050505]">
+        {isImageBackground ? (
+          <ImageBackground source={themeSource} resizeMode="cover" className="flex-1">
+            <View className="flex-1 bg-black/40">
+              <MainContent {...contentProps} />
+            </View>
+          </ImageBackground>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: typeof themeSource === "object" ? themeSource.color : "#050505",
+            }}
+          >
+            <MainContent {...contentProps} />
+          </View>
+        )}
         <ResonateQuotesModal ref={bottomSheetModalRef} />
       </View>
     </BottomSheetModalProvider>

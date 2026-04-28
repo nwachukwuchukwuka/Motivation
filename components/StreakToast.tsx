@@ -1,7 +1,6 @@
 import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect } from "react";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -20,15 +19,15 @@ type StreakToastProps = {
 const StreakToast = ({ visible, streakCount }: StreakToastProps) => {
   const insets = useSafeAreaInsets();
 
-  const translateY = useSharedValue(-200);
+  const translateY = useSharedValue(400);
   const opacity = useSharedValue(0);
 
   useEffect(() => {
     if (visible) {
-      translateY.value = withSpring(0, { damping: 20, stiffness: 100 });
+      translateY.value = withSpring(0, { damping: 15, stiffness: 100 });
       opacity.value = withTiming(1, { duration: 300 });
     } else {
-      translateY.value = withTiming(-200, { duration: 250 });
+      translateY.value = withTiming(400, { duration: 250 });
       opacity.value = withTiming(0, { duration: 200 });
     }
   }, [visible]);
@@ -44,51 +43,41 @@ const StreakToast = ({ visible, streakCount }: StreakToastProps) => {
 
   return (
     <Animated.View
-      style={[animatedStyle, { top: insets.top }]}
-      className="absolute left-4 right-4 z-20"
+      style={[animatedStyle, { bottom: insets.bottom + 110 }]}
+      className="absolute left-4 right-4 z-[100]"
     >
-      <View className="bg-[#3a4151] rounded-3xl p-4 flex-row items-center">
-        <View className="relative">
-          <Image
-            source={require("../assets/images/fire-img.png")}
-            className="w-[80] h-[80]"
-            resizeMode="contain"
-          />
-          <Text className="absolute bottom-0 left-[35px] text-xl text-white font-bold">
-            {streakCount}
+      <View
+        className="bg-[#111111] rounded-[32px] p-6 items-center border border-white/5"
+      >
+        <View className="flex-row items-center mb-6">
+          <View className="w-10 h-10 bg-emerald-500/10 rounded-xl items-center justify-center border border-emerald-500/20 mr-3">
+            <Feather name="zap" size={20} color="#10b981" />
+          </View>
+          <Text className="text-white text-2xl font-semibold tracking-tighter">
+            {streakCount} Day Streak
           </Text>
         </View>
 
-        <View className="flex-1">
-          <View className="flex-row justify-between items-center">
-            <Text className="text-white font-bold text-lg">Your streak</Text>
-          </View>
-          <View className="flex-row justify-between mt-2">
-            {DAYS_SHORT.map((day, index) => {
-              const isActive = index === currentDayIndex;
-              return (
-                <View key={index} className="items-center">
-                  <Text className="text-white mb-2">{day}</Text>
-                  {isActive ? (
-                    <LinearGradient
-                      colors={["#C97EFF", "#F5A1BE"]}
-                      style={{
-                        width: 25,
-                        height: 25,
-                        borderRadius: 9999,
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Feather name="check" size={14} color="white" />
-                    </LinearGradient>
-                  ) : (
-                    <View className="w-[25px] h-[25px] rounded-full bg-[#4a5162]" />
-                  )}
-                </View>
-              );
-            })}
-          </View>
+        <View className="flex-row justify-between w-full px-2">
+          {DAYS_SHORT.map((day, index) => {
+            const isActive = index === currentDayIndex;
+            return (
+              <View key={index} className="items-center">
+                <Text className={`text-[10px] font-bold mb-3 tracking-tight ${isActive ? "text-emerald-500" : "text-zinc-600"}`}>
+                  {day}
+                </Text>
+                {isActive ? (
+                  <View
+                    className="w-8 h-8 rounded-full bg-emerald-500 items-center justify-center"
+                  >
+                    <Feather name="check" size={16} color="black" />
+                  </View>
+                ) : (
+                  <View className="w-8 h-8 rounded-full bg-white/5 border border-white/5" />
+                )}
+              </View>
+            );
+          })}
         </View>
       </View>
     </Animated.View>

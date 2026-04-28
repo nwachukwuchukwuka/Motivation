@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  StyleSheet
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -20,49 +22,78 @@ const NameScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d] justify-between">
+    <SafeAreaView className="flex-1 bg-[#050505]">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1 justify-between"
+        className="flex-1"
       >
-        <View>
-          <View className="flex-row items-center p-4">
-            <TouchableOpacity
-              onPress={() => router.back()}
-              className="flex-row items-center"
-            >
-              <Feather name="chevron-left" size={28} color="white" />
-              <Text className="text-white text-xl ml-1">Settings</Text>
-            </TouchableOpacity>
-          </View>
-          <View className="p-4">
-            <Text className="text-white text-3xl font-bold">Name</Text>
-            <Text className="text-gray-100 text-xl mt-2 mb-6">
-              Your name is used to personalize your content
+        {/* Premium Header */}
+        <View className="flex-row items-center px-6 py-4">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-white/5"
+            style={styles.cardShadow}
+          >
+            <Feather name="chevron-left" size={24} color="white" />
+          </TouchableOpacity>
+          <View className="flex-1 items-center mr-10">
+            <Text className="text-white text-xl font-bold tracking-tight">
+              Profile
             </Text>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="Your name"
-              placeholderTextColor="#969da8"
-              className="bg-[#3a4151] rounded-lg p-4 text-white text-lg"
-            />
           </View>
         </View>
-        <View className="p-4 ">
+
+        <ScrollView 
+          className="flex-1"
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="px-6 mt-8">
+            <Text className="text-white text-4xl font-bold tracking-tighter leading-tight">
+              What shall we{"\n"}call you?
+            </Text>
+            <Text className="text-zinc-500 text-base mt-4 font-medium leading-relaxed max-w-[85%]">
+              Your name allows us to address you personally in notifications and widgets.
+            </Text>
+          </View>
+
+          <View className="px-6 mt-12">
+            <View 
+              className="bg-[#111111] rounded-[24px] p-2 border border-white/5"
+              style={styles.cardShadowSmall}
+            >
+              <View className="flex-row items-center px-4 py-2">
+                <View className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-3" />
+                <Text className="text-zinc-500 text-[10px] font-bold tracking-tight">Display name</Text>
+              </View>
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                placeholder="Enter your name"
+                placeholderTextColor="#3f3f46"
+                autoFocus
+                className="px-4 pb-6 pt-2 text-white text-2xl font-bold tracking-tight"
+              />
+            </View>
+          </View>
+        </ScrollView>
+
+        {/* Floating Action Button */}
+        <View className="absolute bottom-10 left-0 px-5 right-0">
           <TouchableOpacity
             onPress={handleSave}
             disabled={!name.trim()}
-            className={`rounded-full py-4 items-center ${
-              !name.trim() ? "bg-gray-500" : "bg-white"
+            className={`p-3 rounded-[24px] items-center justify-center border border-white/10 px-8 ${
+              !name.trim() 
+                ? "bg-zinc-800 opacity-50" 
+                : "bg-emerald-500"
             }`}
+            style={name.trim() ? styles.emeraldShadow : {}}
           >
-            <Text
-              className={`font-bold text-lg ${
-                !name.trim() ? "text-gray-400" : "text-black"
-              }`}
-            >
-              Save
+            <Text className={`font-bold text-xl tracking-tight ${
+              !name.trim() ? "text-zinc-500" : "text-black"
+            }`}>
+              Update Name
             </Text>
           </TouchableOpacity>
         </View>
@@ -70,5 +101,29 @@ const NameScreen = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  cardShadow: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 5,
+  },
+  cardShadowSmall: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 3,
+  },
+  emeraldShadow: {
+    shadowColor: "#10b981",
+    shadowOffset: { width: 0, height: 15 },
+    shadowOpacity: 0.4,
+    shadowRadius: 30,
+    elevation: 10,
+  }
+});
 
 export default NameScreen;

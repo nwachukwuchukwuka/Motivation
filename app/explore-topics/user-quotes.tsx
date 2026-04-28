@@ -60,104 +60,119 @@ const UserQuotesScreen = () => {
     setFeedQuotes(userQuotes);
     router.push("/explore-topics/show-all-in-feed");
   };
+
   if (userQuotes.length === 0) {
     return (
-      <SafeAreaView className="flex-1 bg-[#262e3d]">
-        <View className="flex-row justify-between items-center p-4 pl-2 py-2">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Feather name="chevron-left" size={28} color="white" />
+      <SafeAreaView className="flex-1 bg-[#050505]">
+        <View className="flex-row justify-between items-center px-6 py-6">
+          <TouchableOpacity onPress={() => router.back()} className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-[#222222]">
+            <Feather name="chevron-left" size={24} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => router.push("/explore-topics/add-quote")}
           >
-            <Text className="text-white text-xl">Add </Text>
+            <Text className="text-emerald-500 font-bold">Add</Text>
           </TouchableOpacity>
         </View>
-        <Text className="text-white text-2xl font-bold px-4 mt-4">
-          Your own quotes
-        </Text>
-
-        <View className="flex-1 justify-center items-center p-6 -mt-24">
-          <BoxIllustration />
-          <Text className="text-white text-3xl font-bold text-center mt-20">
-            You don't have any quotes yet
+        
+        <View className="px-10 mt-4">
+          <Text className="text-white text-3xl font-bold tracking-tight">
+            Your own quotes
           </Text>
         </View>
-        <View className=" absolute bottom-10 left-0 right-0 p-4">
+
+        <View className="flex-1 justify-center items-center px-10">
+          <View className="w-32 h-32 bg-emerald-500/10 rounded-full items-center justify-center border border-emerald-500/20 mb-10">
+            <BoxIllustration />
+          </View>
+          <Text className="text-white text-3xl font-bold text-center">
+            Nothing here yet
+          </Text>
+          <Text className="text-zinc-500 text-center mt-4 text-lg font-medium leading-relaxed">
+            Create your own inspiration and keep it all in one place.
+          </Text>
+        </View>
+
+        <View className="px-6 pb-10">
           <TouchableOpacity
             onPress={() => router.push("/explore-topics/add-quote")}
-            className="bg-white rounded-full w-full py-4 items-center justify-center"
+            className="bg-emerald-500 rounded-[24px] w-full py-5 items-center justify-center shadow-lg shadow-emerald-500/40"
           >
-            <Text className="text-black font-bold text-lg">Add quote</Text>
+            <Text className="text-white font-bold text-lg">
+              Add quote
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
   }
+
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
+    <SafeAreaView className="flex-1 bg-[#050505]">
       {!isSearching && (
-        <View className="flex-row justify-between items-center p-4 pl-2">
+        <View className="flex-row justify-between items-center px-6 py-6">
           <TouchableOpacity onPress={() => router.back()}>
-            <Feather name="chevron-left" size={28} color="white" />
+            <Text className="text-zinc-500 text-base font-bold">Close</Text>
           </TouchableOpacity>
-          <Text className="text-white text-2xl font-bold">Your own quotes</Text>
-          <View className="flex-row items-center gap-4">
-            <TouchableOpacity>
+          
+          <Text className="text-white text-lg font-bold tracking-tight">My Quotes</Text>
+
+          <View className="flex-row items-center gap-3">
+            <TouchableOpacity className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-[#222222]">
               <MaterialCommunityIcons
                 name="swap-vertical"
-                size={24}
+                size={20}
                 color="white"
               />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Feather name="more-vertical" size={24} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity className="border border-gray-500 rounded-full px-4 py-1.5">
-              <Text className="text-white">Follow</Text>
+            <TouchableOpacity className="bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20">
+              <Text className="text-emerald-400 text-xs font-bold">Follow</Text>
             </TouchableOpacity>
           </View>
         </View>
       )}
 
-      <View className="px-4 mt-2 mb-4 flex-row items-center">
-        <View className="bg-[#3a4151] rounded-lg flex-row items-center px-3 py-2.5 flex-1">
-          <Feather name="search" size={20} color="#969da8" />
+      {/* Modern Search Bar */}
+      <View className="px-6 mb-6 flex-row items-center">
+        <View className="bg-[#111111] rounded-2xl flex-row items-center px-4 py-4 flex-1 border border-[#222222]">
+          <Feather name="search" size={18} color="#52525b" />
           <TextInput
-            placeholder="Search"
-            placeholderTextColor="#969da8"
-            className="text-white ml-2 flex-1"
+            placeholder="Search your quotes"
+            placeholderTextColor="#3f3f46"
+            className="text-white ml-3 flex-1 text-base font-medium"
             value={searchQuery}
             onChangeText={setSearchQuery}
             onFocus={() => setIsSearching(true)}
           />
-          {searchQuery.length > 0 && isSearching && (
+          {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery("")}>
-              <Feather name="x-circle" size={18} color="#969da8" />
+              <Feather name="x-circle" size={18} color="#52525b" />
             </TouchableOpacity>
           )}
         </View>
         {isSearching && (
-          <TouchableOpacity onPress={handleCancelSearch} className="pl-4">
-            <Text className="text-white text-base">Cancel</Text>
+          <TouchableOpacity onPress={handleCancelSearch} className="ml-4">
+            <Text className="text-emerald-500 font-bold text-sm">DONE</Text>
           </TouchableOpacity>
         )}
       </View>
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 150 }}
       >
         {!isSearching && (
           <TouchableOpacity
-            className="bg-white rounded-full py-3 items-center mb-4"
+            className="bg-emerald-500 rounded-[20px] py-4 items-center mb-8 shadow-lg shadow-emerald-500/40"
             onPress={handleShowInFeed}
           >
-            <Text className="text-black text-base font-bold">
+            <Text className="text-white text-base font-bold">
               Show all in feed
             </Text>
           </TouchableOpacity>
         )}
-        <View className="gap-4">
+
+        <View className="gap-5">
           {filteredUserQuotes.map((quote) => {
             const isQuoteFavorited = isFavorite(quote.id);
             const isBookmarked = isQuoteInAnyCollection(quote.id);
@@ -165,44 +180,45 @@ const UserQuotesScreen = () => {
             return (
               <View
                 key={quote.id}
-                className="bg-[#3a4151] rounded-2xl p-4 gap-4"
+                className="bg-[#111111] border border-[#222222] rounded-[32px] p-6 shadow-sm"
               >
-                <Text className="text-white text-lg leading-relaxed">
+                <Text className="text-white text-xl font-bold leading-relaxed mb-6">
                   {quote.text}
                 </Text>
-                <View className="flex-row justify-between items-center">
-                  <View>
-                    <Text className="text-gray-400 font-semibold">
+                
+                <View className="flex-row justify-between items-center border-t border-zinc-800/50 pt-5">
+                  <View className="flex-1 pr-4">
+                    <Text className="text-emerald-500 text-sm font-bold">
                       -{quote.author}
                     </Text>
-                    <Text className="text-gray-500 text-xs mt-1">
+                    <Text className="text-zinc-500 text-[10px] font-bold mt-1">
                       {quote.date}
                     </Text>
                   </View>
 
-                  <View className="flex-row items-center gap-4">
+                  <View className="flex-row items-center gap-6">
                     <TouchableOpacity onPress={() => toggleFavorite(quote.id)}>
                       {isQuoteFavorited ? (
-                        <AntDesign name="heart" size={20} color="white" />
+                        <AntDesign name="heart" size={20} color="#10b981" />
                       ) : (
-                        <Feather name="heart" size={20} color="white" />
+                        <Feather name="heart" size={20} color="#52525b" />
                       )}
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => handleAddToCollection(quote)}
                     >
                       {isBookmarked ? (
-                        <FontAwesome name="bookmark" size={20} color="white" />
+                        <FontAwesome name="bookmark" size={20} color="#10b981" />
                       ) : (
                         <FontAwesome
                           name="bookmark-o"
                           size={20}
-                          color="white"
+                          color="#52525b"
                         />
                       )}
                     </TouchableOpacity>
                     <TouchableOpacity>
-                      <Feather name="share" size={20} color="white" />
+                      <Feather name="share" size={20} color="#52525b" />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -212,14 +228,16 @@ const UserQuotesScreen = () => {
         </View>
       </ScrollView>
 
-      <View className="absolute bottom-10 left-0 right-0 p-4">
-        <TouchableOpacity
-          onPress={() => router.push("/explore-topics/add-quote")}
-          className="bg-white rounded-full w-full py-4 items-center justify-center"
-        >
-          <Text className="text-black font-bold text-base">Add quote</Text>
-        </TouchableOpacity>
-      </View>
+      {!isSearching && (
+        <View className="absolute bottom-10 left-0 right-0 px-6">
+          <TouchableOpacity
+            onPress={() => router.push("/explore-topics/add-quote")}
+            className="bg-emerald-500 rounded-[24px] w-full py-5 items-center justify-center shadow-lg shadow-emerald-500/40"
+          >
+            <Text className="text-white font-bold text-lg">Add quote</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

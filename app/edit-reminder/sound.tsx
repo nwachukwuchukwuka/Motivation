@@ -2,7 +2,7 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SOUND_OPTIONS = [
   { name: "Messenger", isMuted: false },
@@ -21,57 +21,73 @@ const SOUND_OPTIONS = [
 
 const SoundScreen = () => {
   const router = useRouter();
-
+  const insets = useSafeAreaInsets();
   const [selectedSound, setSelectedSound] = useState("System default");
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="flex-row items-center p-4 pl-2">
+    <SafeAreaView edges={["top"]} className="flex-1 bg-[#050505]">
+      <View className="px-8 pt-6 flex-row justify-between items-center mb-5">
         <TouchableOpacity
           onPress={() => router.back()}
-          className="flex-row items-center"
+          className="w-10 h-10 rounded-full bg-white/5 items-center justify-center border border-white/10"
         >
-          <Feather name="chevron-left" size={28} color="white" />
-          <Text className="text-white text-xl ml-1">Edit reminder</Text>
+          <Feather name="chevron-left" size={24} color="#94A3B8" />
         </TouchableOpacity>
+        <View className="w-10 h-1" />
       </View>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
-        <Text className="text-white text-3xl font-bold mt-4">Sound</Text>
-        <Text className="text-white text-xl mt-6 mb-6">
-          Choose a sound for notifications
-        </Text>
-        <View className="bg-[#374051] rounded-2xl p-4">
-          {SOUND_OPTIONS.map((sound) => {
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-8"
+        contentContainerStyle={{ paddingBottom: 60 }}
+      >
+        <View className="mb-12">
+          <Text className="text-[#E2E8F0] text-4xl font-bold tracking-tighter leading-tight">
+            Sound
+          </Text>
+          <Text className="text-[#94A3B8] text-lg mt-4 leading-relaxed">
+            Choose a unique sound for your notification reminders.
+          </Text>
+          <View className="w-12 h-1 bg-emerald-500 mt-6" />
+        </View>
+
+        {/* Sound Selection Pod */}
+        <View className="bg-[#111111] rounded-[32px] p-6 border border-white/5">
+          {SOUND_OPTIONS.map((sound, index) => {
             const isSelected = selectedSound === sound.name;
+            const isLast = index === SOUND_OPTIONS.length - 1;
+
             return (
-              <TouchableOpacity
-                key={sound.name}
-                onPress={() => setSelectedSound(sound.name)}
-                className="flex-row justify-between items-center py-3 border-b border-[#3e485c] -mx-4 px-4"
-              >
-                <View className="flex-row items-center">
-                  {sound.isMuted ? (
-                    <Ionicons
-                      name="volume-mute-outline"
-                      size={24}
-                      color="#969da8"
-                    />
+              <View key={sound.name}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => setSelectedSound(sound.name)}
+                  className="flex-row justify-between items-center py-4"
+                >
+                  <View className="flex-row items-center">
+                    <View className={`w-10 h-10 rounded-xl items-center justify-center border transition-all ${isSelected ? "bg-emerald-500/10 border-emerald-500/20" : "bg-white/5 border-white/10"
+                      }`}>
+                      <Ionicons
+                        name={sound.isMuted ? "volume-mute-outline" : "volume-medium-outline"}
+                        size={20}
+                        color={isSelected ? "#10b981" : "#52525b"}
+                      />
+                    </View>
+                    <Text className="ml-4 text-lg font-medium tracking-tight text-white">
+                      {sound.name}
+                    </Text>
+                  </View>
+
+                  {isSelected ? (
+                    <View className="w-5 h-5 rounded-full bg-emerald-500 items-center justify-center">
+                      <Feather name="check" size={12} color="black" />
+                    </View>
                   ) : (
-                    <Ionicons
-                      name="volume-medium-outline"
-                      size={24}
-                      color="#969da8"
-                    />
+                    <View className="w-5 h-5 rounded-full border-2 border-white/10" />
                   )}
-                  <Text className="text-white text-lg ml-4">{sound.name}</Text>
-                </View>
-                <View className="w-6 h-6 rounded-full border-2 border-gray-500 items-center justify-center">
-                  {isSelected && (
-                    <View className="w-3 h-3 rounded-full bg-white" />
-                  )}
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+                {!isLast && <View className="h-[1px] bg-white/5 w-full" />}
+              </View>
             );
           })}
         </View>

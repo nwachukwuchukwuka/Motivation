@@ -21,34 +21,37 @@ const CollectionsScreen = () => {
 
   if (collections.length === 0) {
     return (
-      <SafeAreaView className="flex-1 bg-[#262e3d]">
-        <View className="flex-row justify-between items-center px-4 py-2">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Feather name="chevron-left" size={28} color="white" />
+      <SafeAreaView className="flex-1 bg-[#050505]">
+        <View className="flex-row justify-between items-center px-6 py-6">
+          <TouchableOpacity onPress={() => router.back()} className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-[#222222]">
+            <Feather name="chevron-left" size={24} color="white" />
           </TouchableOpacity>
-          <Text className="text-white text-2xl font-bold">My collections</Text>
+          <Text className="text-white text-lg font-bold tracking-tight">My Collections</Text>
           <TouchableOpacity
             onPress={() => router.push("/explore-topics/new-collections")}
           >
-            <Text className="text-white text-xl">Add new</Text>
+            <Text className="text-emerald-500 font-bold">Add new</Text>
           </TouchableOpacity>
         </View>
-        <View className="flex-1 justify-center items-center p-6 mt-24">
-          <BookIllustration />
-          <Text className="text-white text-3xl font-bold text-center mt-20">
-            You don't have any collections yet
+        
+        <View className="flex-1 justify-center items-center px-10">
+          <View className="w-32 h-32 bg-emerald-500/10 rounded-full items-center justify-center border border-emerald-500/20 mb-10">
+            <BookIllustration />
+          </View>
+          <Text className="text-white text-3xl font-bold text-center">
+            No collections yet
           </Text>
-          <Text className="text-white text-xl text-center mt-4 leading-relaxed">
-            Create collections to group quotes you want to save together, like
-            'Loving myself' or 'Reaching my goals'.
+          <Text className="text-zinc-500 text-center mt-4 text-lg font-medium leading-relaxed">
+            Create collections to group quotes you want to save together.
           </Text>
         </View>
-        <View className="p-4 ">
+
+        <View className="px-6 pb-10">
           <TouchableOpacity
             onPress={() => router.push("/explore-topics/new-collections")}
-            className="bg-white rounded-full w-full py-4 items-center justify-center"
+            className="bg-emerald-500 rounded-[24px] w-full py-5 items-center justify-center shadow-lg shadow-emerald-500/40"
           >
-            <Text className="text-black font-bold text-lg">
+            <Text className="text-white font-bold text-lg">
               Create collection
             </Text>
           </TouchableOpacity>
@@ -58,23 +61,24 @@ const CollectionsScreen = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="flex-row justify-between items-center px-4 py-2">
-        <TouchableOpacity onPress={() => router.back()}>
-          <Feather name="chevron-left" size={28} color="white" />
+    <SafeAreaView className="flex-1 bg-[#050505]">
+      <View className="flex-row justify-between items-center px-6 py-6">
+        <TouchableOpacity onPress={() => router.back()} className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-[#222222]">
+          <Feather name="chevron-left" size={24} color="white" />
         </TouchableOpacity>
-        <Text className="text-white text-2xl font-bold">My collections</Text>
+        <Text className="text-white text-lg font-bold tracking-tight">My Collections</Text>
         <TouchableOpacity
           onPress={() => router.push("/explore-topics/new-collections")}
         >
-          <Text className="text-white text-xl">Add new</Text>
+          <Text className="text-emerald-500 font-bold">Add new</Text>
         </TouchableOpacity>
       </View>
 
       <FlatList
         data={collections}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16 }}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 10, paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           const isBookmarked = quoteToAdd
             ? isQuoteInCollection(item.id, quoteToAdd.id)
@@ -89,14 +93,14 @@ const CollectionsScreen = () => {
                   addQuoteToCollection(item.id, quoteToAdd.id);
                 }
               }}
-              className="bg-[#3a4151] rounded-2xl p-4 mb-3 flex-row justify-between items-center"
+              className="bg-[#111111] border border-[#222222] rounded-[28px] p-6 mb-4 flex-row justify-between items-center shadow-sm"
             >
-              <View>
-                <Text className="text-white text-lg font-semibold">
+              <View className="flex-1 pr-4">
+                <Text className="text-white text-lg font-bold">
                   {item.name}
                 </Text>
                 {currentDisplayMode === "collections" && (
-                  <Text className="text-gray-400 mt-1">
+                  <Text className="text-zinc-500 mt-1 font-bold text-xs">
                     {item.quoteIds.length} quote
                     {item.quoteIds.length !== 1 ? "s" : ""}
                   </Text>
@@ -104,11 +108,17 @@ const CollectionsScreen = () => {
               </View>
 
               {currentDisplayMode === "collections" ? (
-                <Feather name="chevron-right" size={24} color="#969da8" />
+                <View className="w-10 h-10 bg-zinc-900 rounded-full items-center justify-center border border-zinc-800">
+                  <Feather name="chevron-right" size={20} color="#52525b" />
+                </View>
               ) : isBookmarked ? (
-                <FontAwesome name="bookmark" size={24} color="black" />
+                <View className="w-10 h-10 bg-emerald-500/10 rounded-full items-center justify-center border border-emerald-500/20">
+                  <FontAwesome name="bookmark" size={20} color="#10b981" />
+                </View>
               ) : (
-                <FontAwesome name="bookmark-o" size={24} color="black" />
+                <View className="w-10 h-10 bg-[#0a0a0a] rounded-full items-center justify-center border border-[#222222]">
+                  <FontAwesome name="bookmark-o" size={20} color="#3f3f46" />
+                </View>
               )}
             </Pressable>
           );

@@ -4,8 +4,7 @@ import {
   AntDesign,
   Entypo,
   Feather,
-  FontAwesome,
-  MaterialCommunityIcons,
+  FontAwesome
 } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
@@ -43,8 +42,8 @@ const CollectionDetailsScreen = () => {
 
   if (!collection) {
     return (
-      <SafeAreaView className="flex-1 bg-[#262e3d] items-center justify-center">
-        <Text className="text-white">Collection not found.</Text>
+      <SafeAreaView className="flex-1 bg-[#050505] items-center justify-center">
+        <Text className="text-zinc-500 font-bold">Collection not found</Text>
       </SafeAreaView>
     );
   }
@@ -81,65 +80,65 @@ const CollectionDetailsScreen = () => {
   const hasQuotes = collection.quoteIds.length > 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="p-4">
-        <View className="flex-row justify-between items-center py-2">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Feather name="chevron-left" size={28} color="white" />
+    <SafeAreaView className="flex-1 bg-[#050505]">
+      {/* Premium Header */}
+      <View className="px-6 py-6">
+        <View className="flex-row justify-between items-center">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-[#222222]"
+          >
+            <Feather name="chevron-left" size={24} color="white" />
           </TouchableOpacity>
-          <Text className="text-white text-2xl font-bold">
+
+          <Text className="text-white text-lg font-bold tracking-tight flex-1 text-center px-4">
             {collection.name}
           </Text>
-          <View className="flex-row items-center gap-4">
+
+          <View className="flex-row items-center gap-3">
             <TouchableOpacity
-              className="border border-gray-500 rounded-full px-4 py-1.5"
               onPress={() => router.push("/free-trial-details-screen")}
+              className="bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20"
             >
-              <Text className="text-white">Follow</Text>
+              <Text className="text-emerald-400 text-xs font-bold">Folow</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <MaterialCommunityIcons
-                name="swap-vertical"
-                size={24}
-                color="white"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Entypo name="dots-three-horizontal" size={24} color="white" />
+            <TouchableOpacity className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-[#222222]">
+              <Entypo name="dots-three-horizontal" size={20} color="#52525b" />
             </TouchableOpacity>
           </View>
         </View>
 
-        <View className="mt-4 mb-4 flex-row items-center">
-          <View className="bg-[#3a4151] rounded-lg flex-row items-center px-3 py-2.5 flex-1">
-            <Feather name="search" size={20} color="#969da8" />
+        {/* Modern Search Bar */}
+        <View className="mt-8 mb-2 flex-row items-center">
+          <View className="bg-[#111111] rounded-2xl flex-row items-center px-4 py-4 flex-1 border border-[#222222]">
+            <Feather name="search" size={18} color="#52525b" />
             <TextInput
-              placeholder="Search"
-              placeholderTextColor="#969da8"
-              className="text-white ml-2 flex-1"
+              placeholder="Search in collection"
+              placeholderTextColor="#3f3f46"
+              className="text-white ml-3 flex-1 text-base font-medium"
               value={searchQuery}
               onChangeText={setSearchQuery}
               onFocus={() => setIsSearching(true)}
             />
-            {searchQuery.length > 0 && isSearching && (
+            {searchQuery.length > 0 && (
               <TouchableOpacity onPress={() => setSearchQuery("")}>
-                <Feather name="x-circle" size={18} color="#969da8" />
+                <Feather name="x-circle" size={18} color="#52525b" />
               </TouchableOpacity>
             )}
           </View>
           {isSearching && (
-            <TouchableOpacity onPress={handleCancelSearch} className="pl-4">
-              <Text className="text-white text-base">Cancel</Text>
+            <TouchableOpacity onPress={handleCancelSearch} className="ml-4">
+              <Text className="text-emerald-500 font-bold text-sm">DONE</Text>
             </TouchableOpacity>
           )}
         </View>
 
         {!isSearching && hasQuotes && (
           <TouchableOpacity
-            className="bg-white rounded-full py-3 items-center mb-4 mt-4"
+            className="bg-emerald-500 rounded-[20px] py-4 items-center mb-2 mt-6 shadow-lg shadow-emerald-500/40"
             onPress={handleShowInFeed}
           >
-            <Text className="text-black text-base font-bold">
+            <Text className="text-white text-base font-bold">
               Show all in feed
             </Text>
           </TouchableOpacity>
@@ -147,8 +146,11 @@ const CollectionDetailsScreen = () => {
       </View>
 
       {hasQuotes ? (
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
-          <View className="gap-4">
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 100 }}
+        >
+          <View className="gap-5">
             {filteredQuotes.map((fav) => {
               const isBookmarked = isQuoteInAnyCollection(fav.id);
               const isQuoteFavorited = isFavorite(fav.id);
@@ -156,21 +158,24 @@ const CollectionDetailsScreen = () => {
               return (
                 <View
                   key={fav.id}
-                  className="bg-[#3a4151] rounded-2xl p-4 gap-4"
+                  className="bg-[#111111] border border-[#222222] rounded-[32px] p-6 shadow-sm"
                 >
-                  <Text className="text-white text-lg leading-relaxed">
+                  <Text className="text-white text-xl font-bold leading-relaxed mb-6">
                     {fav.text}
                   </Text>
-                  <View className="flex-row justify-between items-center">
-                    <Text className="text-gray-400">{fav.date}</Text>
-                    <View className="flex-row items-center gap-4">
+
+                  <View className="flex-row justify-between items-center border-t border-zinc-800/50 pt-5">
+                    <Text className="text-zinc-500 text-xs font-bold">{fav.date}</Text>
+
+                    <View className="flex-row items-center gap-6">
                       <TouchableOpacity onPress={() => toggleFavorite(fav.id)}>
                         {isQuoteFavorited ? (
-                          <AntDesign name="heart" size={20} color="white" />
+                          <AntDesign name="heart" size={20} color="#10b981" />
                         ) : (
-                          <Feather name="heart" size={20} color="white" />
+                          <Feather name="heart" size={20} color="#52525b" />
                         )}
                       </TouchableOpacity>
+
                       <TouchableOpacity
                         onPress={() => handleAddToCollection(fav)}
                       >
@@ -178,18 +183,19 @@ const CollectionDetailsScreen = () => {
                           <FontAwesome
                             name="bookmark"
                             size={20}
-                            color="white"
+                            color="#10b981"
                           />
                         ) : (
                           <FontAwesome
                             name="bookmark-o"
                             size={20}
-                            color="white"
+                            color="#52525b"
                           />
                         )}
                       </TouchableOpacity>
+
                       <TouchableOpacity>
-                        <Feather name="share" size={20} color="white" />
+                        <Feather name="share" size={20} color="#52525b" />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -199,10 +205,15 @@ const CollectionDetailsScreen = () => {
           </View>
         </ScrollView>
       ) : (
-        <View className="flex-1 items-center justify-center">
-          <BookIllustration />
-          <Text className="text-white text-2xl font-bold text-center mt-8">
-            You haven't added anything to this collection yet
+        <View className="flex-1 justify-center items-center px-10">
+          <View className="w-32 h-32 bg-emerald-500/10 rounded-full items-center justify-center border border-emerald-500/20 mb-8">
+            <BookIllustration />
+          </View>
+          <Text className="text-white text-2xl font-bold text-center">
+            Empty collection
+          </Text>
+          <Text className="text-zinc-500 text-center mt-4 text-lg font-medium leading-relaxed">
+            You haven't added any quotes to this collection yet.
           </Text>
         </View>
       )}

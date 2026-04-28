@@ -1,13 +1,13 @@
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
-    Extrapolate,
-    interpolate,
-    useAnimatedScrollHandler,
-    useAnimatedStyle,
-    useSharedValue,
+  Extrapolate,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -61,26 +61,28 @@ const SiriShortcutsScreen = () => {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="absolute top-0 left-0 right-0 z-10 bg-[#262e3d]">
+    <SafeAreaView className="flex-1 bg-[#050505]">
+      {/* Premium Header */}
+      <View className="absolute top-0 left-0 right-0 z-20 bg-[#050505]">
         <SafeAreaView edges={["top"]}>
-          <View className="flex-row items-center justify-between p-4 h-[60px]">
+          <View className="flex-row items-center justify-between px-6 py-4 h-[64px]">
             <TouchableOpacity
               onPress={() => router.back()}
-              className="flex-row items-center"
+              className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-white/5"
+              style={styles.cardShadow}
             >
-              <Feather name="chevron-left" size={28} color="white" />
-              <Text className="text-white text-xl ml-1">Settings</Text>
+              <Feather name="chevron-left" size={24} color="white" />
             </TouchableOpacity>
 
             <Animated.View
               style={smallHeaderTitleStyle}
-              className="absolute left-0 right-0 items-center"
+              className="absolute left-0 right-0 items-center -z-10"
             >
-              <Text className="text-white text-lg font-bold">
-                Add Siri Shortcuts
+              <Text className="text-white text-lg font-bold tracking-tight">
+                Siri Shortcuts
               </Text>
             </Animated.View>
+            <View className="w-10" />
           </View>
         </SafeAreaView>
       </View>
@@ -88,20 +90,26 @@ const SiriShortcutsScreen = () => {
       <Animated.ScrollView
         onScroll={scrollHandler}
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingTop: HEADER_MAX_HEIGHT }}
+        contentContainerStyle={{ paddingTop: HEADER_MAX_HEIGHT + 100, paddingBottom: 40 }}
+        showsVerticalScrollIndicator={false}
       >
-        <View className="bg-[#3a4151]">
-          {SHORTCUTS.map((shortcut, index) => {
-            const isLastItem = index === SHORTCUTS.length - 1;
+        <View className="px-6 gap-3">
+          {SHORTCUTS.map((shortcut) => {
             return (
               <TouchableOpacity
                 key={shortcut}
-                className={`flex-row items-center p-4 ${
-                  !isLastItem ? "border-b border-gray-600" : ""
-                }`}
+                className="bg-[#111111] rounded-[24px] p-5 flex-row justify-between items-center border border-white/5"
+                style={styles.cardShadow}
               >
-                <Feather name="plus-circle" size={24} color="white" />
-                <Text className="text-white text-xl ml-4">{shortcut}</Text>
+                <View className="flex-row items-center">
+                  <View className="w-10 h-10 bg-white/5 rounded-xl items-center justify-center border border-white/5">
+                    <Feather name="mic" size={18} color="#10b981" />
+                  </View>
+                  <Text className="text-white text-lg font-bold ml-4 tracking-tight">{shortcut}</Text>
+                </View>
+                <View className="bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20">
+                  <Text className="text-emerald-500 text-xs font-bold">Add to Siri</Text>
+                </View>
               </TouchableOpacity>
             );
           })}
@@ -109,15 +117,29 @@ const SiriShortcutsScreen = () => {
       </Animated.ScrollView>
 
       <Animated.View
-        style={[{ paddingTop: HEADER_MIN_HEIGHT }, largeHeaderTitleStyle]}
-        className="absolute top-0 left-0 right-0 px-4"
+        style={[{ paddingTop: HEADER_MIN_HEIGHT + 30 }, largeHeaderTitleStyle]}
+        className="absolute top-0 left-6 right-6"
       >
-        <Text className="text-white text-3xl font-bold">
-          Add Siri Shortcuts
+        <Text className="text-white text-4xl font-bold tracking-tighter leading-tight">
+          Siri Shortcuts
+        </Text>
+        <Text className="text-zinc-500 text-base mt-2 font-medium leading-relaxed">
+          Access your favorite categories with just your voice.
         </Text>
       </Animated.View>
     </SafeAreaView>
   );
 };
 
+const styles = StyleSheet.create({
+  cardShadow: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 5,
+  }
+});
+
 export default SiriShortcutsScreen;
+

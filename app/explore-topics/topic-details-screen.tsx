@@ -8,18 +8,18 @@ import {
   ImageBackground,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Pressable,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import {
+import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Quote = {
   id: string;
@@ -27,7 +27,7 @@ type Quote = {
   author: string;
 };
 
-const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 type QuoteCardProps = {
   item: Quote;
@@ -51,36 +51,45 @@ const QuoteCard = ({
   const router = useRouter();
   return (
     <View
-      style={{ height: SCREEN_HEIGHT }}
-      className="w-full justify-center items-center px-8"
+      style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
+      className="justify-center items-center px-10"
     >
-      <View>
-        <View className="items-center">
-          <Text
-            className="text-center leading-relaxed"
-            style={[
-              {
-                fontFamily: textStyles.fontFamily,
-                fontSize: textStyles.fontSize,
-                color: textStyles.color,
-                textAlign: textStyles.textAlign,
-              },
-              textStyles.textShadowStyle,
-            ]}
+      <View className="items-center">
+        <Text
+          className="text-center leading-relaxed"
+          style={[
+            {
+              fontFamily: textStyles.fontFamily,
+              fontSize: textStyles.fontSize,
+              color: textStyles.color,
+              textAlign: textStyles.textAlign,
+            },
+            textStyles.textShadowStyle,
+          ]}
+        >
+          {item.text}
+        </Text>
+        
+        <View className="flex-row justify-center items-center gap-12 mt-16">
+          <TouchableOpacity 
+            activeOpacity={0.7}
+            onPress={() => router.push("/share-quote-modal")}
+            className="w-14 h-14 rounded-full bg-white/5 items-center justify-center border border-white/10"
           >
-            {item.text}
-          </Text>
-        </View>
-        <View className="flex-row justify-center items-center gap-8 mt-12">
-          <Pressable onPress={() => router.push("/share-quote-modal")}>
-            <Feather name="share" size={28} color="white" />
-          </Pressable>
+            <Feather name="share" size={24} color="white" />
+          </TouchableOpacity>
 
-          <TouchableOpacity onPress={onToggleFavorite}>
+          <TouchableOpacity 
+            activeOpacity={0.7}
+            onPress={onToggleFavorite}
+            className={`w-14 h-14 rounded-full items-center justify-center border transition-all ${
+              isFavorite ? "bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/30" : "bg-white/5 border-white/10"
+            }`}
+          >
             {isFavorite ? (
-              <AntDesign name="heart" size={32} color="white" />
+              <AntDesign name="heart" size={24} color="black" />
             ) : (
-              <Feather name="heart" size={32} color="white" />
+              <Feather name="heart" size={24} color="white" />
             )}
           </TouchableOpacity>
         </View>
@@ -95,7 +104,6 @@ const TopicDetailsScreen = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
-  const [likedQuotes, setLikedQuotes] = useState<string[]>([]);
   const scale = useSharedValue(0);
   const opacity = useSharedValue(0);
 
@@ -124,8 +132,9 @@ const TopicDetailsScreen = () => {
   };
 
   const handleLikePress = (quoteId: string) => {
+    const currentlyFavorited = isFavorite(quoteId);
     toggleFavorite(quoteId);
-    if (!isFavorite(quoteId)) {
+    if (!currentlyFavorited) {
       triggerLikeAnimation();
     }
   };
@@ -135,8 +144,8 @@ const TopicDetailsScreen = () => {
   const handleMomentumScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / SCREEN_HEIGHT);
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(offsetX / SCREEN_WIDTH);
     if (newIndex !== currentIndex) {
       setCurrentIndex(newIndex);
     }
@@ -146,13 +155,12 @@ const TopicDetailsScreen = () => {
     <View className="flex-1">
       <FlatList
         ref={flatListRef}
-        // data={QUOTES}
         data={feedQuotes}
         renderItem={({ item }) => (
           <QuoteCard
             item={item}
             onToggleFavorite={() => handleLikePress(item.id)}
-            isFavorite={likedQuotes.includes(item.id)}
+            isFavorite={isFavorite(item.id)}
             textStyles={{
               fontSize,
               fontFamily,
@@ -163,56 +171,70 @@ const TopicDetailsScreen = () => {
           />
         )}
         keyExtractor={(item) => item.id}
-        snapToInterval={SCREEN_HEIGHT}
-        snapToAlignment={"start"}
-        showsVerticalScrollIndicator={false}
+        horizontal
+        snapToInterval={SCREEN_WIDTH}
+        snapToAlignment={"center"}
+        showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={handleMomentumScrollEnd}
         decelerationRate="fast"
       />
 
-      <View className="absolute top-0 left-0 right-0 p-4">
-        <View className="flex-row justify-between items-center h-14">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Feather name="chevron-left" size={28} color="white" />
+      {/* Floating Header Area */}
+      <SafeAreaView edges={["top"]} className="absolute top-0 left-0 right-0 z-50">
+        <View className="flex-row justify-between items-center h-14 px-8 mt-4">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="w-10 h-10 rounded-full bg-black/40 items-center justify-center border border-white/10 backdrop-blur-md"
+          >
+            <Feather name="chevron-left" size={24} color="#E2E8F0" />
           </TouchableOpacity>
-          <Text className="text-white text-lg font-bold">
+          
+          <Text className="text-[#E2E8F0] text-xl font-bold tracking-tighter">
             {topicName || "Topic"}
           </Text>
+
           <TouchableOpacity
             onPress={() => setIsFollowing(!isFollowing)}
-            className={`rounded-full border px-5 py-1.5 flex-row items-center ${
-              isFollowing ? "border-white" : "border-gray-500"
+            className={`rounded-full px-5 py-2 flex-row items-center transition-all ${
+              isFollowing ? "bg-emerald-500 shadow-lg shadow-emerald-500/30" : "bg-white/5 border border-white/10"
             }`}
           >
             {isFollowing && (
               <Feather
                 name="check"
-                size={16}
-                color="white"
+                size={14}
+                color="black"
                 style={{ marginRight: 4 }}
               />
             )}
-            <Text className="text-white font-semibold">
+            <Text className={`font-bold text-xs uppercase tracking-widest ${isFollowing ? "text-black" : "text-white"}`}>
               {isFollowing ? "Following" : "Follow"}
             </Text>
           </TouchableOpacity>
         </View>
+      </SafeAreaView>
+
+      {/* Like Animation Overlay */}
+      <View className="absolute inset-0 pointer-events-none items-center justify-center">
+        <Animated.View style={animatedStyle}>
+          <AntDesign name="heart" size={100} color="#10b981" />
+        </Animated.View>
       </View>
     </View>
   );
 
   return isImageBackground ? (
     <ImageBackground source={themeSource} resizeMode="cover" className="flex-1">
-      <View className="flex-1 bg-black/20">
+      <View className="flex-1 bg-black/30">
         <MainContent />
       </View>
     </ImageBackground>
   ) : (
     <View
-      className="flex-1"
+      className="flex-1 bg-[#050505]"
       style={{
         backgroundColor:
-          typeof themeSource === "object" ? themeSource.color : "black",
+          typeof themeSource === "object" ? themeSource.color : "#050505",
       }}
     >
       <MainContent />

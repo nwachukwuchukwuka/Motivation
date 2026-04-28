@@ -1,25 +1,21 @@
+import { Feather } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const MENTAL_HEALTH_OPTIONS = [
-  'Exercise and nutrition',
-  'Support from others',
-  'Spending time in nature',
-  'Journaling',
-  'Therapy',
-  'Meditation',
+  { label: 'Exercise & Diet', icon: 'activity' },
+  { label: 'Social Support', icon: 'users' },
+  { label: 'Nature', icon: 'wind' },
+  { label: 'Journaling', icon: 'edit-3' },
+  { label: 'Therapy', icon: 'heart' },
+  { label: 'Meditation', icon: 'sun' },
 ];
-
-const CheckIcon = () => (
-  <Svg width={14} height={14} viewBox="0 0 24 24" stroke="black" strokeWidth={3} strokeLinecap="round">
-    <Path d="M20 6L9 17l-5-5" />
-  </Svg>
-);
 
 const MentalHealthScreen = () => {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<string[]>([]);
 
   const handleSelect = (option: string) => {
@@ -33,46 +29,77 @@ const MentalHealthScreen = () => {
   };
 
   return (
-    <View className="flex-1 justify-between px-5 pt-24 bg-[#262e3d]">
-      <View>
-        <Text className="text-white text-3xl font-bold text-center mb-2">
-          How do you improve your mental health?
-        </Text>
-        <Text className="text-[#969da8] text-base text-center mb-6">
-          You can select more than one option
-        </Text>
-        <View>
-          {MENTAL_HEALTH_OPTIONS.map(option => {
-            const isSelected = selected.includes(option);
+    <View className="flex-1 bg-[#050505]" style={{ paddingTop: insets.top + 60 }}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-8"
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
+        <View className="mb-12">
+          <Text className="text-[#E2E8F0] text-4xl font-bold tracking-tighter leading-tight">
+            How do you improve your mental health?
+          </Text>
+          <Text className="text-[#94A3B8] text-lg mt-4 leading-relaxed">
+            Select the practices that help you maintain your inner balance.
+          </Text>
+          <View className="w-12 h-1 bg-emerald-500 mt-6" />
+        </View>
+
+        <View className="flex-row flex-wrap justify-between">
+          {MENTAL_HEALTH_OPTIONS.map((item) => {
+            const isSelected = selected.includes(item.label);
             return (
               <TouchableOpacity
-                key={option}
-                className={`flex-row justify-between items-center rounded-full px-6 py-4 my-2 border ${
-                  isSelected ? "bg-[#333b4f] border-gray-300" : "border-[#3a4151]"
-                }`}
-                onPress={() => handleSelect(option)}
+                key={item.label}
                 activeOpacity={0.8}
+                onPress={() => handleSelect(item.label)}
+                className={`w-[48%] h-[120px] p-4 rounded-[28px] border-2 mb-4 justify-between transition-all ${
+                  isSelected ? "bg-[#111111] border-emerald-500" : "bg-[#111111] border-white/5"
+                }`}
               >
-                <Text className={`text-lg ${isSelected ? "text-white" : "text-[#969da8]"}`}>{option}</Text>
-                {isSelected ? (
-                  <View className="w-6 h-6 rounded-full bg-white items-center justify-center">
-                    <CheckIcon />
+                <View className="flex-row justify-between items-start">
+                  <View className={`w-8 h-8 rounded-lg items-center justify-center border ${
+                    isSelected ? "bg-emerald-500/10 border-emerald-500/20" : "bg-white/5 border-white/10"
+                  }`}>
+                    <Feather 
+                      name={item.icon as any} 
+                      size={16} 
+                      color={isSelected ? "#10b981" : "#52525b"} 
+                    />
                   </View>
-                ) : (
-                  <View className="w-6 h-6 rounded-full border-2 border-[#969da8]" />
-                )}
+                  
+                  {isSelected ? (
+                    <View className="w-5 h-5 rounded-full bg-emerald-500 items-center justify-center">
+                      <Feather name="check" size={12} color="black" />
+                    </View>
+                  ) : (
+                    <View className="w-5 h-5 rounded-full border-2 border-white/10" />
+                  )}
+                </View>
+
+                <Text 
+                  className={`text-[14px] tracking-tight leading-tight ${
+                    isSelected ? "text-white" : "text-[#94A3B8]"
+                  }`}
+                >
+                  {item.label}
+                </Text>
               </TouchableOpacity>
             );
           })}
         </View>
+      </ScrollView>
+
+      {/* Action Area */}
+      <View className="absolute bottom-0 left-0 right-0 p-8 bg-[#050505]/90">
+        <TouchableOpacity
+          className="bg-emerald-500 w-full py-5 rounded-[24px] items-center justify-center shadow-lg shadow-emerald-500/30"
+          onPress={handleContinue}
+          activeOpacity={0.9}
+        >
+          <Text className="text-black text-lg font-bold tracking-tight">Continue</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        className="bg-white w-full py-4 rounded-full items-center justify-center mb-4"
-        onPress={handleContinue}
-        activeOpacity={0.8}
-      >
-        <Text className="text-black text-lg font-bold">Continue</Text>
-      </TouchableOpacity>
     </View>
   );
 };

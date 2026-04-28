@@ -10,11 +10,12 @@ import {
   ImageBackground,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const QuoteEditorScreen = () => {
   const router = useRouter();
@@ -49,14 +50,14 @@ const QuoteEditorScreen = () => {
     switch (letterCaseStyle) {
       case "thin":
         return {
-          textShadowColor: "rgba(255, 255, 255, 0.8)",
-          textShadowOffset: { width: 0, height: 0 },
-          textShadowRadius: 2,
+          textShadowColor: "rgba(0,0,0,0.4)",
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: 3,
         };
       case "thick":
         return {
-          textShadowColor: "rgba(255, 255, 255, 0.9)",
-          textShadowOffset: { width: 0, height: 0 },
+          textShadowColor: "rgba(0,0,0,0.8)",
+          textShadowOffset: { width: 0, height: 2 },
           textShadowRadius: 8,
         };
       case "filled":
@@ -103,54 +104,61 @@ const QuoteEditorScreen = () => {
 
   const renderBottomControls = () => {
     return (
-      <>
+      <View className="mt-2">
         {isColorPickerVisible ? (
-          <View className="flex-row items-center">
+          <View className="flex-row items-center bg-[#0a0a0a] rounded-2xl p-3 border border-white/5">
             <TouchableOpacity
               onPress={() => setIsColorPickerVisible(false)}
-              className="p-1.5 bg-[#262e3d] rounded-full mr-3"
+              className="w-12 h-12 bg-[#111111] rounded-full items-center justify-center mr-3 border border-white/10"
             >
               <Feather name="chevron-left" size={24} color="white" />
             </TouchableOpacity>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <TouchableOpacity className="w-10 h-10 rounded-full items-center justify-center bg-gray-500 mx-1">
-                <Feather name="aperture" size={24} color="white" />
+
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center' }}>
+              <TouchableOpacity className="w-10 h-10 rounded-full items-center justify-center bg-[#111111] mx-1.5 border border-emerald-500/30">
+                <Feather name="aperture" size={20} color="#10b981" />
               </TouchableOpacity>
               {COLORS.map((color, index) => (
                 <TouchableOpacity
                   key={index}
                   onPress={() => setBackground({ color })}
-                  className="w-10 h-10 rounded-full mx-1"
+                  className="w-10 h-10 rounded-full mx-1.5 border border-white/10"
                   style={{ backgroundColor: color }}
                 />
               ))}
             </ScrollView>
           </View>
         ) : (
-          <View className="flex-row justify-around items-center bg-[#262e3d] rounded-2xl p-4">
-            <Pressable onPress={pickImage} className="items-center px-4">
-              <Feather name="camera" size={28} color="white" />
+          <View
+            style={styles.shadow2xl}
+            className="flex-row justify-between items-center bg-[#0a0a0a] rounded-[24px] p-2 border border-white/5"
+          >
+            <Pressable onPress={pickImage} className="flex-1 items-center py-5 bg-[#111111]/50 rounded-2xl mx-1 border border-white/5">
+              <Feather name="camera" size={22} color="#10b981" />
+              <Text className="text-zinc-500 text-[10px] mt-2 font-bold tracking-tight">Camera</Text>
             </Pressable>
             <Pressable
               onPress={() => router.push("/editor/unsplash")}
-              className="items-center px-4"
+              className="flex-1 items-center py-5 bg-[#111111]/50 rounded-2xl mx-1 border border-white/5"
             >
-              <Feather name="image" size={28} color="white" />
+              <Feather name="image" size={22} color="#10b981" />
+              <Text className="text-zinc-500 text-[10px] mt-2 font-bold tracking-tight">Unsplash</Text>
             </Pressable>
             <Pressable
               onPress={() => setIsColorPickerVisible(true)}
-              className="items-center px-4"
+              className="flex-1 items-center py-5 bg-[#111111]/50 rounded-2xl mx-1 border border-white/5"
             >
-              <Feather name="aperture" size={28} color="white" />
+              <Feather name="droplet" size={22} color="#10b981" />
+              <Text className="text-zinc-500 text-[10px] mt-2 font-bold tracking-tight">Colors</Text>
             </Pressable>
           </View>
         )}
-      </>
+      </View>
     );
   };
 
   const MainContent = () => (
-    <View className="flex-1 justify-center items-center p-8">
+    <View className="flex-1 justify-center items-center px-8 pb-32">
       <Text
         style={[
           {
@@ -161,21 +169,24 @@ const QuoteEditorScreen = () => {
           },
           textShadowStyle,
         ]}
-        className=" leading-relaxed"
+        className="leading-relaxed"
       >
         {quoteText}
       </Text>
       {quoteAuthor && (
         <Text
-          style={{
-            fontFamily,
-            fontSize: fontSize / 2,
-            color: textColor,
-            textAlign,
-          }}
-          className="mt-4"
+          style={[
+            {
+              fontFamily,
+              fontSize: fontSize * 0.45,
+              color: textColor,
+              textAlign,
+            },
+            textShadowStyle,
+          ]}
+          className="mt-6 font-bold opacity-90 tracking-tight"
         >
-          {quoteAuthor}
+          — {quoteAuthor}
         </Text>
       )}
     </View>
@@ -184,89 +195,135 @@ const QuoteEditorScreen = () => {
   const isImageBackground = typeof themeSource === "object" && themeSource.uri;
 
   return (
-    <View className="flex-1">
-      {isImageBackground ? (
-        <ImageBackground
-          source={background}
-          resizeMode="cover"
-          className="flex-1"
-        >
-          <MainContent />
-        </ImageBackground>
-      ) : (
-        <View
-          // style={{ backgroundColor: background.color }}
-          style={{
-            backgroundColor:
-              typeof themeSource === "object" ? themeSource.color : "black",
-          }}
-          className="flex-1"
-        >
-          <MainContent />
-        </View>
-      )}
-
-      <SafeAreaView className="absolute top-10 left-0 right-0 bottom-10 justify-between">
-        <View className="flex-row justify-between items-center p-4">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="bg-black/50 w-10 h-10 rounded-full items-center justify-center"
+    <View className="flex-1 bg-[#050505]">
+      {/* Background & Content Layer */}
+      <View className="absolute inset-0">
+        {isImageBackground ? (
+          <ImageBackground
+            source={background}
+            resizeMode="cover"
+            className="flex-1"
           >
-            <Feather name="x" size={24} color="white" />
-          </TouchableOpacity>
-
-          {(isCustomImage || background || activeTab === "Text") && (
-            <TouchableOpacity
-              onPress={handleDone}
-              className="bg-white rounded-full px-6 py-2"
-            >
-              <Text className="text-black font-bold text-base">Done</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View className="p-4">
-          {activeTab === "Background" ? (
-            renderBottomControls()
-          ) : (
-            <TextControls
-              onFontSizeChange={setFontSize}
-              initialFontSize={fontSize}
-              onFontChange={setFontFamily}
-              currentFont={fontFamily}
-              onColorChange={setTextColor}
-              currentColor={textColor}
-              onAlignmentChange={setTextAlign}
-              currentAlignment={textAlign}
-              onLetterCaseChange={setLetterCaseStyle}
-              currentLetterCase={letterCaseStyle}
-            />
-          )}
-
-          <View className="flex-row items-center mt-4 rounded-full p-1 bg-[#262e3d]">
-            <Pressable
-              onPress={() => setActiveTab("Background")}
-              className={`flex-1 py-2 rounded-full ${
-                activeTab === "Background" ? "bg-[#3a4151]" : ""
-              }`}
-            >
-              <Text className="font-bold text-center text-white">
-                Background
-              </Text>
-            </Pressable>
-            <TouchableOpacity
-              onPress={() => setActiveTab("Text")}
-              className={`flex-1 py-2 rounded-full ${
-                activeTab === "Text" ? "bg-[#3a4151]" : ""
-              }`}
-            >
-              <Text className="font-bold text-center text-white">Text</Text>
-            </TouchableOpacity>
+            <View className="absolute inset-0 bg-black/20" />
+            <MainContent />
+          </ImageBackground>
+        ) : (
+          <View
+            style={{
+              backgroundColor:
+                typeof background === "object" && background.color ? background.color : "#050505",
+            }}
+            className="flex-1"
+          >
+            <MainContent />
           </View>
-        </View>
-      </SafeAreaView>
+        )}
+      </View>
+
+      {/* Floating UI Layer */}
+      <SafeAreaProvider>
+        <SafeAreaView edges={["top"]} className="flex-1 justify-between">
+          {/* Modern Top Header */}
+          <View className="flex-row justify-between items-center px-6 pt-2">
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={styles.shadow2xl}
+              className="bg-[#111111]/80 w-11 h-11 rounded-full items-center justify-center border border-white/10"
+            >
+              <Feather name="x" size={22} color="white" />
+            </TouchableOpacity>
+
+            {(isCustomImage || background || activeTab === "Text") && (
+              <TouchableOpacity
+                onPress={handleDone}
+                style={styles.shadowEmerald}
+                className="bg-emerald-500 rounded-full px-8 py-2.5"
+              >
+                <Text className="text-white font-bold text-sm">Done</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Premium Editing Dock */}
+          <View
+            style={styles.shadow2xl}
+            className="bg-[#111111] rounded-t-[40px] px-6 pb-12 pt-8 border-t border-white/5"
+          >
+            {/* Segmented Tab Control */}
+            <View className="flex-row items-center rounded-full p-1 bg-[#050505] mb-6 border border-white/5">
+              <Pressable
+                onPress={() => setActiveTab("Background")}
+                style={activeTab === "Background" ? styles.shadowLg : {}}
+                className={`flex-1 py-3 rounded-full ${activeTab === "Background" ? "bg-emerald-500" : ""
+                  }`}
+              >
+                <Text className={`font-bold text-center text-sm ${activeTab === "Background" ? "text-white" : "text-zinc-500"}`}>
+                  Background
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setActiveTab("Text")}
+                style={activeTab === "Text" ? styles.shadowLg : {}}
+                className={`flex-1 py-3 rounded-full ${activeTab === "Text" ? "bg-emerald-500" : ""
+                  }`}
+              >
+                <Text className={`font-bold text-center text-sm ${activeTab === "Text" ? "text-white" : "text-zinc-500"}`}>
+                  Text
+                </Text>
+              </Pressable>
+            </View>
+
+            {/* Active Tool Views */}
+            <View>
+              {activeTab === "Background" ? (
+                renderBottomControls()
+              ) : (
+                <View className="bg-[#0a0a0a] rounded-[24px] p-6 border border-white/5">
+                  <TextControls
+                    onFontSizeChange={setFontSize}
+                    initialFontSize={fontSize}
+                    onFontChange={setFontFamily}
+                    currentFont={fontFamily}
+                    onColorChange={setTextColor}
+                    currentColor={textColor}
+                    onAlignmentChange={setTextAlign}
+                    currentAlignment={textAlign}
+                    onLetterCaseChange={setLetterCaseStyle}
+                    currentLetterCase={letterCaseStyle}
+                  />
+                </View>
+              )}
+            </View>
+          </View>
+        </SafeAreaView>
+      </SafeAreaProvider>
+
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  shadow2xl: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.4,
+    shadowRadius: 30,
+    elevation: 20,
+  },
+  shadowLg: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 8,
+  },
+  shadowEmerald: {
+    shadowColor: "#10b981",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 15,
+    elevation: 12,
+  },
+});
 
 export default QuoteEditorScreen;

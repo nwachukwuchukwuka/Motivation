@@ -47,17 +47,16 @@ const TopicsScreen = () => {
 
     return (
       <View
-        className={`flex-row justify-between items-center py-3 -mx-3 px-3  ${
-          !isLastItem ? "border-b border-b-[#262e3d]" : ""
-        }`}
+        className={`flex-row justify-between items-center py-4 px-1  ${!isLastItem ? "border-b border-white/5" : ""
+          }`}
       >
         <View className="flex-row items-center">
-          <Text className="text-white text-xl">{name}</Text>
+          <Text className="text-white text-lg font-bold tracking-tight">{name}</Text>
           {isLocked && (
             <Feather
               name="lock"
-              size={14}
-              color="#969da8"
+              size={12}
+              color="#52525b"
               style={{ marginLeft: 8 }}
             />
           )}
@@ -65,19 +64,18 @@ const TopicsScreen = () => {
         <TouchableOpacity
           disabled={isLocked}
           onPress={() => handleFollowToggle(name)}
-          className={`rounded-full px-4 py-1.5 flex-row items-center border ${
-            isFollowing ? "border-white" : "border-[#969da8]"
-          } ${isLocked ? "opacity-50" : ""}`}
+          className={`rounded-full px-5 py-1.5 flex-row items-center border ${isFollowing ? "bg-emerald-500 border-emerald-500" : "border-emerald-500/30"
+            } ${isLocked ? "opacity-30" : ""}`}
         >
           {isFollowing && (
             <Feather
               name="check"
-              size={16}
-              color="white"
+              size={14}
+              color="black"
               style={{ marginRight: 4 }}
             />
           )}
-          <Text className="text-white font-semibold">
+          <Text className={`text-sm font-bold ${isFollowing ? "text-black" : "text-emerald-500"}`}>
             {isFollowing ? "Following" : "Follow"}
           </Text>
         </TouchableOpacity>
@@ -92,47 +90,53 @@ const TopicsScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="flex-row justify-between items-center px-4 py-4">
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text className="text-white text-lg">Close</Text>
+    <SafeAreaView className="flex-1 bg-[#050505]">
+      {/* Premium Header */}
+      <View className="flex-row items-center px-6 py-4">
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-white/5 shadow-lg"
+        >
+          <Feather name="chevron-left" size={24} color="white" />
         </TouchableOpacity>
         {!isSearching && (
-          <Text className="text-white text-xl font-semibold">
-            Topics you follow
-          </Text>
+          <View className="flex-1 items-center mr-10">
+            <Text className="text-white text-xl font-bold tracking-tight">
+              Topics you follow
+            </Text>
+          </View>
         )}
-        <View className="w-12" />
       </View>
 
-      <View className="px-4 mt-2 mb-4 flex-row items-center">
-        <View className="bg-[#3a4151] rounded-lg flex-row items-center px-3 py-2.5 flex-1">
-          <Feather name="search" size={20} color="#969da8" />
+      {/* Modern Search Bar */}
+      <View className="px-6 mb-6 flex-row items-center">
+        <View className="bg-[#111111] rounded-2xl flex-row items-center px-4 py-3.5 flex-1 border border-white/5 shadow-sm">
+          <Feather name="search" size={20} color="#10b981" />
           <TextInput
-            placeholder="Search"
-            placeholderTextColor="#969da8"
-            className="text-white ml-2 flex-1"
+            placeholder="Search topics"
+            placeholderTextColor="#52525b"
+            className="text-white ml-3 flex-1 font-medium"
             value={searchQuery}
             onChangeText={setSearchQuery}
             onFocus={() => setIsSearching(true)}
           />
           {searchQuery.length > 0 && isSearching && (
             <TouchableOpacity onPress={() => setSearchQuery("")}>
-              <Feather name="x-circle" size={18} color="#969da8" />
+              <Feather name="x-circle" size={18} color="#52525b" />
             </TouchableOpacity>
           )}
         </View>
         {isSearching && (
           <TouchableOpacity onPress={handleCancelSearch} className="pl-4">
-            <Text className="text-white text-base">Cancel</Text>
+            <Text className="text-emerald-500 font-bold text-sm">Cancel</Text>
           </TouchableOpacity>
         )}
       </View>
 
-      <ScrollView>
-        <View className="px-4">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="px-6">
           {isSearching ? (
-            <View className="bg-[#3a4151] p-3 rounded-lg">
+            <View className="bg-[#111111] p-4 rounded-[24px] border border-white/5">
               {filteredResults.map((item, index) => (
                 <TopicRow
                   key={item.name}
@@ -144,7 +148,7 @@ const TopicsScreen = () => {
             </View>
           ) : (
             <>
-              <View className="mb-6 bg-[#3a4151] p-3 pt-0 rounded-lg">
+              <View className="mb-8 bg-[#111111] p-4 rounded-[24px] border border-white/5 shadow-2xl">
                 <TopicRow name="General" isLocked={false} isLastItem={false} />
                 <TopicRow
                   name="Favorites"
@@ -159,16 +163,16 @@ const TopicsScreen = () => {
               </View>
 
               {TOPIC_SECTIONS.map((section) => (
-                <View key={section.title} className="mb-6 ">
-                  <View className="flex-row justify-between items-center mb-2">
-                    <Text className="text-white text-xl font-bold">
+                <View key={section.title} className="mb-8 ">
+                  <View className="flex-row justify-between items-end mb-4 px-2">
+                    <Text className="text-white text-xl font-bold tracking-tight">
                       {section.title}
                     </Text>
                     <TouchableOpacity>
-                      <Text className="text-[#969da8]">Follow all</Text>
+                      <Text className="text-emerald-500 font-bold text-xs">Follow all</Text>
                     </TouchableOpacity>
                   </View>
-                  <View className="bg-[#3a4151] p-3 py-0 rounded-lg">
+                  <View className="bg-[#111111] px-5 py-2 rounded-[24px] border border-white/5">
                     {section.items.map((item, index) => (
                       <TopicRow
                         key={item.name}

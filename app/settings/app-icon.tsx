@@ -4,7 +4,6 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -83,8 +82,8 @@ const IconDisplay = ({
 
   return (
     <View
-      className={`w-full aspect-square rounded-2xl items-center justify-center overflow-hidden relative ${
-        isSelected ? "border-2 border-white" : ""
+      className={`w-full aspect-square rounded-[24px] items-center justify-center overflow-hidden relative transition-all ${
+        isSelected ? "border-2 border-emerald-500 scale-95" : "border-2 border-transparent"
       }`}
     >
       {styleInfo.type === "image" && (
@@ -108,6 +107,12 @@ const IconDisplay = ({
       )}
       <View className="absolute inset-0 bg-black/10" />
       {renderContent()}
+      
+      {isSelected && (
+        <View className="absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-500 items-center justify-center shadow-lg">
+          <Feather name="check" size={12} color="black" />
+        </View>
+      )}
     </View>
   );
 };
@@ -117,34 +122,48 @@ const AppIconScreen = () => {
   const [selectedIconId, setSelectedIconId] = useState("default");
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="flex-row items-center p-4 pl-2">
+    <SafeAreaView edges={["top"]} className="flex-1 bg-[#050505]">
+      {/* Header Area */}
+      <View className="px-8 pt-6 flex-row justify-between items-center mb-10">
         <TouchableOpacity
           onPress={() => router.back()}
-          className="flex-row items-center"
+          className="w-10 h-10 rounded-full bg-white/5 items-center justify-center border border-white/10"
         >
-          <Feather name="chevron-left" size={28} color="white" />
-          <Text className="text-white text-xl ml-1">Motivation</Text>
+          <Feather name="chevron-left" size={24} color="#94A3B8" />
         </TouchableOpacity>
+        <View className="w-10 h-1" />
       </View>
 
-      <ScrollView contentContainerStyle={{ padding: 16 }}>
-        <Text className="text-white text-3xl font-bold">App icon</Text>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-8"
+        contentContainerStyle={{ paddingBottom: 60 }}
+      >
+        <View className="mb-12">
+          <Text className="text-[#E2E8F0] text-4xl font-bold tracking-tighter leading-tight">
+            App icon
+          </Text>
+          <Text className="text-[#94A3B8] text-lg mt-4 leading-relaxed">
+            Choose a visual identity that resonates with your personal aesthetic.
+          </Text>
+          <View className="w-12 h-1 bg-emerald-500 mt-6" />
+        </View>
 
-        <View className="flex-row flex-wrap mt-4 justify-between gap-5">
+        <View className="flex-row flex-wrap justify-between">
           {ICON_STYLES.map((style) => (
-            <View key={style.id} className="w-[70px] mb-5">
-              <Pressable
+            <View key={style.id} className="w-[30%] mb-6">
+              <TouchableOpacity
+                activeOpacity={0.8}
                 onPress={() => {
-                  router.push("/free-trial-details-screen");
                   setSelectedIconId(style.id);
                 }}
+                className="bg-[#111111] rounded-[32px] p-1.5 border border-white/5 items-center justify-center"
               >
                 <IconDisplay
                   styleInfo={style}
                   isSelected={selectedIconId === style.id}
                 />
-              </Pressable>
+              </TouchableOpacity>
             </View>
           ))}
         </View>

@@ -47,37 +47,35 @@ const TopicsFollowScreen = () => {
 
     return (
       <View
-        className={`flex-row justify-between items-center py-3 -mx-3 px-3  ${
-          !isLastItem ? "border-b border-b-[#262e3d]" : ""
-        }`}
+        className={`flex-row justify-between items-center py-4 px-4 ${!isLastItem ? "border-b border-zinc-800/50" : ""
+          }`}
       >
-        <View className="flex-row items-center">
-          <Text className="text-white text-xl">{name}</Text>
+        <View className="flex-row items-center flex-1 pr-4">
+          <Text className="text-zinc-100 text-lg font-bold">{name}</Text>
           {isLocked && (
-            <Feather
-              name="lock"
-              size={14}
-              color="#969da8"
-              style={{ marginLeft: 8 }}
-            />
+            <View className="ml-3 bg-zinc-900 p-1 rounded-md">
+              <Feather name="lock" size={10} color="#52525b" />
+            </View>
           )}
         </View>
+
         <TouchableOpacity
           disabled={isLocked}
           onPress={() => handleFollowToggle(name)}
-          className={`rounded-full px-4 py-1.5 flex-row items-center border ${
-            isFollowing ? "border-white" : "border-[#969da8]"
-          } ${isLocked ? "opacity-50" : ""}`}
+          className={`rounded-full px-5 py-2 flex-row items-center border ${isFollowing
+              ? "bg-emerald-500 border-emerald-500"
+              : "border-zinc-700 bg-transparent"
+            } ${isLocked ? "opacity-30" : ""}`}
         >
           {isFollowing && (
             <Feather
               name="check"
-              size={16}
+              size={14}
               color="white"
-              style={{ marginRight: 4 }}
+              style={{ marginRight: 6 }}
             />
           )}
-          <Text className="text-white font-semibold">
+          <Text className={`${isFollowing ? "text-white" : "text-zinc-400"} font-bold text-xs`}>
             {isFollowing ? "Following" : "Follow"}
           </Text>
         </TouchableOpacity>
@@ -92,59 +90,67 @@ const TopicsFollowScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="flex-row justify-between items-center px-4 py-4">
+    <SafeAreaView className="flex-1 bg-[#050505]">
+      {/* Premium Header */}
+      <View className="flex-row justify-between items-center px-6 py-6">
         <TouchableOpacity onPress={() => router.back()}>
-          <Text className="text-white text-lg">Close</Text>
+          <Text className="text-zinc-500 text-base font-bold">Close</Text>
         </TouchableOpacity>
         {!isSearching && (
-          <Text className="text-white text-xl font-semibold">
-            Topics you follow
+          <Text className="text-white text-lg font-bold tracking-tight">
+            Manage Topics
           </Text>
         )}
         <View className="w-12" />
       </View>
 
-      <View className="px-4 mt-2 mb-4 flex-row items-center">
-        <View className="bg-[#3a4151] rounded-lg flex-row items-center px-3 py-2.5 flex-1">
-          <Feather name="search" size={20} color="#969da8" />
+      {/* Search Bar */}
+      <View className="px-6 mb-6 flex-row items-center">
+        <View className="bg-[#111111] rounded-2xl flex-row items-center px-4 py-4 flex-1 border border-[#222222]">
+          <Feather name="search" size={18} color="#52525b" />
           <TextInput
-            placeholder="Search"
-            placeholderTextColor="#969da8"
-            className="text-white ml-2 flex-1"
+            placeholder="Search all topics"
+            placeholderTextColor="#3f3f46"
+            className="text-white ml-3 flex-1 text-base font-medium"
             value={searchQuery}
             onChangeText={setSearchQuery}
             onFocus={() => setIsSearching(true)}
           />
-          {searchQuery.length > 0 && isSearching && (
+          {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery("")}>
-              <Feather name="x-circle" size={18} color="#969da8" />
+              <Feather name="x-circle" size={18} color="#52525b" />
             </TouchableOpacity>
           )}
         </View>
         {isSearching && (
-          <TouchableOpacity onPress={handleCancelSearch} className="pl-4">
-            <Text className="text-white text-base">Cancel</Text>
+          <TouchableOpacity onPress={handleCancelSearch} className="ml-4">
+            <Text className="text-emerald-500 font-bold text-sm">DONE</Text>
           </TouchableOpacity>
         )}
       </View>
 
-      <ScrollView>
-        <View className="px-4">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="px-6 pb-20">
           {isSearching ? (
-            <View className="bg-[#3a4151] p-3 rounded-lg">
-              {filteredResults.map((item, index) => (
-                <TopicRow
-                  key={item.name}
-                  name={item.name}
-                  isLocked={item.isLocked}
-                  isLastItem={index === filteredResults.length - 1}
-                />
-              ))}
+            <View className="bg-[#111111] rounded-[28px] border border-[#222222] overflow-hidden">
+              {filteredResults.length > 0 ? (
+                filteredResults.map((item, index) => (
+                  <TopicRow
+                    key={item.name}
+                    name={item.name}
+                    isLocked={item.isLocked}
+                    isLastItem={index === filteredResults.length - 1}
+                  />
+                ))
+              ) : (
+                <View className="py-20 items-center">
+                  <Text className="text-zinc-500 font-bold">No topics found</Text>
+                </View>
+              )}
             </View>
           ) : (
             <>
-              <View className="mb-6 bg-[#3a4151] p-3 pt-0 rounded-lg">
+              <View className="mb-8 bg-[#111111] rounded-[28px] border border-[#222222] overflow-hidden">
                 <TopicRow name="General" isLocked={false} isLastItem={false} />
                 <TopicRow
                   name="Favorites"
@@ -159,16 +165,16 @@ const TopicsFollowScreen = () => {
               </View>
 
               {TOPIC_SECTIONS.map((section) => (
-                <View key={section.title} className="mb-6 ">
-                  <View className="flex-row justify-between items-center mb-2">
-                    <Text className="text-white text-xl font-bold">
+                <View key={section.title} className="mb-8 ">
+                  <View className="flex-row justify-between items-center mb-4 px-2">
+                    <Text className="text-white/60 text-xs font-bold">
                       {section.title}
                     </Text>
-                    <TouchableOpacity>
-                      <Text className="text-[#969da8]">Follow all</Text>
+                    <TouchableOpacity className="bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                      <Text className="text-emerald-400 text-[11px] font-bold">Follow all</Text>
                     </TouchableOpacity>
                   </View>
-                  <View className="bg-[#3a4151] p-3 py-0 rounded-lg">
+                  <View className="bg-[#111111] rounded-[28px] border border-[#222222] overflow-hidden">
                     {section.items.map((item, index) => (
                       <TopicRow
                         key={item.name}

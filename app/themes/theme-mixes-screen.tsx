@@ -15,41 +15,72 @@ const ThemeMixesScreen = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="flex-row justify-between items-center p-4">
+    <SafeAreaView className="flex-1 bg-[#050505]">
+      {/* Top Navigation Bar */}
+      <View className="flex-row justify-between items-center px-6 py-4">
         <TouchableOpacity
           onPress={() => router.back()}
-          className="flex-row items-center"
+          className="w-10 h-10 rounded-full bg-[#111111] border border-[#222222] items-center justify-center"
         >
-          <Feather name="chevron-left" size={28} color="white" />
-          <Text className="text-white text-xl ml-1">Themes</Text>
+          <Feather name="chevron-left" size={24} color="white" />
         </TouchableOpacity>
-        <Text className="text-white text-2xl font-bold">Theme mixes</Text>
-        <TouchableOpacity>
-          <Text className="text-white text-xl">Create</Text>
+
+        <TouchableOpacity
+          onPress={() => router.push("/editor")}
+          className="bg-emerald-500/10 px-5 py-2.5 rounded-full border border-emerald-500/20"
+        >
+          <Text className="text-emerald-400 text-sm font-bold">
+            Create
+          </Text>
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={{ padding: 8 }} showsVerticalScrollIndicator={false}>
-        <View className="flex-row flex-wrap justify-between">
+      {/* Header Section */}
+      <View className="px-6 py-6 mb-2">
+        <Text className="text-emerald-500 text-sm font-bold tracking-tight mb-2">
+          Your library
+        </Text>
+        <Text className="text-white text-4xl font-bold tracking-tight">
+          Theme mixes
+        </Text>
+      </View>
+
+      {/* Main Content List */}
+      <ScrollView
+        contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 50 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="flex-col">
           {THEME_MIXES.map((mix, index) => (
-            <View key={index} className="w-1/2 p-2">
-              <TouchableOpacity>
+            <TouchableOpacity key={index} activeOpacity={0.8} className="mb-6">
+              <View className="w-full h-48 rounded-[36px] overflow-hidden border border-[#222222] shadow-2xl">
                 <ImageBackground
                   source={{ uri: mix.image }}
-                  className="h-40 rounded-2xl items-center justify-center p-2 overflow-hidden"
+                  className="flex-1 justify-end"
                   resizeMode="cover"
                 >
-                  <View className="absolute inset-0 bg-black/30 rounded-2xl" />
-                  <Text
-                    className="text-white text-xl font-bold text-center"
-                    style={{ fontFamily: "serif" }}
-                  >
-                    {mix.name}
-                  </Text>
+                  {/* Modern Overlay */}
+                  <View className="absolute inset-0 bg-black/40" />
+
+                  {/* Card Content */}
+                  <View className="p-5 flex-row justify-between items-end">
+                    <View className="flex-1 pr-">
+                      <Text
+                        className="text-white text-2xl font-bold tracking-tight"
+                        numberOfLines={2}
+                      >
+                        {mix.name}
+                      </Text>
+                    </View>
+
+                    {/* Action Icon */}
+                    <View className="bg-emerald-500 w-12 h-12 rounded-full items-center justify-center shadow-lg shadow-emerald-500/40">
+                      <Feather name="chevron-right" size={24} color="white" />
+                    </View>
+                  </View>
                 </ImageBackground>
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>

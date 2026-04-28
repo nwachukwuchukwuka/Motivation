@@ -1,7 +1,6 @@
 import { Href, Stack, useRouter, useSegments } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const ONBOARDING_ROUTES = [
   "welcome-screen",
@@ -68,7 +67,7 @@ export default function OnboardingLayout() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
+    <View className="flex-1 ">
       <Stack
         screenOptions={{
           headerShown: false,
@@ -103,6 +102,6 @@ export default function OnboardingLayout() {
           <Text style={{ color: "#969da8", fontSize: 16 }}>Skip</Text>
         </TouchableOpacity>
       )}
-    </SafeAreaView>
+    </View>
   );
 }

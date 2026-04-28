@@ -15,7 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const UNSPLASH_IMAGES = [
   {
-    author: "Wietse Jongs...",
+    author: "Wietse Jongbloed",
     image:
       "https://images.unsplash.com/photo-1588392382834-a891154bca4d?q=80&w=800",
   },
@@ -25,12 +25,12 @@ const UNSPLASH_IMAGES = [
       "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=800",
   },
   {
-    author: "Philipp",
+    author: "Philipp Pilz",
     image:
       "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800",
   },
   {
-    author: "Ingmar",
+    author: "Ingmar Meiler",
     image:
       "https://images.unsplash.com/photo-1502602898657-3e91760c0341?q=80&w=800",
   },
@@ -40,7 +40,7 @@ const UNSPLASH_IMAGES = [
       "https://images.unsplash.com/photo-1554050857-c85985862535?q=80&w=800",
   },
   {
-    author: "Karsten Wine...",
+    author: "Karsten Winegeart",
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=800",
   },
@@ -56,36 +56,57 @@ const UnsplashScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]">
-      <View className="flex-row justify-between items-center px-4 py-2">
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text className="text-white text-base">Cancel</Text>
+    <SafeAreaView className="flex-1 bg-[#050505]">
+      {/* Header */}
+      <View className="flex-row items-center px-6 py-4">
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-white/5 shadow-lg"
+        >
+          <Feather name="chevron-left" size={24} color="white" />
         </TouchableOpacity>
-        <Text className="text-white text-lg font-bold">Unsplash</Text>
-        <View className="w-14" />
+        <View className="flex-1 items-center mr-10">
+          <Text className="text-white text-xl font-bold tracking-tight">Unsplash</Text>
+        </View>
       </View>
-      <View className="px-4 mt-2 mb-4">
-        <View className="bg-[#3a4151] rounded-lg flex-row items-center px-3 py-2.5">
-          <Feather name="search" size={20} color="#969da8" />
+
+      {/* Search Bar */}
+      <View className="px-6 mb-6">
+        <View className="bg-[#111111] rounded-2xl flex-row items-center px-4 py-3.5 border border-white/5 shadow-sm">
+          <Feather name="search" size={20} color="#10b981" />
           <TextInput
-            placeholder="Search photos"
-            placeholderTextColor="#969da8"
-            className="text-white ml-2 flex-1"
+            placeholder="Search thousands of photos"
+            placeholderTextColor="#52525b"
+            className="text-white ml-3 flex-1 font-medium"
           />
         </View>
       </View>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 12 }}>
-        <View className="flex-row flex-wrap">
+
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 32 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="px-6">
           {UNSPLASH_IMAGES.map((item, index) => (
-            <View key={index} className="w-1/2 p-2">
-              <Pressable onPress={() => handleImageSelect(item.image)}>
+            <View key={index} className="w-full mb-6">
+              <Pressable
+                onPress={() => handleImageSelect(item.image)}
+                className="active:opacity-90 transition-opacity"
+              >
                 <ImageBackground
                   source={{ uri: item.image }}
                   resizeMode="cover"
-                  className="h-48 w-full rounded-lg justify-end p-2 overflow-hidden"
+                  className="h-[650px] w-full rounded-[32px] justify-end overflow-hidden border border-white/5 shadow-2xl"
                 >
-                  <View className="absolute inset-0 bg-black/30" />
-                  <Text className="text-white font-bold">{item.author}</Text>
+                  <View className="absolute inset-0 bg-black/20" />
+                  <View className="p-6 bg-black/40 backdrop-blur-xl">
+                    <Text
+                      className="text-white text-sm font-bold tracking-tight"
+                      numberOfLines={1}
+                    >
+                      {item.author}
+                    </Text>
+                  </View>
                 </ImageBackground>
               </Pressable>
             </View>

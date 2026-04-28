@@ -45,64 +45,73 @@ const ProfileSettings = () => {
   }) => {
     return (
       <Pressable
-        className={`flex-row justify-between items-center py-4 -mx-3 px-3  ${
-          !isLastItem ? "border-b border-b-[#262e3d]" : ""
+        className={`flex-row justify-between items-center py-5 px-1  ${
+          !isLastItem ? "border-b border-white/5" : ""
         }`}
         onPress={onPress}
       >
         <View className="flex-row items-center gap-4">
-          <AntDesign name="crown" size={20} color="#969da8" />
-
-          <Text className="text-white text-xl">{name}</Text>
+          <AntDesign name="crown" size={18} color="#10b981" />
+          <Text className="text-white text-lg font-bold tracking-tight">{name}</Text>
         </View>
 
         {onPress && (
-          <SimpleLineIcons name="arrow-right" size={14} color="#969da8" />
+          <Feather name="chevron-right" size={18} color="#3f3f46" />
         )}
       </Pressable>
     );
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d]" edges={["top"]}>
-      <View className="flex-row justify-between items-center pl-2 pr-4 py-4">
-        <Pressable
+    <SafeAreaView className="flex-1 bg-[#050505]" edges={["top"]}>
+      {/* Header */}
+      <View className="flex-row items-center px-6 py-4">
+        <TouchableOpacity
           onPress={() => router.back()}
-          className="flex-row items-center"
+          className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-white/5 shadow-lg"
         >
-          <Feather name="chevron-left" size={28} color="white" />
-          <Text className="text-white text-xl ml-1">Motivation</Text>
-        </Pressable>
+          <Feather name="chevron-left" size={24} color="white" />
+        </TouchableOpacity>
+        <Text className="text-zinc-500 text-sm font-bold ml-4 tracking-tight">Motivation</Text>
       </View>
 
-      <ScrollView>
-        <View className="px-4">
-          <Text className="text-2xl font-bold text-white">Preferences</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="px-6 pb-20">
+          <Text className="text-3xl font-bold text-white tracking-tighter mb-8">Preferences</Text>
 
-          <>
-            <Text className="text-white text-lg mt-8">PREMIUM</Text>
-            <Pressable
-              className="bg-[#374051] rounded-2xl p-4 my-4 flex-row items-center justify-between"
+          <View>
+            <View className="flex-row items-center mb-4 px-1">
+              <View className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2" />
+              <Text className="text-emerald-500 text-xs font-bold tracking-tight">Premium</Text>
+            </View>
+            <TouchableOpacity
+              className="bg-[#111111] rounded-[24px] p-6 mb-10 flex-row items-center justify-between border border-white/5 shadow-2xl"
               onPress={() => router.push("./subscription-screen")}
             >
               <View className="flex-row items-center gap-4">
-                <AntDesign name="crown" size={20} color="#969da8" />
+                <View className="w-11 h-11 bg-emerald-500/10 rounded-2xl items-center justify-center border border-emerald-500/10">
+                  <AntDesign name="crown" size={22} color="#10b981" />
+                </View>
 
-                <Text className="text-white font-semibold  text-xl">
-                  Manage subscriptions
-                </Text>
+                <View>
+                  <Text className="text-white font-bold text-lg tracking-tight">
+                    Subscriptions
+                  </Text>
+                  <Text className="text-zinc-500 text-[10px] font-medium">Manage your plan</Text>
+                </View>
               </View>
-              <SimpleLineIcons name="arrow-right" size={14} color="#969da8" />
-            </Pressable>
+              <Feather name="arrow-up-right" size={20} color="#10b981" />
+            </TouchableOpacity>
 
             {SETTINGS_DATA.map((section) => (
-              <View key={section.title} className="mb-6 ">
-                <View className="flex-row justify-between items-center mb-2">
-                  <Text className="text-white text-lg text-capitalize">
+              <View key={section.title} className="mb-10">
+                <View className="flex-row items-center mb-4 px-1">
+                  <View className="w-1.5 h-1.5 rounded-full bg-zinc-800 mr-2" />
+                  <Text className="text-zinc-500 text-xs font-bold tracking-tight">
                     {section.title}
                   </Text>
                 </View>
-                <View className="bg-[#374051] p-3 py-0 rounded-lg">
+                <View className="bg-[#111111] px-6 py-1 rounded-[32px] border border-white/5">
                   {section.items.map((item, index) => (
                     <TopicRow
                       key={item.name}
@@ -116,25 +125,29 @@ const ProfileSettings = () => {
                 </View>
               </View>
             ))}
-          </>
-        </View>
-        <View className="mx-5 mb-20">
-          <View className="border border-white rounded-2xl flex-row">
-            <View className="flex-1 p-4 justify-center">
-              <Text className="text-gray-300 text-base">
-                Motivation app - version {appVersion}
-              </Text>
-              <Text className="text-gray-300 text-sm mt-1">
+          </View>
+
+          {/* Minimalist Footer Design */}
+          <View className="mt-12 items-center">
+            <View className="w-12 h-1 bg-[#111111] rounded-full mb-8 opacity-20" />
+            
+            <Text className="text-zinc-500 text-[11px] font-bold tracking-tight">
+              Motivation App — Version {appVersion}
+            </Text>
+            
+            <TouchableOpacity 
+              onPress={handleCopyToClipboard}
+              className="mt-6 flex-row items-center bg-[#111111] px-5 py-3 rounded-full border border-white/5 shadow-sm"
+            >
+              <Ionicons name="copy-outline" size={14} color="#10b981" />
+              <Text className="text-zinc-400 text-[10px] font-bold ml-2 tracking-tight">
                 User ID: {displayUserId}
               </Text>
-            </View>
-
-            <TouchableOpacity
-              onPress={handleCopyToClipboard}
-              className="border-l border-l-white px-4 items-center justify-center"
-            >
-              <Ionicons name="copy-outline" size={28} color="white" />
             </TouchableOpacity>
+            
+            <Text className="text-zinc-800 text-[9px] mt-8 font-medium tracking-widest opacity-50">
+              Made with passion
+            </Text>
           </View>
         </View>
       </ScrollView>

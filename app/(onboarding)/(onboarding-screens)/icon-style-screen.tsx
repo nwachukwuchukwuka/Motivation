@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
-import Svg, { Path } from "react-native-svg";
+import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Feather } from "@expo/vector-icons";
 
 const ICON_STYLES = [
   {
@@ -61,17 +62,9 @@ const ICON_STYLES = [
   },
 ];
 
-const CheckIcon = () => (
-  <Svg width={16} height={16} viewBox="0 0 24 24">
-    <Path
-      fill="black"
-      d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-    />
-  </Svg>
-);
-
 const IconStyleScreen = () => {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [selectedId, setSelectedId] = useState(1);
 
   const handleContinue = () => {
@@ -79,64 +72,90 @@ const IconStyleScreen = () => {
   };
 
   return (
-    <View className="flex-1 justify-between p-6 pt-24 bg-[#262e3d]">
-      <View className="items-center">
-        <Text className="text-white text-3xl font-semibold text-center mb-8">
-          Which icon style do you like the most?
-        </Text>
-        <View className="flex-row flex-wrap justify-center mt-32">
-          {ICON_STYLES.map((style) => (
-            <View key={style.id} className="p-2 w-1/3">
-              <TouchableOpacity onPress={() => setSelectedId(style.id)}>
+    <View className="flex-1 bg-[#050505]" style={{ paddingTop: insets.top + 60 }}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-8"
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
+        <View className="mb-12">
+          <Text className="text-[#E2E8F0] text-4xl font-bold tracking-tighter leading-tight">
+            Which icon style do you like most?
+          </Text>
+          <Text className="text-[#94A3B8] text-lg mt-4 leading-relaxed">
+            Personalize your workspace with a theme that inspires you.
+          </Text>
+          <View className="w-12 h-1 bg-emerald-500 mt-6" />
+        </View>
+
+        <View className="flex-row flex-wrap justify-between">
+          {ICON_STYLES.map((style) => {
+            const isSelected = selectedId === style.id;
+            return (
+              <TouchableOpacity 
+                key={style.id} 
+                activeOpacity={0.9}
+                onPress={() => setSelectedId(style.id)}
+                className={`w-[48%] h-[160px] rounded-[32px] overflow-hidden mb-4 border-2 ${
+                  isSelected ? "border-emerald-500" : "border-white/5"
+                }`}
+              >
                 <ImageBackground
                   source={style.value} 
-                  className="h-24 w-full rounded-2xl items-center justify-center p-2 relative overflow-hidden"
+                  className="flex-1 items-center justify-center p-4"
                   resizeMode="cover"
                 >
-                  <View className="absolute inset-0 bg-black/20" />
+                  <View className="absolute inset-0 bg-black/30" />
                   
                   {style.content === "icon" ? (
                     <Text
                       style={{
                         color: style.textColor || "white",
-                        fontSize: 48,
+                        fontSize: 60,
                         fontWeight: "bold",
+                        textShadowColor: 'rgba(0, 0, 0, 0.5)',
+                        textShadowOffset: { width: 0, height: 2 },
+                        textShadowRadius: 10,
                       }}
                     >
                       ”
                     </Text>
                   ) : (
                     <Text
+                      className="text-center font-bold tracking-tight"
                       style={{
                         color: style.textColor || "white",
-                        textAlign: "center",
-                        fontWeight: "bold",
+                        fontSize: 16,
                       }}
                     >
                       {style.content}
                     </Text>
                   )}
-                  {selectedId === style.id && (
-                    <View className="absolute inset-0 bg-black/30 border-2 border-white rounded-2xl items-end p-1">
-                      <View className="bg-white rounded-full w-5 h-5 items-center justify-center">
-                        <CheckIcon />
-                      </View>
+
+                  {isSelected && (
+                    <View className="absolute top-3 right-3 bg-emerald-500 w-7 h-7 rounded-full items-center justify-center shadow-lg shadow-emerald-500/50">
+                      <Feather name="check" size={16} color="black" />
                     </View>
                   )}
                 </ImageBackground>
               </TouchableOpacity>
-            </View>
-          ))}
+            );
+          })}
         </View>
+      </ScrollView>
+
+      {/* Action Area */}
+      <View className="absolute bottom-0 left-0 right-0 p-8 bg-[#050505]/90">
+        <TouchableOpacity
+          className="bg-emerald-500 w-full py-5 rounded-[24px] items-center justify-center shadow-lg shadow-emerald-500/30"
+          onPress={handleContinue}
+          activeOpacity={0.9}
+        >
+          <Text className="text-black text-lg font-bold tracking-tight">Continue</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        className="bg-white w-full py-4 rounded-full items-center justify-center mb-4"
-        onPress={handleContinue}
-      >
-        <Text className="text-black text-lg font-bold">Continue</Text>
-      </TouchableOpacity>
     </View>
   );
 };
 
-export default IconStyleScreen;
+export default IconStyleScreen;

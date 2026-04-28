@@ -17,45 +17,52 @@ const NewCollectionScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#262e3d] justify-between">
+    <SafeAreaView className="flex-1 bg-[#050505] justify-between">
       <View>
-        <View className="flex-row items-center p-4">
+        <View className="flex-row items-center px-6 py-6">
           <TouchableOpacity
             onPress={() => router.back()}
-            className="flex-row items-center"
+            className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center border border-[#222222]"
           >
-            <Feather name="chevron-left" size={28} color="white" />
-            <Text className="text-white text-xl ml-1">Back</Text>
+            <Feather name="chevron-left" size={24} color="white" />
           </TouchableOpacity>
         </View>
-        <View className="p-4">
-          <Text className="text-white text-3xl font-bold">New collection</Text>
-          <Text className="text-white text-lg mt-2 mb-6">
-            Enter a name for your new collection. You can rename it later.
+        
+        <View className="px-10 mt-4">
+          <Text className="text-white text-4xl font-bold tracking-tight">New collection</Text>
+          <Text className="text-zinc-500 text-lg mt-3 mb-10 font-medium leading-relaxed">
+            Give your collection a name. You can always change it later.
           </Text>
-          <TextInput
-            value={name}
-            onChangeText={setName}
-            placeholder="My new collection"
-            placeholderTextColor="#969da8"
-            className="bg-[#3a4151] rounded-lg p-4 pt-3 text-white text-lg"
-          />
+          
+          <View className="bg-[#111111] border border-[#222222] rounded-[28px] p-2">
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder="e.g., Morning Motivation"
+              placeholderTextColor="#3f3f46"
+              className="px-6 py-5 text-white text-xl font-bold"
+              autoFocus
+            />
+          </View>
         </View>
       </View>
-      <View className="p-4">
+
+      <View className="px-6 pb-10">
         <TouchableOpacity
           onPress={handleSave}
           disabled={!name.trim()}
-          className={`rounded-full py-4 items-center ${
-            !name.trim() ? "bg-gray-500" : "bg-white"
+          className={`rounded-[24px] py-5 items-center shadow-lg ${
+            !name.trim() 
+              ? "bg-zinc-900 border border-zinc-800" 
+              : "bg-emerald-500 shadow-emerald-500/40"
           }`}
         >
           <Text
             className={`font-bold text-lg ${
-              !name.trim() ? "text-gray-400" : "text-black"
+              !name.trim() ? "text-zinc-700" : "text-white"
             }`}
           >
-            Save
+            Save collection
           </Text>
         </TouchableOpacity>
       </View>

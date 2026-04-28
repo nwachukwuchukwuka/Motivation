@@ -2,11 +2,10 @@ import { COLORS } from "@/constants/constants";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -125,10 +124,10 @@ const TextControls = ({
         return (
           <Text
             style={{
-              fontSize: 28,
-              color: "white",
+              fontSize: 24,
+              color: "#10b981",
               fontWeight: "300",
-              textShadowColor: "white",
+              textShadowColor: "#10b981",
               textShadowRadius: 1,
             }}
           >
@@ -139,11 +138,11 @@ const TextControls = ({
         return (
           <Text
             style={{
-              fontSize: 28,
-              color: "white",
+              fontSize: 24,
+              color: "#10b981",
               fontWeight: "bold",
-              textShadowColor: "white",
-              textShadowRadius: 3,
+              textShadowColor: "#10b981",
+              textShadowRadius: 4,
             }}
           >
             A
@@ -152,7 +151,7 @@ const TextControls = ({
       case "filled":
       default:
         return (
-          <Text style={{ fontSize: 28, color: "white", fontWeight: "bold" }}>
+          <Text style={{ fontSize: 24, color: "#10b981", fontWeight: "bold" }}>
             A
           </Text>
         );
@@ -166,32 +165,28 @@ const TextControls = ({
 
   if (activeControl === "font") {
     return (
-      <View className="flex-row justify-around gap-4 py-4">
-        <Pressable
+      <View className="flex-row items-center py-2">
+        <TouchableOpacity
           onPress={() => setActiveControl("main")}
-          className="p-2 bg-[#262e3d] rounded-full"
+          className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center mr-3 border border-white/10"
         >
           <Feather name="chevron-left" size={24} color="white" />
-        </Pressable>
-        <Pressable className="p-2 bg-[#262e3d] rounded-full">
-          <Feather name="more-horizontal" size={24} color="white" />
-        </Pressable>
+        </TouchableOpacity>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {FONTS.map((font) => (
-            <Pressable
+            <TouchableOpacity
               key={font.fontFamily}
               onPress={() => onFontChange(font.fontFamily)}
-              className={`rounded-full px-4 py-2 mx-1.5 justify-center bg-[#262e3d]  ${
-                currentFont === font.fontFamily ? "border" : ""
-              }`}
+              className={`rounded-2xl px-5 py-2.5 mx-1.5 justify-center bg-[#111111] border ${currentFont === font.fontFamily ? "border-emerald-500" : "border-white/5"
+                }`}
             >
               <Text
                 style={{ fontFamily: font.fontFamily }}
-                className="text-lg text-white "
+                className={`text-base ${currentFont === font.fontFamily ? "text-emerald-500" : "text-white"}`}
               >
                 {font.displayName}
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
@@ -200,22 +195,22 @@ const TextControls = ({
 
   if (activeControl === "color") {
     return (
-      <View className="flex-row items-center p-2">
+      <View className="flex-row items-center py-2">
         <TouchableOpacity
           onPress={() => setActiveControl("main")}
-          className="p-1.5 bg-[#262e3d] rounded-full mr-3"
+          className="w-10 h-10 bg-[#111111] rounded-full items-center justify-center mr-3 border border-white/10"
         >
           <Feather name="chevron-left" size={24} color="white" />
         </TouchableOpacity>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity className="w-10 h-10 rounded-full items-center justify-center bg-gray-500 mx-1">
-            <Feather name="aperture" size={24} color="white" />
+          <TouchableOpacity className="w-10 h-10 rounded-full items-center justify-center bg-[#111111] mx-1 border border-emerald-500/30">
+            <Feather name="aperture" size={20} color="#10b981" />
           </TouchableOpacity>
           {COLORS.map((color, index) => (
             <TouchableOpacity
               key={index}
               onPress={() => onColorChange(color)}
-              className="w-10 h-10 rounded-full mx-2"
+              className={`w-10 h-10 rounded-full mx-2 border ${currentColor === color ? 'border-emerald-500 border-2' : 'border-white/10'}`}
               style={{ backgroundColor: color }}
             />
           ))}
@@ -225,39 +220,56 @@ const TextControls = ({
   }
 
   return (
-    <>
-      <View className="flex-row justify-around items-center bg-[#262e3d] rounded-2xl p-4">
-        <TouchableOpacity onPress={() => setActiveControl("font")}>
-          <MaterialCommunityIcons name="format-font" size={28} color="white" />
+    <View>
+      <View className="flex-row justify-around items-center bg-[#0a0a0a] rounded-[24px] p-2 border border-white/5">
+        <TouchableOpacity
+          onPress={() => setActiveControl("font")}
+          className="p-4 items-center"
+        >
+          <MaterialCommunityIcons name="format-font" size={26} color="white" />
+          <View className="w-1 h-1 rounded-full bg-emerald-500 mt-1 opacity-50" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setActiveControl("color")}>
-          <Feather name="aperture" size={28} color="white" />
+        <TouchableOpacity
+          onPress={() => setActiveControl("color")}
+          className="p-4 items-center"
+        >
+          <Feather name="aperture" size={26} color="white" />
+          <View className="w-1 h-1 rounded-full bg-emerald-500 mt-1 opacity-50" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleAlignmentToggle}>
+        <TouchableOpacity
+          onPress={handleAlignmentToggle}
+          className="p-4 items-center"
+        >
           <MaterialCommunityIcons
             name={alignmentIcon}
-            size={28}
+            size={26}
             color="white"
           />
+          <View className="w-1 h-1 rounded-full bg-emerald-500 mt-1 opacity-50" />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleLetterCaseToggle}>
+        <TouchableOpacity
+          onPress={handleLetterCaseToggle}
+          className="p-4 items-center"
+        >
           <LetterCaseIcon />
+          <View className="w-1 h-1 rounded-full bg-emerald-500 mt-1 opacity-50" />
         </TouchableOpacity>
       </View>
 
       <View
         style={{ height: SLIDER_HEIGHT }}
-        className="absolute right-4 bottom-48 w-1.5 bg-white rounded-full items-center"
+        className="absolute right-4 bottom-48 w-1 bg-[#111111] rounded-full items-center border border-white/5"
       >
+        <View className="absolute inset-0 bg-emerald-500/20 rounded-full" />
         <GestureDetector gesture={panGesture}>
           <Animated.View
-            style={animatedKnobStyle}
-            className="w-6 h-6 bg-gray-400 rounded-full border-2 border-white"
+            style={[animatedKnobStyle]}
+            className="w-6 h-6 bg-emerald-500 rounded-full border-4 border-[#050505] shadow-lg shadow-emerald-500/40"
           />
         </GestureDetector>
       </View>
-    </>
+    </View>
   );
 };
 

@@ -1,36 +1,16 @@
+import { Feather } from "@expo/vector-icons";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, { forwardRef, useMemo } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import Svg, {
-  Defs,
-  Path,
-  Stop,
-  LinearGradient as SvgGradient,
-} from "react-native-svg";
-
-const GradientHeartIcon = () => (
-  <Svg width="100" height="100" viewBox="0 0 24 24">
-    <Defs>
-      <SvgGradient id="heartGradient" x1="0" y1="0" x2="1" y2="1">
-        <Stop offset="0%" stopColor="#C97EFF" />
-        <Stop offset="100%" stopColor="#F5A1BE" />
-      </SvgGradient>
-    </Defs>
-    <Path
-      fill="url(#heartGradient)"
-      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-    />
-  </Svg>
-);
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export type ResonateQuotesModalRef = BottomSheetModal;
 
 const ResonateQuotesModal = forwardRef<ResonateQuotesModalRef>((props, ref) => {
-  const snapPoints = useMemo(() => ["50%"], []);
+  const snapPoints = useMemo(() => ["65%"], []);
 
   const handleGotIt = () => {
     if (ref && "current" in ref) {
@@ -46,39 +26,92 @@ const ResonateQuotesModal = forwardRef<ResonateQuotesModalRef>((props, ref) => {
       enableDynamicSizing={false}
       enablePanDownToClose={true}
       animateOnMount={true}
-      backgroundStyle={{ backgroundColor: "#262e3d" }}
-      handleIndicatorStyle={{ backgroundColor: "gray" }}
+      backgroundStyle={{ backgroundColor: "#050505" }}
+      handleIndicatorStyle={{ backgroundColor: "#27272a", width: 32 }}
       backdropComponent={(props) => (
         <BottomSheetBackdrop
           {...props}
           disappearsOnIndex={-1}
           appearsOnIndex={0}
+          opacity={0.8}
         />
       )}
     >
       <BottomSheetView
-        style={{ flex: 1, paddingHorizontal: 20, paddingBottom: 40 }}
+        style={{ flex: 1, paddingHorizontal: 28, paddingTop: 20, paddingBottom: 40 }}
       >
-        <View className="flex-1 justify-center items-center mt-12">
-          <GradientHeartIcon />
-          <Text className="text-white text-3xl font-semibold text-center mt-8">
-            Get quotes that resonate with you
-          </Text>
-          <Text className="text-gray-300 text-lg text-center mt-4">
-            Personalize your feed by adding at least 5 quotes to favorites
-          </Text>
-        </View>
-        <View className="w-full mt-6">
-          <TouchableOpacity
-            className="bg-white w-full py-4 rounded-full items-center justify-center"
-            onPress={handleGotIt}
+        <View className="flex-row justify-between items-start mb-8">
+          <View className="flex-1 pr-4">
+            <Text className="text-white text-5xl font-semibold tracking-tighter leading-[1.1]">
+              Resonate
+            </Text>
+            <Text className="text-emerald-500 text-lg font-semibold tracking-tight mt-1">
+              Your Daily Feed
+            </Text>
+          </View>
+          <View
+            className="w-20 h-20 bg-white/5 rounded-[28px] items-center justify-center border border-white/10"
+            style={styles.obsidianShadow}
           >
-            <Text className="text-black text-lg font-bold">Got it!</Text>
-          </TouchableOpacity>
+            <Feather name="heart" size={32} color="#10b981" />
+          </View>
         </View>
+
+        <Text className="text-zinc-500 text-lg leading-relaxed font-medium mb-10">
+          Personalize your feed by adding at least 5 quotes to favorites. We'll learn from your taste to curate the perfect motivation.
+        </Text>
+
+        <View
+          className="bg-[#111111] rounded-[32px] p-6 border border-white/5 mb-10"
+          style={styles.progressShadow}
+        >
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-white font-bold tracking-tight">Curation Milestone</Text>
+            <Text className="text-emerald-500 font-bold">0/5</Text>
+          </View>
+          <View className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+            <View className="w-[10%] h-full bg-emerald-500 rounded-full" />
+          </View>
+          <View className="flex-row items-center mt-4">
+            <Feather name="activity" size={14} color="#71717a" />
+            <Text className="text-zinc-600 text-xs font-bold ml-2">Waiting for your first heart</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          className="bg-zinc-900 border border-emerald-500/30 w-full py-4 rounded-2xl items-center justify-center"
+          onPress={handleGotIt}
+          style={styles.buttonShadow}
+        >
+          <Text className="text-white text-base font-bold tracking-tight">Got it, thanks!</Text>
+        </TouchableOpacity>
       </BottomSheetView>
     </BottomSheetModal>
   );
+});
+
+const styles = StyleSheet.create({
+  obsidianShadow: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 10,
+  },
+  progressShadow: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.4,
+    shadowRadius: 30,
+    elevation: 20,
+  },
+  buttonShadow: {
+    shadowColor: "#10b981",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 4,
+  }
 });
 
 export default ResonateQuotesModal;
